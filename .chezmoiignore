@@ -26,3 +26,9 @@ Library/LaunchAgents
 .claude/skills/postiz
 .claude/skills/skill-creator
 .claude/skills/supabase-postgres-best-practices
+
+# VPS (Linux) keeps its own runtime config; Mac stays authoritative for these
+{{ if eq .chezmoi.os "linux" -}}
+.claude/settings.json
+.claude/statusline.sh
+{{ end -}}

@@ -4,6 +4,12 @@
 *.bak
 *.backup-*
 
+# per-machine sync config (Telegram token + role) — never synced
+.config/claude-sync
+
+# macOS-only scheduler (would clutter Linux) — keep machine-local
+Library/LaunchAgents
+
 # regenerable skill artifacts — sync source, not built output
 .claude/skills/**/.venv
 .claude/skills/**/node_modules

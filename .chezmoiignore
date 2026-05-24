@@ -1,0 +1,22 @@
+# secrets (defense-in-depth; we never `chezmoi add` these anyway)
+.credentials.json
+**/.credentials.json
+*.bak
+*.backup-*
+
+# regenerable skill artifacts — sync source, not built output
+.claude/skills/**/.venv
+.claude/skills/**/node_modules
+.claude/skills/**/__pycache__
+.claude/skills/**/*.pyc
+
+# externally-managed symlinked skills (would dangle on other machines)
+.claude/skills/cua-driver
+.claude/skills/defuddle
+.claude/skills/json-canvas
+.claude/skills/obsidian-bases
+.claude/skills/obsidian-cli
+.claude/skills/obsidian-markdown
+.claude/skills/postiz
+.claude/skills/skill-creator
+.claude/skills/supabase-postgres-best-practices

@@ -27,8 +27,8 @@ Library/LaunchAgents
 .claude/skills/skill-creator
 .claude/skills/supabase-postgres-best-practices
 
-# VPS (Linux) keeps its own runtime config; Mac stays authoritative for these
+# VPS (Linux) keeps its own settings.json; statusline.sh is now cross-platform
+# and shared (Mac authoritative). context-mode 3rd line no-ops where unavailable.
 {{ if eq .chezmoi.os "linux" -}}
 .claude/settings.json
-.claude/statusline.sh
 {{ end -}}

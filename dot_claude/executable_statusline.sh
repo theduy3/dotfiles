@@ -53,7 +53,7 @@ CACHE_MAX_AGE=5
 
 cache_is_stale() {
     [ ! -f "$CACHE_FILE" ] || \
-    [ $(($(date +%s) - $(stat -f %m "$CACHE_FILE" 2>/dev/null || echo 0))) -gt $CACHE_MAX_AGE ]
+    [ $(($(date +%s) - $(stat -f %m "$CACHE_FILE" 2>/dev/null || stat -c %Y "$CACHE_FILE" 2>/dev/null || echo 0))) -gt $CACHE_MAX_AGE ]
 }
 
 if cache_is_stale; then
@@ -79,3 +79,16 @@ if [ -n "$BRANCH" ]; then
 fi
 
 echo -e "${CYAN}${MODEL}${RESET} ${DIM}|${RESET} ${DIR##*/}${GIT_INFO} ${DIM}|${RESET} ${BAR_COLOR}${BAR}${RESET} ${PCT}% ${DIM}[${RESET}${AUTH_BADGE}${DIM}]${RESET} ${DIM}|${RESET} ${YELLOW}${COST_FMT}${RESET} ${DIM}|${RESET} ${MINS}m ${SECS}s ${DIM}|${RESET} ${DIM}${STYLE}${RESET}"
+
+# Line 2: context-mode savings — hidden until real data exists.
+# Reuses $input (already drained at top); context-mode self-resolves its session
+# via parent-process walk. Bundle lives in the versioned cache install (the only
+# one with the native better-sqlite3 dep); resolve newest by mtime.
+CM_BIN=$(ls -dt "$HOME"/.claude/plugins/cache/context-mode/context-mode/*/cli.bundle.mjs 2>/dev/null | head -n1)
+if [ -n "$CM_BIN" ] && command -v node >/dev/null 2>&1; then
+    CM_LINE=$(printf '%s' "$input" | node "$CM_BIN" statusline 2>/dev/null)
+    # Empty-state placeholder contains "saves ~98%"; show only real savings.
+    if [ -n "$CM_LINE" ] && [[ "$CM_LINE" != *"saves ~98%"* ]]; then
+        echo -e "$CM_LINE"
+    fi
+fi

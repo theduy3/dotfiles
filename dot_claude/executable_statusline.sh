@@ -80,7 +80,22 @@ fi
 
 echo -e "${CYAN}${MODEL}${RESET} ${DIM}|${RESET} ${DIR##*/}${GIT_INFO} ${DIM}|${RESET} ${BAR_COLOR}${BAR}${RESET} ${PCT}% ${DIM}[${RESET}${AUTH_BADGE}${DIM}]${RESET} ${DIM}|${RESET} ${YELLOW}${COST_FMT}${RESET} ${DIM}|${RESET} ${MINS}m ${SECS}s ${DIM}|${RESET} ${DIM}${STYLE}${RESET}"
 
-# Line 2: context-mode savings — hidden until real data exists.
+# Line 2: prompt-cache hit rate — hidden until usage data exists (fresh session).
+CACHE_READ=$(echo "$input" | jq -r '.context_window.current_usage.cache_read_input_tokens // 0')
+CACHE_WRITE=$(echo "$input" | jq -r '.context_window.current_usage.cache_creation_input_tokens // 0')
+FRESH_INPUT=$(echo "$input" | jq -r '.context_window.current_usage.input_tokens // 0')
+TOTAL_INPUT=$((CACHE_READ + CACHE_WRITE + FRESH_INPUT))
+if [ "$TOTAL_INPUT" -gt 0 ]; then
+    HIT_RATE=$((CACHE_READ * 100 / TOTAL_INPUT))
+    if [ "$HIT_RATE" -ge 85 ]; then HR_COLOR="$GREEN"
+    elif [ "$HIT_RATE" -ge 60 ]; then HR_COLOR="$YELLOW"
+    else HR_COLOR="$RED"; fi
+    fmt_k() { awk -v n="$1" 'BEGIN{ if (n>=1000) printf "%.1fk", n/1000; else printf "%d", n }'; }
+    CR=$(fmt_k "$CACHE_READ"); CW=$(fmt_k "$CACHE_WRITE"); FI=$(fmt_k "$FRESH_INPUT")
+    echo -e "${DIM}cache${RESET} ${HR_COLOR}${HIT_RATE}%${RESET} hit ${DIM}|${RESET} read ${GREEN}${CR}${RESET} ${DIM}·${RESET} write ${YELLOW}${CW}${RESET} ${DIM}·${RESET} fresh ${RED}${FI}${RESET}"
+fi
+
+# Line 3: context-mode savings — hidden until real data exists.
 # Reuses $input (already drained at top); context-mode self-resolves its session
 # via parent-process walk. Bundle lives in the versioned cache install (the only
 # one with the native better-sqlite3 dep); resolve newest by mtime.

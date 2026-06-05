@@ -2,7 +2,7 @@
 
 On session start or after context clear, scan for `tasks/todo-*.md` files in the current repo.
 
-If any file contains an s1-new-task metadata block with `status: plan-approved`:
+If any file contains an s1-plan metadata block with `status: plan-approved`:
 - If multiple such files exist, pick the one whose `worktree:` field matches the current branch (if in a worktree) or ask the user which task to resume
 
 0. **Stale-age check.** Before anything else, determine plan age:
@@ -24,4 +24,4 @@ If any file contains an s1-new-task metadata block with `status: plan-approved`:
 5. Proceed with the implementation steps from the plan
 6. After implementation begins, update `status: plan-approved` to `status: implementing`
 
-This enables `/s1-new-task` workflows to survive context clears. New sessions start in normal mode (not plan mode), so ExitPlanMode is usually unnecessary. If in plan mode, the PreToolUse hook exists but does NOT bypass the interactive selector on Android — type "proceed" as a text message instead.
+This enables `/s1-plan` workflows to survive context clears. New sessions start in normal mode (not plan mode), so ExitPlanMode is usually unnecessary. If in plan mode, the PreToolUse hook exists but does NOT bypass the interactive selector on Android — type "proceed" as a text message instead.

@@ -5,7 +5,7 @@
 | Command | Target Model | How to Launch |
 |---------|-------------|---------------|
 | /s0-brainstorm | Opus | `claude --model opus` (or default session) |
-| /s1-new-task | Opus | Same Opus session (routes to /s1-small or /s1-full) |
+| /s1-plan | Opus | Same Opus session (scope detection internal: small/medium/large) |
 | /ship | Sonnet | `claude --model sonnet` then `/ship` |
 | /quick-ship | Sonnet | `claude --model sonnet` then `/quick-ship` |
 | /deploy | Haiku | `claude --model haiku` then `/deploy` |

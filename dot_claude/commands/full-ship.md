@@ -26,7 +26,7 @@ Invoke `/s0-brainstorm <topic>`. This runs the `superpowers:brainstorming` skill
 - User rejects spec → stop. No worktree exists; nothing to clean.
 - Spec already exists and user opts to keep it → continue to Phase 1.
 
-After s0 commits the spec, do NOT invoke `/s1-new-task` automatically (s0's default handoff). Instead, proceed directly to Phase 1 below.
+After s0 commits the spec, do NOT invoke `/s1-plan` automatically (s0's default handoff). Instead, proceed directly to Phase 1 below.
 
 ---
 

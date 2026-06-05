@@ -3,7 +3,7 @@ description: Brainstorm and design a feature before planning implementation
 argument-hint: [topic]
 ---
 
-Brainstorm and design a feature, producing a spec for `/s1-new-task` to consume.
+Brainstorm and design a feature, producing a spec for `/s1-plan` to consume.
 
 Parse topic from: `$ARGUMENTS`
 - If provided (e.g., `/s0-brainstorm add user authentication`) → use as brainstorming topic
@@ -21,7 +21,7 @@ Derive `<task-name>` slug: convert the topic to lowercase kebab-case (e.g., "add
    - Run `git checkout main && git pull origin main` (now safely in main repo)
 3. Check if `tasks/spec-<task-name>.md` already exists:
    - If it exists → warn: "An existing spec was found at `tasks/spec-<task-name>.md`. Overwrite it or review what's there first?"
-   - If user wants to keep it → stop (they can proceed to `/s1-new-task` directly)
+   - If user wants to keep it → stop (they can proceed to `/s1-plan` directly)
 
 ## Step 2: Brainstorm
 
@@ -30,7 +30,7 @@ Invoke `superpowers:brainstorming` skill with the topic.
 **Critical overrides to the brainstorming skill's default behavior:**
 
 1. **Spec output path**: Save the spec to `tasks/spec-<task-name>.md` — NOT to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
-2. **Stop after step 8** (user reviews written spec). Do NOT invoke `superpowers:writing-plans` (step 9 of the brainstorming skill). Writing the implementation plan is `/s1-new-task`'s responsibility.
+2. **Stop after step 8** (user reviews written spec). Do NOT invoke `superpowers:writing-plans` (step 9 of the brainstorming skill). Writing the implementation plan is `/s1-plan`'s responsibility.
 
 Follow the brainstorming skill's full process (steps 1-8):
 - Explore project context
@@ -54,9 +54,9 @@ After the user approves the spec:
 2. Ask the user:
    ```
    Spec ready at tasks/spec-<task-name>.md.
-   Proceed with /s1-new-task <topic>?
+   Proceed with /s1-plan <task-name>?
    ```
-   - If yes → invoke `/s1-new-task <topic>`
+   - If yes → invoke `/s1-plan <task-name>`
    - If no → stop
 
 IMPORTANT: Do NOT create a worktree, enter plan mode, or invoke writing-plans. This command's sole output is `tasks/spec-<task-name>.md`. Everything else is s1's job.

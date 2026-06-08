@@ -38,28 +38,34 @@ MAIN_REPO_ROOT=$(dirname "$COMMON_GIT_DIR")
 # Guard: skip if worktree IS the main repo (not actually a worktree)
 [[ "$MAIN_REPO_ROOT" == "$WORKTREE_PATH" ]] && exit 0
 
-# ─── Copy untracked .env* files ───────────────────
+# ─── Copy untracked .env* files (root + nested package dirs) ──────
+# Recurses the repo but prunes node_modules/.git/worktrees, and keeps
+# the package-relative path so monorepo packages/*/.env land correctly
+# (basename alone would collapse multiple .env files onto each other).
 COPIED=0
 SKIPPED=0
 
 while IFS= read -r ENV_FILE; do
-  BASENAME=$(basename "$ENV_FILE")
+  REL="${ENV_FILE#"$MAIN_REPO_ROOT"/}"
 
   # Skip if file is tracked by git
-  if git -C "$MAIN_REPO_ROOT" ls-files --error-unmatch "$BASENAME" &>/dev/null; then
+  if git -C "$MAIN_REPO_ROOT" ls-files --error-unmatch "$REL" &>/dev/null; then
     SKIPPED=$((SKIPPED + 1))
     continue
   fi
 
   # Skip if file already exists in worktree (don't overwrite manual edits)
-  if [[ -f "$WORKTREE_PATH/$BASENAME" ]]; then
+  if [[ -f "$WORKTREE_PATH/$REL" ]]; then
     SKIPPED=$((SKIPPED + 1))
     continue
   fi
 
-  # Copy (not symlink) for isolation
-  cp "$ENV_FILE" "$WORKTREE_PATH/$BASENAME" 2>/dev/null && COPIED=$((COPIED + 1))
-done < <(find "$MAIN_REPO_ROOT" -maxdepth 1 -name '.env*' -type f 2>/dev/null)
+  # Copy (not symlink) for isolation, recreating package subdirs
+  mkdir -p "$(dirname "$WORKTREE_PATH/$REL")" 2>/dev/null
+  cp "$ENV_FILE" "$WORKTREE_PATH/$REL" 2>/dev/null && COPIED=$((COPIED + 1))
+done < <(find "$MAIN_REPO_ROOT" \
+  \( -name node_modules -o -name .git -o -path "$MAIN_REPO_ROOT/.claude/worktrees" \) -prune \
+  -o -name '.env*' -type f -print 2>/dev/null)
 
 echo "worktree-env-copy: copied $COPIED, skipped $SKIPPED .env* file(s)" >&2
 

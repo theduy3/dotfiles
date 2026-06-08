@@ -9,9 +9,11 @@ Clean up after PR merge:
 5. Remove the worktree: `git worktree remove <path>`
 6. Delete the local branch if it still exists: `git branch -d <branch-name>`
 7. Delete the remote branch if it still exists: `git push origin --delete <branch-name>` (ignore errors if already deleted)
-8. Run `git checkout main && git pull origin main`
+8. Resolve the repo's default branch, then sync it:
+   - `DEFAULT=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@')` — falls back to `main` if unset
+   - `git checkout "$DEFAULT" && git pull origin "$DEFAULT"` (handles `master`/`develop`/`trunk`, not just `main`)
 9. Clean up task files:
-   - Use the branch name from step 2 as `<task-name>`
+   - Derive `<task-name>` from the branch name, stripping any `feature/`, `fix/`, or `chore/` prefix (the slug `/s1-plan` used). Prefer the `worktree:` field in `tasks/todo-*.md` if present — it is the authoritative slug.
    - Delete `tasks/spec-<task-name>.md` and `tasks/todo-<task-name>.md` if they exist
    - If any files were deleted, commit: `git add -u tasks/ && git commit -m "chore: clean up task files for <task-name>"`
 10. Confirm with `git log --oneline -3`

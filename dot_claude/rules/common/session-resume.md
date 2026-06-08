@@ -18,9 +18,9 @@ If any file contains an s1-plan metadata block with `status: plan-approved`:
        - If not: `git worktree add .claude/worktrees/<speckit-branch> <speckit-branch>`, then `cd` into it
      - **If not speckit:** Call `EnterWorktree` with the worktree name from the metadata block
 3. Once in the worktree, run baseline tests to confirm clean starting point
-4. Check the `complexity` field in the metadata block:
-   - If `complexity: medium` or `complexity: large`: use `superpowers:subagent-driven-development` for implementation — the plan should contain granular, self-contained tasks
-   - If `complexity: small`: implement directly with TDD discipline
+4. Check the `scope` field in the metadata block (the key `/s1-plan` writes):
+   - If `scope: medium` or `scope: large`: use `superpowers:subagent-driven-development` for implementation — the plan should contain granular, self-contained tasks
+   - If `scope: small`: implement directly with TDD discipline
 5. Proceed with the implementation steps from the plan
 6. After implementation begins, update `status: plan-approved` to `status: implementing`
 

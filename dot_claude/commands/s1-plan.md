@@ -16,7 +16,7 @@ Analyze the spec or task description and classify:
 | **medium** | 4-10 files, some design choices, may introduce new patterns |
 | **large** | 10+ files, architectural decisions, cross-cutting concerns |
 
-If repo is indexed (`gitnexus status`): run `query` + `impact` MCP tools to gauge blast radius. Factor into classification.
+If repo is indexed (code-review-graph `list_graph_stats`): run `query_graph` + `get_impact_radius` MCP tools to gauge blast radius. Factor into classification.
 User can override: "this is small" or "treat this as large".
 
 ## Step 3 — Write Plan
@@ -27,6 +27,8 @@ Write plan to `tasks/todo-<task-name>.md`:
 ```
 <!-- s1 metadata
 task-name: <name>
+worktree: <name>
+speckit: false
 scope: small|medium|large
 status: planning
 repo: <absolute-repo-root>

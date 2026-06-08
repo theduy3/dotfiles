@@ -4,7 +4,7 @@
 
 ## Worktree Workflow
 
-- **Entry**: `/s1-plan` (calls built-in `EnterWorktree`). GSD removed — no `/gsd-*` commands.
+- **Entry**: `/s1-plan` (calls built-in `EnterWorktree`). GSD removed *from this workflow* — worktree entry/exit use built-in `EnterWorktree`/`ExitWorktree`, not `/gsd-*` commands. (The GSD *plugin* skills `/gsd-*` are still installed and registry-listed; they are a separate system, not part of the worktree flow. Note: the `gsd-plan-phase` skill is currently broken — its `~/.claude/get-shit-done/` runtime dir is missing, so its `@`-imports resolve to nothing.)
 - **Setup hooks** (PostToolUse on `EnterWorktree`):
   - `~/.claude/hooks/worktree-env-copy.sh` — copies `.env*` from main into worktree
   - `~/.claude/hooks/worktree-tab-rename.sh` — sets terminal tab title

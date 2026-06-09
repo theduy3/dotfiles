@@ -1,5 +1,3 @@
-@RTK.md
-
 ## MCP: code-review-graph vs GitNexus — graph-tool precedence (don't blend the two)
 
 Both `code-review-graph` and the `gitnexus-*` skills wrap an overlapping codebase

@@ -47,7 +47,12 @@
       "EnterPlanMode",
       "EnterWorktree",
       "ExitWorktree",
-      "Agent"
+      "Agent",
+      "Bash(npx gsd-core *)",
+      "Read(.planning/*)",
+      "Write(.planning/*)",
+      "Read(STATE.md)",
+      "Write(STATE.md)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -87,7 +92,10 @@
       "Bash(curl * | sh)",
       "Bash(curl * | bash)",
       "Bash(wget * | sh)",
-      "Bash(wget * | bash)"
+      "Bash(wget * | bash)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(.secrets)"
     ],
     "defaultMode": "auto"
   },
@@ -117,6 +125,46 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-context-monitor.js\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-read-injection-scanner.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-graphify-update.sh\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-phase-boundary.sh\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -127,6 +175,119 @@
             "type": "command",
             "command": "code-review-graph status",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-check-update.js\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-session-state.sh\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-prompt-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-read-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-workflow-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-worktree-path-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-validate-commit.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-context-monitor.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-context-monitor.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-context-monitor.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "FileChanged": [
+      {
+        "matcher": "config.json",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"{{ .chezmoi.homeDir }}/.claude/hooks/gsd-config-reload.js\"",
+            "timeout": 8
           }
         ]
       }

@@ -32,3 +32,10 @@ Library/LaunchAgents
 {{ if eq .chezmoi.os "linux" -}}
 .claude/settings.json
 {{ end -}}
+
+# GSD (@opengsd/gsd-core) agents — externally-managed, regenerable via
+# `npx @opengsd/gsd-core --claude --global` and `gsd update`. Like the GSD
+# skills/hooks/runtime (already unmanaged), GSD owns these; chezmoi must not
+# revert them on apply. settings.json GSD hooks stay managed (templated) because
+# that file is chezmoi-owned as a whole.
+.claude/agents/gsd-*.md

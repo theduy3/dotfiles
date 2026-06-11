@@ -65,7 +65,7 @@ Invoke `subagent-driven-development` (model: opus). The plan from `/s1-plan` sho
 ## Phase 3 — Ship
 
 Invoke `/ship-agents`. This runs:
-- Round 1: verify (haiku) — typecheck, lint, test, build, security scan.
+- Round 1: verify (sonnet) — typecheck, lint, test, build, security scan, goal-backward verifier.
 - Round 2: techdebt + claude-md (parallel; Round 2A skipped if scope=small).
 - Round 3: commit, push, create PR (sonnet).
 

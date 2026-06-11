@@ -13,10 +13,12 @@ Read tasks/todo-*.md on the current branch. Extract `scope` from s1 metadata:
 - `medium` or `large`: run full pipeline
 - If no plan file found: default to `medium`
 
-## Round 1 — Verify (haiku)
-Dispatch Agent(model: haiku):
+## Round 1 — Verify (sonnet)
+Dispatch Agent(model: sonnet):
   Prompt: Run s3-verify-app steps on branch $BRANCH.
   Return: READY TO SHIP or NEEDS FIXES with list.
+  (sonnet, not haiku: s3-verify-app's goal-backward step launches the `verifier`
+   sub-agent — a haiku runner cannot spawn sub-agents, so that check would silently skip.)
 
 If NEEDS FIXES → stop. Report errors to user. Do not proceed to Round 2.
 

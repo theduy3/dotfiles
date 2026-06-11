@@ -23,7 +23,10 @@ Verify the app works on the current branch:
     It checks the Must-Haves (truths hold / artifacts substantive not stubs / key links wired) and audits
     test quality (no disabled tests, no circular/always-pass tests, assertions have real expected values).
     Treat unmet Must-Haves or a failed test-quality audit as ❌.
-    Skip silently if no plan with Must-Haves exists.
+    **If the running agent cannot spawn sub-agents (e.g. a haiku runner), do NOT skip — perform the
+    Must-Haves + test-quality check inline yourself** against `tasks/todo-<task-name>.md` and the
+    changed files. This step must never silently vanish just because of the runner's model tier.
+    Skip only if no plan with Must-Haves exists.
 10. Report results:
     ✅ or ❌ for each step
     Skip steps that don't exist

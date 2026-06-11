@@ -5,7 +5,7 @@ Use this after implementation is complete and you want a single fire-and-forget 
 
 ## Phase 1 — Ship (invoke ship-agents)
 Run all rounds of /ship-agents (scope auto-detected from tasks/todo-*.md):
-- Round 1: verify (haiku)
+- Round 1: verify (sonnet)
 - Round 2: techdebt + reflect — skipped if scope=small, parallel if scope=medium|large
 - Round 3: commit + PR (sonnet)
 

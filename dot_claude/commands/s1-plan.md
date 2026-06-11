@@ -57,9 +57,15 @@ created-at: <today's date, YYYY-MM-DD>
 Present plan for user approval.
 
 ## Step 4 — After Approval (ExitPlanMode)
+
+> **Invariant — worktree is unconditional.** EVERY task enters a worktree here, regardless of
+> scope. Scope (small/medium/large) selects implementation STYLE in Step 5 only — it NEVER decides
+> whether a worktree is used. Never announce or imply "no worktree" for any scope. No matter how
+> small the task, it runs in a worktree.
+
 1. Update metadata: `status: planning` → `status: plan-approved`
 2. Safety check: verify `.gitignore` includes worktree directory pattern
-3. Call `EnterWorktree` with task-name
+3. Call `EnterWorktree` with task-name — **mandatory for all scopes, no exceptions**
 4. Run baseline tests to confirm clean starting point
 
 ## Step 5 — Execute Skill Handoff (test-first, mandatory)
@@ -73,10 +79,13 @@ cannot run without a runner.
 fails for the right reason → minimal GREEN), per the `test-driven-development` Iron Law: no
 production code without a failing test first.
 
-Branch on scope:
+Branch on scope (all paths run **inside the Step 4 worktree** — scope picks STYLE, not isolation):
 
 ### scope: small
-Invoke the `test-driven-development` skill. No prompt (fast loop). Drive the truths→tests→code cycle.
+Implement directly (single-context TDD) **inside the Step 4 worktree** — invoke the
+`test-driven-development` skill. No prompt (fast loop). Drive the truths→tests→code cycle.
+"Directly" here = one context, no subagents — it does NOT mean "in the main repo." You are already
+in the worktree from Step 4.
 
 ### scope: medium | large
 **PROMPT user via `AskUserQuestion`:**

@@ -10,7 +10,7 @@ If any file contains an s1-plan metadata block with `status: plan-approved`:
    - Fallback to filesystem mtime: `stat -f%Sm -t "%s" tasks/todo-<name>.md`.
    - If age > 14 days, STOP and warn the user: `"Plan is N days old — main may have diverged since. Reply 'resume' to continue or 'replan' to run /s1-plan fresh."` Block further action until the user replies.
 1. Read the full plan from the matched `tasks/todo-<task-name>.md`
-2. Follow the **Setup** section exactly:
+2. Follow the **Setup** section exactly. **Worktree entry below is unconditional — it is NEVER gated on scope. Every resumed task re-enters its worktree regardless of size.**
    - If in plan mode → call `ExitPlanMode` (auto-approved by PreToolUse hook) to unblock writes
    - Check metadata for `speckit: true`:
      - **If speckit:** Check if worktree already exists (`git worktree list | grep <speckit-branch>`)
@@ -18,9 +18,9 @@ If any file contains an s1-plan metadata block with `status: plan-approved`:
        - If not: `git worktree add .claude/worktrees/<speckit-branch> <speckit-branch>`, then `cd` into it
      - **If not speckit:** Call `EnterWorktree` with the worktree name from the metadata block
 3. Once in the worktree, run baseline tests to confirm clean starting point
-4. Check the `scope` field in the metadata block (the key `/s1-plan` writes):
+4. Check the `scope` field in the metadata block (the key `/s1-plan` writes). This selects implementation STYLE only — you are already in the worktree from step 2; scope NEVER sends work back to the main repo:
    - If `scope: medium` or `scope: large`: use `superpowers:subagent-driven-development` for implementation — the plan should contain granular, self-contained tasks
-   - If `scope: small`: implement directly with TDD discipline
+   - If `scope: small`: implement directly (single-context TDD) inside the worktree from step 2 — "directly" = one context, no subagents, NOT "in the main repo"
 5. Proceed with the implementation steps from the plan
 6. After implementation begins, update `status: plan-approved` to `status: implementing`
 

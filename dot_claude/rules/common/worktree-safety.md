@@ -28,8 +28,13 @@ worktree from a subagent while the parent CWD is still inside it.
 - **`worktree-branch-guard.js`** (`Bash`) — blocks `git commit` when CWD is inside a linked
   worktree AND the branch is the repo default (main/master/…). Commit from the feature
   branch, or from the main checkout if intentional.
+- **`worktree-required-guard.js`** (`Write|Edit|MultiEdit`) — enforces the *every `/s*` task
+  runs in a worktree, regardless of scope* rule. Blocks edits to the **main checkout** while a
+  `tasks/todo-*.md` is at `status: plan-approved`|`implementing`. Exempts edits under `tasks/`
+  (the plan/spec itself) and files outside the repo, so only mid-implementation edits to the
+  main checkout are blocked. `EnterWorktree` (or `cd` into the worktree) to proceed.
 
-Both fail-open (exit 0 on any error) — they never block valid work due to hook failure.
+All fail-open (exit 0 on any error) — they never block valid work due to hook failure.
 
 ## Token: minimize Enter/Exit cycles
 

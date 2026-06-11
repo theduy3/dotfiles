@@ -79,6 +79,8 @@ Capture the PR URL/number from Round 3 output.
 
 ### CWD pre-step (CRITICAL — orchestrator runs this, NOT a subagent)
 
+> Full contract: `~/.claude/rules/common/worktree-safety.md` (CWD-ENOENT trap + ordering).
+
 Before dispatching any deploy-agents subagents:
 
 1. Run `git worktree list` to enumerate active worktrees.

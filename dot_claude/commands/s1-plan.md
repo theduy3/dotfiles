@@ -4,8 +4,11 @@ Parse task name from: `$ARGUMENTS`
 - If provided → use as task name, derive kebab slug
 - If empty → scan tasks/spec-*.md, ask user to pick
 
-## Step 1 — Load Spec
-Load tasks/spec-<task-name>.md if it exists. If none found, proceed with task description only.
+## Step 1 — Load Spec (or derive the contract)
+Load tasks/spec-<task-name>.md if it exists (the `/s0` path, used for bigger work).
+If none found, do NOT proceed on the task description alone — **derive the Must-Haves contract
+inline in Step 3** from the task description. Every plan ends up with a Must-Haves block, spec or
+not. This keeps small direct-`/s1` jobs spec-driven without forcing `/s0`.
 
 ## Step 2 — Scope Detection
 Analyze the spec or task description and classify:
@@ -48,6 +51,7 @@ created-at: <today's date, YYYY-MM-DD>
 ```
 
 > The Must-Haves block is the contract `/s3-verify-app`'s goal-backward check reads. Keep it concrete and falsifiable.
+> **Each Truth becomes a FAILING test first in Step 5 (TDD)** — write truths so each maps cleanly to one test.
 > For deep plan authoring on large scope, the `planner` agent (harvested from GSD) can draft this block — invoke it with the spec path.
 
 Present plan for user approval.
@@ -58,24 +62,33 @@ Present plan for user approval.
 3. Call `EnterWorktree` with task-name
 4. Run baseline tests to confirm clean starting point
 
-## Step 5 — Execute Skill Handoff
+## Step 5 — Execute Skill Handoff (test-first, mandatory)
+
+**Precondition — a test runner must exist.** If `package.json` has no `test` script / no test
+framework configured (or the stack has no runner), bootstrap it BEFORE any implementation:
+Vite+React+TS → invoke `/init-tests`; otherwise set up the stack's standard test runner. TDD
+cannot run without a runner.
+
+**Every scope is test-first.** Each Must-Have *truth* becomes a FAILING test first (RED → verify it
+fails for the right reason → minimal GREEN), per the `test-driven-development` Iron Law: no
+production code without a failing test first.
 
 Branch on scope:
 
 ### scope: small
-Implement directly with TDD discipline. No prompt (obvious path, fast feedback loop).
+Invoke the `test-driven-development` skill. No prompt (fast loop). Drive the truths→tests→code cycle.
 
 ### scope: medium | large
 **PROMPT user via `AskUserQuestion`:**
 
-Question: `"Plan approved and baseline tests pass. Start implementation with subagent-driven-development?"`
+Question: `"Plan approved and baseline tests pass. Start implementation with subagent-driven-development (test-first)?"`
 
 Options:
-- **Yes, start now** → invoke `subagent-driven-development` (model: opus)
-- **Yes, but different skill** → follow-up `AskUserQuestion` with options:
-  - `test-driven-development` (single-agent TDD loop)
-  - `claude-mem:do` (phased plan executor)
+- **Yes, start now** → invoke `subagent-driven-development` (model: opus) — embeds per-task TDD.
+- **Yes, single-agent TDD** → invoke `test-driven-development` (single-agent RED→GREEN loop).
 - **Pause — I'll run execute later** → stay in worktree, status already `plan-approved`, exit. Next session auto-resumes per `~/.claude/rules/common/session-resume.md`.
+
+(No non-TDD executor — test-first is mandatory on every path.)
 
 For `large` scope: before dispatching subagents, confirm plan contains granular self-contained tasks (each task = one subagent, independent, testable). If not, return to Step 3 and refine.
 

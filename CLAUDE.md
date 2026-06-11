@@ -97,6 +97,7 @@ their own — you MUST invoke them at the trigger point below:
 
 ### Workflow skills — bound to `/s*` stages (user-level, no plugin)
 - `brainstorming` → /s0 · `writing-plans` → /s1 · `subagent-driven-development` → /s1 (medium/large) · `requesting-code-review` → /s6
+- **`/s1` enforces spec+TDD:** always produces a Must-Haves contract (derived inline if no `/s0` spec), routes every scope through `test-driven-development` (test-first, no opt-out), each Truth → a failing test; `/s3` verifies every Truth has a test.
 
 ### Harvested agents (`~/.claude/agents/`)
 - Review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`

@@ -20,9 +20,11 @@ Verify the app works on the current branch:
 9b. **Goal-backward verification** (only if `tasks/todo-<task-name>.md` exists with a Must-Haves block):
     Launch the `verifier` agent. Pass it the plan path `tasks/todo-<task-name>.md` and the changed files
     (the agent's prose assumes a different artifact layout — override by giving the `tasks/` paths explicitly).
-    It checks the Must-Haves (truths hold / artifacts substantive not stubs / key links wired) and audits
-    test quality (no disabled tests, no circular/always-pass tests, assertions have real expected values).
-    Treat unmet Must-Haves or a failed test-quality audit as ❌.
+    It checks the Must-Haves (truths hold / artifacts substantive not stubs / key links wired), confirms
+    **each Truth has a corresponding test** (a truth with no test → ❌ — closes spec→truth→test→code),
+    and audits test quality (no disabled tests, no circular/always-pass tests, assertions have real
+    expected values).
+    Treat unmet Must-Haves, an untested truth, or a failed test-quality audit as ❌.
     **If the running agent cannot spawn sub-agents (e.g. a haiku runner), do NOT skip — perform the
     Must-Haves + test-quality check inline yourself** against `tasks/todo-<task-name>.md` and the
     changed files. This step must never silently vanish just because of the runner's model tier.

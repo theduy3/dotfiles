@@ -17,6 +17,13 @@ Verify the app works on the current branch:
    SQL injection, XSS, command injection, and OWASP Top 10 patterns.
    Report findings with severity (CRITICAL/HIGH/MEDIUM/LOW) and file:line references.
    Treat any CRITICAL or HIGH finding as ❌ SECURITY.
+9b. **Goal-backward verification** (only if `tasks/todo-<task-name>.md` exists with a Must-Haves block):
+    Launch the `verifier` agent. Pass it the plan path `tasks/todo-<task-name>.md` and the changed files
+    (the agent's prose assumes a different artifact layout — override by giving the `tasks/` paths explicitly).
+    It checks the Must-Haves (truths hold / artifacts substantive not stubs / key links wired) and audits
+    test quality (no disabled tests, no circular/always-pass tests, assertions have real expected values).
+    Treat unmet Must-Haves or a failed test-quality audit as ❌.
+    Skip silently if no plan with Must-Haves exists.
 10. Report results:
     ✅ or ❌ for each step
     Skip steps that don't exist

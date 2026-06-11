@@ -20,7 +20,7 @@ If repo is indexed (code-review-graph `list_graph_stats`): run `query_graph` + `
 User can override: "this is small" or "treat this as large".
 
 ## Step 3 — Write Plan
-Enter plan mode. Invoke `superpowers:writing-plans` with spec as context.
+Enter plan mode. Invoke `writing-plans` with spec as context.
 
 Write plan to `tasks/todo-<task-name>.md`:
 
@@ -35,11 +35,20 @@ repo: <absolute-repo-root>
 created-at: <today's date, YYYY-MM-DD>
 -->
 
+## Must-Haves (goal-backward verification anchors)
+<!-- Derived from the spec's GOAL, not from the task list. /s3-verify checks these, not just "tasks done". -->
+- **Truths**: observable facts that must hold when the goal is achieved (e.g. "user can log in with email+password")
+- **Artifacts**: files/modules that must exist and be substantive (not stubs)
+- **Key links**: wiring that must connect (export X imported by Y; endpoint Z actually called)
+
 ## Implementation Plan
 
 - [ ] Step 1: ...
 - [ ] Step 2: ...
 ```
+
+> The Must-Haves block is the contract `/s3-verify-app`'s goal-backward check reads. Keep it concrete and falsifiable.
+> For deep plan authoring on large scope, the `planner` agent (harvested from GSD) can draft this block — invoke it with the spec path.
 
 Present plan for user approval.
 
@@ -62,10 +71,9 @@ Implement directly with TDD discipline. No prompt (obvious path, fast feedback l
 Question: `"Plan approved and baseline tests pass. Start implementation with subagent-driven-development?"`
 
 Options:
-- **Yes, start now** → invoke `superpowers:subagent-driven-development` (model: opus)
+- **Yes, start now** → invoke `subagent-driven-development` (model: opus)
 - **Yes, but different skill** → follow-up `AskUserQuestion` with options:
-  - `superpowers:test-driven-development` (single-agent TDD loop)
-  - `everything-claude-code:prp-implement` (PRP rigorous execution)
+  - `test-driven-development` (single-agent TDD loop)
   - `claude-mem:do` (phased plan executor)
 - **Pause — I'll run execute later** → stay in worktree, status already `plan-approved`, exit. Next session auto-resumes per `~/.claude/rules/common/session-resume.md`.
 

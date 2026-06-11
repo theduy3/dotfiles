@@ -20,7 +20,7 @@ Derive `<task-name>` slug from topic (lowercase kebab-case). This slug is reused
 
 ## Phase 0 — Brainstorm
 
-Invoke `/s0-brainstorm <topic>`. This runs the `superpowers:brainstorming` skill, writes `tasks/spec-<task-name>.md`, and waits for user approval.
+Invoke `/s0-brainstorm <topic>`. This runs the `brainstorming` skill, writes `tasks/spec-<task-name>.md`, and waits for user approval.
 
 **Stop conditions**:
 - User rejects spec → stop. No worktree exists; nothing to clean.
@@ -48,10 +48,10 @@ IMPORTANT: At this point you are inside the worktree. Do NOT `git checkout main`
 Branch on the captured `scope:`:
 
 ### scope: small
-Implement the plan steps directly with TDD discipline (`superpowers:test-driven-development`). Single-file or 1-3 file changes don't justify the subagent overhead.
+Implement the plan steps directly with TDD discipline (`test-driven-development`). Single-file or 1-3 file changes don't justify the subagent overhead.
 
 ### scope: medium | large
-Invoke `superpowers:subagent-driven-development` (model: opus). The plan from `/s1-plan` should already contain granular self-contained tasks (each = one subagent, independent, testable) per s1's large-scope guard. If not, return to `/s1-plan` to refine before proceeding.
+Invoke `subagent-driven-development` (model: opus). The plan from `/s1-plan` should already contain granular self-contained tasks (each = one subagent, independent, testable) per s1's large-scope guard. If not, return to `/s1-plan` to refine before proceeding.
 
 ### After implementation completes
 - Run baseline tests one more time to confirm green state.

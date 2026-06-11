@@ -25,12 +25,12 @@ Derive `<task-name>` slug: convert the topic to lowercase kebab-case (e.g., "add
 
 ## Step 2: Brainstorm
 
-Invoke `superpowers:brainstorming` skill with the topic.
+Invoke `brainstorming` skill with the topic.
 
 **Critical overrides to the brainstorming skill's default behavior:**
 
 1. **Spec output path**: Save the spec to `tasks/spec-<task-name>.md` — NOT to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
-2. **Stop after step 8** (user reviews written spec). Do NOT invoke `superpowers:writing-plans` (step 9 of the brainstorming skill). Writing the implementation plan is `/s1-plan`'s responsibility.
+2. **Stop after step 8** (user reviews written spec). Do NOT invoke `writing-plans` (step 9 of the brainstorming skill). Writing the implementation plan is `/s1-plan`'s responsibility.
 
 Follow the brainstorming skill's full process (steps 1-8):
 - Explore project context

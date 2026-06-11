@@ -81,24 +81,40 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - AskUserQuestion with options still blocks — commands use defaults instead
 - Patch script: `~/.local/bin/patch-claude-remote.sh` (auto-runs on `claude-remote` startup)
 
-## Superpowers Integration
+## Workflow Skills & Discipline (consolidated into /s*)
 
-### Auto-Activated Skills
-- `test-driven-development` — all implementation work
-- `systematic-debugging` — test failures, bugs
-- `verification-before-completion` — before any completion claim
-- `dispatching-parallel-agents` — 2+ independent failures
-- `receiving-code-review` — when processing review feedback
+> GSD, ECC, and Superpowers plugins are being retired. Their best parts now live as
+> user-level skills/agents in `~/.claude`. `/s*` owns the loop. Full record: `tasks/spec-consolidation.md`.
 
-### Workflow-Bound Skills
-- `brainstorming` → /s0 (produces `tasks/spec-<task-name>.md`)
-- `writing-plans` → /s1 (consumes spec from /s0)
-- `subagent-driven-development` → after worktree creation (medium/large)
-- `requesting-code-review` → /s6 code review gate
+### Discipline skills — INVOKE EXPLICITLY (no auto-injector anymore)
+The Superpowers SessionStart auto-trigger is gone. These user-level skills no longer fire on
+their own — you MUST invoke them at the trigger point below:
+- Before writing ANY implementation/bugfix code → invoke `test-driven-development`
+- On ANY bug / test failure / unexpected behavior → invoke `systematic-debugging`
+- Before claiming work complete / fixed / passing → invoke `verification-before-completion`
+- When processing code-review feedback → invoke `receiving-code-review`
+- 2+ independent tasks with no shared state → invoke `dispatching-parallel-agents`
 
-### Suppressed Skills
-- `finishing-a-development-branch` → `/s9-cleanup` handles this
-- `using-git-worktrees` → `/s1-new-task`'s `EnterWorktree` handles this
+### Workflow skills — bound to `/s*` stages (user-level, no plugin)
+- `brainstorming` → /s0 · `writing-plans` → /s1 · `subagent-driven-development` → /s1 (medium/large) · `requesting-code-review` → /s6
+
+### Harvested agents (`~/.claude/agents/`)
+- Review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`
+- Verify/debug: `verifier`, `debugger`, `debug-session-manager`, `integration-checker`, `nyquist-auditor`
+- Build/perf: `build-error-resolver`, `performance-optimizer`, `refactor-cleaner`
+- Plan/map/security: `planner`, `codebase-mapper`, `security-auditor`
+- When invoking the harvested GSD agents (verifier/planner/etc.), pass the `tasks/` paths explicitly
+  (`tasks/spec-*.md`, `tasks/todo-*.md`) — their prose still references GSD's old `.planning/` layout.
+
+### Deploy gate
+- `npx ecc-agentshield scan --min-severity high` — scans `.claude` config + MCP for exposed keys,
+  over-permissive hooks, injection surface. External npm, zero plugin dependency. Wired into `/s6`.
+
+### Config protection
+- Do NOT weaken linter/formatter configs (eslint, biome, prettier, tsconfig strictness) to make errors pass.
+
+### Suppressed (handled by `/s*`)
+- branch-finishing → `/s9-cleanup` · worktrees → `EnterWorktree`
 
 ### Worktree & Vault
 Details in `~/.claude/rules/common/worktree-and-vault.md` — load on demand (worktree ops, task resume, vault queries). Key points:

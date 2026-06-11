@@ -93,7 +93,7 @@ Skipping this step bricks the session: Node `posix_spawn` fails with `ENOENT: po
 
 - Pre-flight: collect open PRs (will find the one from Phase 3).
 - Overlap check: single PR → skip.
-- Round 1: merge PR (haiku). Requires `gh pr merge` permission — confirm allowed before dispatch.
+- Round 1: merge PR (haiku) — **waits for CI green before merging** (deploy-agents Round 1 is CI-gated). Requires `gh pr merge` permission — confirm allowed before dispatch.
 - Round 2: cleanup worktree (haiku) via `/s9-cleanup`.
 
 **Stop condition**: overlap conflicts in `CLAUDE_REMOTE=1` → stop. Surface conflicting PRs.

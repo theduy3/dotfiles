@@ -27,7 +27,7 @@ Why: `ExitWorktree` from a subagent does not change the parent's CWD. If the par
 Run all rounds of /deploy-agents:
 - Pre-flight: collect open PRs (will find the PR from Phase 1)
 - Overlap check: single PR → skip (no other PR to conflict with)
-- Round 1: merge PR (haiku)
+- Round 1: merge PR (haiku) — **waits for CI green before merging** (deploy-agents Round 1 is CI-gated)
 - Round 2: cleanup worktree (haiku)
 - Round 3: watch CI (haiku, background)
 

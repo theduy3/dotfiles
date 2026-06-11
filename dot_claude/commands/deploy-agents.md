@@ -28,10 +28,23 @@ If overlaps found:
 
 If no overlaps → proceed automatically.
 
-## Round 1 — Merge (parallel, haiku)
-Dispatch one Agent per PR in a single message:
-  Agent(model: haiku): `gh pr merge <number> --merge --delete-branch`
-  Confirm each PR merged successfully before Round 2.
+## Round 1 — Merge (parallel, haiku) — CI-GATED
+Dispatch one Agent per PR in a single message. Each agent **gates on CI green before merging** —
+never merge a red or unverified PR. Per PR:
+
+1. **Wait for required CI checks:** run `gh pr checks <number> --watch --fail-fast --required`,
+   capturing BOTH its output and exit code. Decide **in this order** (precedence matters):
+   - **Output contains "no checks reported"** (repo has no CI) → warn
+     `"⚠️ no CI checks on PR #<number> — merging on local verify only"`, then merge. Check this
+     message FIRST — a no-CI repo can also exit non-zero, so it must not be mistaken for a failure.
+   - **else, exit 0** (all required checks passed) → proceed to merge (step 2).
+   - **else** (non-zero AND checks existed → a check failed or errored) → **STOP. Do NOT merge.**
+     Run `gh pr checks <number>` and report the failing checks. Holds in `CLAUDE_REMOTE=1` too —
+     never silently merge red.
+2. **Merge:** `gh pr merge <number> --merge --delete-branch`
+   - Branch-protection alternative: if the repo has branch protection with required checks, prefer
+     `gh pr merge <number> --auto --merge --delete-branch` (GitHub holds the merge until checks pass).
+3. Confirm each PR merged successfully before Round 2.
 
 ## Round 2 — Cleanup (parallel, haiku)
 

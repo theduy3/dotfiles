@@ -2,6 +2,8 @@
 description: Simplify code for clarity and maintainability — reduce complexity without changing behavior
 ---
 
+> **Recommended session**: sonnet. Behavior-preserving simplification is sonnet-grade. Not opus.
+
 Invoke the agent-skills:code-simplification skill.
 
 Simplify recently changed code (or the specified scope) while preserving exact behavior:

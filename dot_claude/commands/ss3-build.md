@@ -2,6 +2,8 @@
 description: Implement tasks incrementally — build, test, verify, commit. Add "auto" to run the whole plan in one approved pass.
 ---
 
+> **Recommended session**: sonnet. Implementation is sonnet-grade (best coding model); opus here is wasted spend. If you're on opus, restart with `claude --model sonnet` before building.
+
 Invoke the agent-skills:incremental-implementation skill alongside agent-skills:test-driven-development.
 
 ## Modes

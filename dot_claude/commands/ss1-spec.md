@@ -2,6 +2,8 @@
 description: Start spec-driven development — write a structured specification before writing code
 ---
 
+> **Recommended session**: opus. Spec design is reasoning-heavy (objective framing, acceptance criteria, boundary Q&A) — the one /ss stage worth opus. Cheaper models degrade the spec.
+
 Invoke the agent-skills:spec-driven-development skill.
 
 Begin by understanding what the user wants to build. Ask clarifying questions about:

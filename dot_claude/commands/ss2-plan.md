@@ -2,6 +2,8 @@
 description: Break work into small verifiable tasks with acceptance criteria and dependency ordering
 ---
 
+> **Recommended session**: opus. Task breakdown is reasoning-heavy (dependency graph, vertical slicing). Run planning on opus; the build-onward stages drop to sonnet.
+
 Invoke the agent-skills:planning-and-task-breakdown skill.
 
 Read the existing spec (SPEC.md or equivalent) and the relevant codebase sections. Then:

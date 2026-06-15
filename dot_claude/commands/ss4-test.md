@@ -2,6 +2,8 @@
 description: Run TDD workflow — write failing tests, implement, verify. For bugs, use the Prove-It pattern.
 ---
 
+> **Recommended session**: sonnet. TDD authoring and the RED→GREEN loop are sonnet-grade. Opus is unnecessary spend here.
+
 Invoke the agent-skills:test-driven-development skill.
 
 For new features:

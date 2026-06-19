@@ -1,0 +1,16 @@
+#!/bin/sh
+# powerfull — keep this Mac fully awake: no display/system/disk sleep; network stays up.
+# Reverse with: powersave
+PIDFILE="${TMPDIR:-/tmp}/powerfull.pid"
+
+# Already running? Don't stack a second keep-awake.
+if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE" 2>/dev/null)" 2>/dev/null; then
+  echo "powerfull already ON (pid $(cat "$PIDFILE")). Run 'powersave' to stop."
+  exit 0
+fi
+
+# nohup so the assertion survives this script exiting (disown isn't available in /bin/sh).
+nohup caffeinate -dims >/dev/null 2>&1 &
+echo $! > "$PIDFILE"
+echo "powerfull ON — display, system & disk sleep blocked; network stays awake."
+echo "  pid $(cat "$PIDFILE")  ·  stop with: powersave"

@@ -1,0 +1,21 @@
+#!/bin/sh
+# powersave — stop forcing the Mac awake; restores the normal (battery-saving) power profile.
+PIDFILE="${TMPDIR:-/tmp}/powerfull.pid"
+
+stopped=0
+if [ -f "$PIDFILE" ]; then
+  PID="$(cat "$PIDFILE" 2>/dev/null)"
+  if [ -n "$PID" ] && kill -0 "$PID" 2>/dev/null; then
+    kill "$PID" 2>/dev/null && stopped=1
+  fi
+  rm -f "$PIDFILE"
+fi
+
+# Fallback: clear any stray keep-awake this tool launched (exact arg match — surgical).
+pkill -f 'caffeinate -dims' 2>/dev/null && stopped=1
+
+if [ "$stopped" -eq 1 ]; then
+  echo "powersave ON — keep-awake stopped. Normal battery sleep behavior restored."
+else
+  echo "Nothing to stop — machine was already in normal power mode."
+fi

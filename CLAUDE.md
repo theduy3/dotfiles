@@ -81,47 +81,56 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - AskUserQuestion with options still blocks — commands use defaults instead
 - Patch script: `~/.local/bin/patch-claude-remote.sh` (auto-runs on `claude-remote` startup)
 
-## Workflow Skills & Discipline (consolidated into /s*)
+## Workflow Orchestration — GSD owns the loop (updated 2026-06-19)
 
-> GSD, ECC, and Superpowers plugins are being retired. Their best parts now live as
-> user-level skills/agents in `~/.claude`. `/s*` owns the loop. Full record: `tasks/spec-consolidation.md`.
+> **One loop owner per task.** GSD (global install) owns plan→execute→verify→ship and all
+> enforcement hooks. ECC + Superpowers stay ENABLED but as **explicit-call leaf libraries**
+> (reviewers, build-resolvers, individual discipline skills) — never their workflow loops.
+> The `/s*` suite is **deprecated for daily use** (kept on disk): it is a second full loop
+> owner that duplicates GSD. Never drive one task with both `/gsd-*` and `/s*`. Full record:
+> `tasks/spec-consolidation.md`; hook audit 2026-06-19 below.
 
-### Discipline skills — INVOKE EXPLICITLY (no auto-injector anymore)
-The Superpowers SessionStart auto-trigger is gone. These user-level skills no longer fire on
-their own — you MUST invoke them at the trigger point below:
-- Before writing ANY implementation/bugfix code → invoke `test-driven-development`
-- On ANY bug / test failure / unexpected behavior → invoke `systematic-debugging`
-- Before claiming work complete / fixed / passing → invoke `verification-before-completion`
-- When processing code-review feedback → invoke `receiving-code-review`
-- 2+ independent tasks with no shared state → invoke `dispatching-parallel-agents`
+### The loop → GSD
+- Plan/execute/verify/ship via `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`,
+  `gsd-verify-work`, `gsd-progress`, `gsd-resume-work`, `gsd-workspace`). GSD's own hooks enforce it.
+- `/s*` equivalents (`s0`–`s9`, `ship`, `deploy`) are the deprecated parallel loop — don't invoke for new work.
 
-### Workflow skills — bound to `/s*` stages (user-level, no plugin)
-- `brainstorming` → /s0 · `writing-plans` → /s1 · `subagent-driven-development` → /s1 (medium/large) · `requesting-code-review` → /s6
-- **`/s1` enforces spec+TDD:** always produces a Must-Haves contract (derived inline if no `/s0` spec), routes every scope through `test-driven-development` (test-first, no opt-out), each Truth → a failing test; `/s3` verifies every Truth has a test.
+### Leaf libraries — invoke explicitly, never as a loop
+- **Superpowers skills:** `brainstorming`, `systematic-debugging`, `test-driven-development`,
+  `verification-before-completion`, `receiving-code-review`, `dispatching-parallel-agents`.
+  Call at the trigger point; they no longer auto-fire (SessionStart injector gone).
+- **ECC agents:** language reviewers (`ecc:python-reviewer`, `ecc:typescript-reviewer`, …),
+  build-resolvers, `ecc:security-reviewer`. Avoid `/ecc:plan` / `/ecc:feature-dev` — those are rival loops.
+- **One TDD enforcer per task:** inside GSD use `gsd-verify-work` + `nyquist-auditor`; standalone use
+  `superpowers:test-driven-development`. Don't stack the user-level `/s1` TDD chain on top of GSD.
 
-### Harvested agents (`~/.claude/agents/`)
+### Harvested agents (`~/.claude/agents/`) — neutral, use under any loop
 - Review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`
-- Verify/debug: `verifier`, `debugger`, `debug-session-manager`, `integration-checker`, `nyquist-auditor`
+- Verify/debug: `verifier`, `debugger`, `integration-checker`, `nyquist-auditor`
 - Build/perf: `build-error-resolver`, `performance-optimizer`, `refactor-cleaner`
 - Plan/map/security: `planner`, `codebase-mapper`, `security-auditor`
-- When invoking the harvested GSD agents (verifier/planner/etc.), pass the `tasks/` paths explicitly
-  (`tasks/spec-*.md`, `tasks/todo-*.md`) — their prose still references GSD's old `.planning/` layout.
+- Pass `tasks/` paths explicitly (`tasks/spec-*.md`, `tasks/todo-*.md`) — their prose still says `.planning/`.
 
-### Deploy gate
-- `npx ecc-agentshield scan --min-severity high` — scans `.claude` config + MCP for exposed keys,
-  over-permissive hooks, injection surface. External npm, zero plugin dependency. Wired into `/s6`.
+### Hook audit (2026-06-19) — GSD vs /s* overlap in `~/.claude/settings.json`
+- **KEEP (orchestrator-neutral safety):** `worktree-path-guard.js` (writes stay in active worktree),
+  `worktree-branch-guard.js` (no commit to default branch in a worktree).
+- **CONFLICTS with GSD — `worktree-required-guard.js`:** blocks Write/Edit whenever a `tasks/todo-*.md`
+  sits at `status: plan-approved|implementing` (that's `/s*` state). Under a GSD task with a stale s*
+  plan file present it falsely blocks edits demanding `EnterWorktree`. Disable it if fully GSD-only,
+  or clear stale `tasks/todo-*.md` files.
+- **Redundant, not contradictory:** `gsd-validate-commit.sh` + `worktree-branch-guard.js` both gate
+  `git commit` (different checks, both fail-open) — fine to leave.
 
-### Config protection
-- Do NOT weaken linter/formatter configs (eslint, biome, prettier, tsconfig strictness) to make errors pass.
-
-### Suppressed (handled by `/s*`)
-- branch-finishing → `/s9-cleanup` · worktrees → `EnterWorktree`
+### Deploy gate / config protection (neutral)
+- `npx ecc-agentshield scan --min-severity high` before ship — scans `.claude` + MCP for exposed keys,
+  over-permissive hooks, injection surface. (Was wired into `/s6`; run manually under GSD.)
+- Do NOT weaken linter/formatter configs (eslint, biome, prettier, tsconfig strictness) to pass errors.
 
 ### Worktree & Vault
-Details in `~/.claude/rules/common/worktree-and-vault.md` — load on demand (worktree ops, task resume, vault queries). Key points:
-- Worktree entry via `/s1-plan`; cleanup via `/s9-cleanup`
-- Vault auto-inject is lazy (active task only); `CLAUDE_VAULT_FORCE=1` to force
-- Specs → `tasks/spec-*.md`, plans → `tasks/todo-*.md`
+Details in `~/.claude/rules/common/worktree-and-vault.md` — load on demand. Key points:
+- Worktree entry via built-in `EnterWorktree` (or `gsd-workspace` under GSD); the `/s1-plan` entry path is deprecated.
+- Vault auto-inject is lazy (active task only); `CLAUDE_VAULT_FORCE=1` to force.
+- Specs → `tasks/spec-*.md`, plans → `tasks/todo-*.md`.
 
 ## Dedicated Tools
 

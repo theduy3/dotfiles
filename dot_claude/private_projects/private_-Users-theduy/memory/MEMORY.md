@@ -1,0 +1,38 @@
+# Memory Index
+
+## Environment & Configuration
+- [Claude Config chezmoi Sync](claude-config-chezmoi-sync.md) — ~/.claude synced via chezmoi to private theduy3/dotfiles; edit→`chezmoi add`→push
+- [Status Line & Hooks](statusline-and-hooks.md) - Status line setup, write hook whitelist
+- [Commands & Hooks](commands-and-hooks.md) - 18 slash commands inventory, permission hook layer stack
+- [ECC Cost-Warning Killswitch](ecc-cost-warning-killswitch.md) — `ECC_CONTEXT_MONITOR_COST_WARNINGS=off` silences $5/$10/$50 COST NOTICE prompts; user wants work done, not token-saving
+- [Plugin Routing Priorities](plugin-routing-priorities.md) - GSD owns the loop; ECC+Superpowers = explicit leaf libraries; /s* deprecated (updated 2026-06-19). Canonical rule in ~/CLAUDE.md §Workflow Orchestration.
+- [EnterWorktree Busts Prompt Cache](enterworktree-busts-prompt-cache.md) — Enter/ExitWorktree regenerate CWD-dependent system-prompt sections → cache prefix bust; tool contract beats prose docs (verdict A not B)
+
+## Active Projects
+- [Consolidation into /s*](consolidation-into-s-star.md) — folding GSD+ECC+Superpowers best parts into /s*, then deleting all three. Phase 1-2 done 2026-06-11; Phase 3-4 deferred for soak. Spec: ~/tasks/spec-consolidation.md
+- [GSD Reinstalled Globally](gsd-reinstall-global.md) — `@opengsd/gsd-core` 1.4.4 `--claude --global` (2026-06-10); manifest-idempotent + chezmoi-ignore for agents; supersedes "GSD removed" claims
+- [Sans Souci Ongles & Spa SEO](seo-sanssouci.md) — Wix nail salon, Laval QC. Phase 1 complete (35→55/100). Phase 2: /faq, /galerie, reviews, citations.
+- [Remote Control Persistence](remote_control_persistence.md) — Android remote control: session persistence, permission model, ExitPlanMode still blocks (~10%)
+- [Hermes Desktop → Remote VPS](hermes-desktop-remote.md) — MIGRATED 2026-06-19 to Bluehost root@129.121.100.233 (was Hostinger 147; Dokploy/Supabase stayed). "Hermes Agent.app" → gateway API 8642 (key /root/hermes/.desktop-api-key) via SSH tunnel. RAM-tight (3.8G+swap). zeus profile root:root perm bug RESOLVED 2026-06-20 (chown -R in volume; stale `docker logs --tail` trap).
+- [Hermes Platform Topology](hermes-platform-topology.md) — `hermes`=Telegram (zeus+11, home chan 8446251233) / `hermes-wylios`=Discord (CEO-Wylios + 5 SalonX bots). Platform gate = bot-token presence, not config `enabled:`. zeus Telegram-only (no DISCORD_BOT_TOKEN). Per-profile gateway.pid is JSON; per-profile logs in profiles/<n>/logs/. Python tool-chain fix 2026-06-20: node/bin wrapper→venv python (terminal tool lacked pyyaml); `docker top` is the only reliable liveness check. +`wiki` librarian profile added 2026-06-21 (own TG bot 8821743046:, dump→/vault/Inbox→wiki-ingest→Notes; default wiki cron stays as nightly sweep).
+- [Hermes-Wylios Config Regen](hermes-wylios-config-regen.md) — entrypoint.wylios.sh rewrites every profile's config.yaml from .env on each boot → `config.yaml`/`hermes config set` ephemeral; durable per-profile model lives in entrypoint PROFILE-MODEL-OVERRIDE block (3 Opus + 3 Sonnet, 2026-06-20). Only clean restart = `docker restart hermes-wylios`. All 6 share 1 anthropic OAuth cred. "out of extra usage" 400 = account extra-usage pool exhausted (claude.ai/settings/usage), NOT Discord/weekly-limit; model downgrade slows burn, doesn't unblock.
+- [GSD Off-box Pipeline](gsd-offbox-pipeline.md) — LIVE: salonx-engineer builds off-box via GSD on GitHub Actions + headless Claude Code, Paperclip→repository_dispatch bridge, reuses approve→merge→deploy chassis. 2026-06-28: fixed the 100%-dead Discord PARK path w/ a sonnet pre-pass grey-area scan that parks BEFORE the 45m build. Runtime: GSD 45m; pre-PR verify slimmed (dropped dup `build`, ~12-15min recovered, b65cf49).
+- [Hermes-Wylios Coding Pipeline](hermes-wylios-coding-pipeline.md) — autonomous s1→s9 coder: Discord brainstorm→Paperclip WYL issue→kanban→salonx-engineer→worktree PRs on Wylios-Dev/salonx→#product-dev forum→Discord approve. Driven by CODING-SOP.md (static volume file). Opened PR #653. CWD-ENOENT (os.getcwd FileNotFoundError, persistent_shell camping in GC'd scratch) was #1 failure → fixed 2026-06-20 w/ CWD-safety SOP section. Open: stalled wyl-15, gitnexus unindexed, gh missing.
+- [Hermes Discord Role-Mention Drop](hermes-discord-role-mention.md) — bots silently drop owner `<@&role>` mentions (not in message.mentions); managed role undeletable; fixed via entrypoint boot auto-patch 2026-06-27
+- [Paperclip Tunnel Topology](paperclip-tunnel-topology.md) — paperclip.salonxai.cloud split-brain: Traefik+TLS+basicAuth edge on Hostinger, origin (node :3100 in host-net hermes-wylios) on Bluehost, bridged by SSH tunnel `paperclip-tunnel.service`. 401=password, 502=tunnel/relay/origin. Fixed 2026-06-20 after hermes-wylios migration orphaned the route.
+- [Salonx Mirror for Personas](salonx-mirror-personas.md) — `/vault/repos/salonx-mirror` auto-synced to main every 10m (host systemd) gives read personas (Product-Lead) current merged code + `/vault/bin/gh`, fixing stale `~/.hermes/work/salonx` false-negatives. Agent uses ABSOLUTE paths (no entrypoint env). WARNING: editing `entrypoint.wylios.sh` with `mv` stripped `+x` → whole-fleet crash loop 2026-07-02.
+
+## Safety Rules
+- [Worktree Branch Safety](feedback_worktree_branch_safety.md) - NEVER commit to main in a worktree; verify branch before any git write op
+- [ExitPlanMode Hook](feedback_exitplanmode_hook.md) - ExitPlanMode cannot be auto-approved on Android: neither allow list nor hooks bypass requiresUserInteraction() interactive UI
+- [Worktree CWD ENOENT](feedback_worktree_cwd_enoent.md) - Hooks failing with `posix_spawn '/bin/sh'` ENOENT = parent CWD unlinked after `git worktree remove`; restart required
+- [1M Context Flag](feedback_1m_context_flag.md) - `CLAUDE_CODE_DISABLE_1M_CONTEXT=1` in settings.json silently caps at 200K; check first when 1M model returns 200K
+- [GSD Orphan Project Hooks Crash](gsd-orphan-project-hooks-crash.md) — dead project-local `hooks` block (GSD uninstall) crashes every event with MODULE_NOT_FOUND; `jq 'del(.hooks)'` main + worktree settings, global covers it
+- [GSD Phase Worktree Guard](gsd-phase-worktree-guard.md) — global PreToolUse hook blocks main-checkout source writes while STATE.md `status: executing`; `GSD_ALLOW_INLINE=1` escape hatch for Pattern-C/gap-closure; self-disarms on status flip; wiring in settings.json.tmpl
+- [Salonx Worktree Guard](salonx-worktree-guard.md) — hard PreToolUse hook blocks ALL Write/Edit into salonx MAIN checkout (no /s*-state gate); forces parallel sessions into worktrees; HEAD-collision incident RECOVERED 2026-07-03 (PRs #1049–#1052, zero loss) + salonx merge/CI ops notes
+
+## User Preferences
+- Terminal: Ghostty
+- Package manager: `bun run` preferred for speed; `install` follows project lockfile (`package-lock.json` → npm, `bun.lock` → bun)
+- Output style: learning mode
+- Attribution: disabled globally

@@ -26,6 +26,7 @@ Library/LaunchAgents
 .claude/skills/postiz
 .claude/skills/skill-creator
 .claude/skills/supabase-postgres-best-practices
+.claude/skills/tdd
 
 # VPS (Linux) keeps its own settings.json; statusline.sh is now cross-platform
 # and shared (Mac authoritative). context-mode 3rd line no-ops where unavailable.

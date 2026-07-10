@@ -6,9 +6,11 @@
 - [Commands & Hooks](commands-and-hooks.md) - 18 slash commands inventory, permission hook layer stack
 - [ECC Cost-Warning Killswitch](ecc-cost-warning-killswitch.md) — `ECC_CONTEXT_MONITOR_COST_WARNINGS=off` silences $5/$10/$50 COST NOTICE prompts; user wants work done, not token-saving
 - [Plugin Routing Priorities](plugin-routing-priorities.md) - GSD owns the loop; ECC+Superpowers = explicit leaf libraries; /s* deprecated (updated 2026-06-19). Canonical rule in ~/CLAUDE.md §Workflow Orchestration.
+- [ECC Memory Graph Storage](ecc-memory-graph-storage.md) — knowledge graph lives in npx cache (fragile); markdown memory = source of truth, graph = derived view; re-seed if empty
 - [EnterWorktree Busts Prompt Cache](enterworktree-busts-prompt-cache.md) — Enter/ExitWorktree regenerate CWD-dependent system-prompt sections → cache prefix bust; tool contract beats prose docs (verdict A not B)
 
 ## Active Projects
+- [Task Queue](task-queue.md) — persistent cross-session task queue; scan Active section on session start, update on completion
 - [Consolidation into /s*](consolidation-into-s-star.md) — folding GSD+ECC+Superpowers best parts into /s*, then deleting all three. Phase 1-2 done 2026-06-11; Phase 3-4 deferred for soak. Spec: ~/tasks/spec-consolidation.md
 - [GSD Reinstalled Globally](gsd-reinstall-global.md) — `@opengsd/gsd-core` 1.4.4 `--claude --global` (2026-06-10); manifest-idempotent + chezmoi-ignore for agents; supersedes "GSD removed" claims
 - [Sans Souci Ongles & Spa SEO](seo-sanssouci.md) — Wix nail salon, Laval QC. Phase 1 complete (35→55/100). Phase 2: /faq, /galerie, reviews, citations.

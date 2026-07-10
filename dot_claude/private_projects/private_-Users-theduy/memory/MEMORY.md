@@ -30,6 +30,7 @@
 - [1M Context Flag](feedback_1m_context_flag.md) - `CLAUDE_CODE_DISABLE_1M_CONTEXT=1` in settings.json silently caps at 200K; check first when 1M model returns 200K
 - [GSD Orphan Project Hooks Crash](gsd-orphan-project-hooks-crash.md) — dead project-local `hooks` block (GSD uninstall) crashes every event with MODULE_NOT_FOUND; `jq 'del(.hooks)'` main + worktree settings, global covers it
 - [GSD Phase Worktree Guard](gsd-phase-worktree-guard.md) — global PreToolUse hook blocks main-checkout source writes while STATE.md `status: executing`; `GSD_ALLOW_INLINE=1` escape hatch for Pattern-C/gap-closure; self-disarms on status flip; wiring in settings.json.tmpl
+- [Salonx Gates Local](salonx-gates-local.md) — `bun run gates` tier 4 locally: psql is keg-only libpq, 5432 taken → container on 55432; full recipe
 - [Salonx Worktree Guard](salonx-worktree-guard.md) — hard PreToolUse hook blocks ALL Write/Edit into salonx MAIN checkout (no /s*-state gate); forces parallel sessions into worktrees; HEAD-collision incident RECOVERED 2026-07-03 (PRs #1049–#1052, zero loss) + salonx merge/CI ops notes; 73-spec audit 2026-07-03: ZERO wipe victims, only unmerged work = i18n Phase M (fr/vi/km) on translate-km branch (obsolete keyring, needs remap)
 
 ## User Preferences

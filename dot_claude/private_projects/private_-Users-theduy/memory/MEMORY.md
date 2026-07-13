@@ -10,6 +10,7 @@
 - [EnterWorktree Busts Prompt Cache](enterworktree-busts-prompt-cache.md) — Enter/ExitWorktree regenerate CWD-dependent system-prompt sections → cache prefix bust; tool contract beats prose docs (verdict A not B)
 - [Time Machine Interrupted Loop](timemachine-interrupted-loop.md) — TM "not backing up" = lost reference snapshot → deep-scan→interrupt loop on portable USB; fix = one uninterrupted `startbackup` + `caffeinate -dimsu` (2026-07-13)
 - [Android Remote Access Stack](android-remote-access-stack.md) — Tailscale mesh + Terminus + herdr to reach bluehost/hostinger/mac from Pixel; node IPs, --ssh-off, mac socket-activated sshd (2026-07-13)
+- [Syncthing Vault Cluster](syncthing-vault-cluster.md) — Bluehost=24/7 master, 6 devices, theduyvault+wylios-vault; .stignore per-device gotcha, never sync .git, case conflicts, versioning now ON (2026-07-13)
 
 ## Active Projects
 - [Task Queue](task-queue.md) — persistent cross-session task queue; scan Active section on session start, update on completion

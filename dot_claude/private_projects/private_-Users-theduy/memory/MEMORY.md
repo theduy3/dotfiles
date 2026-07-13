@@ -8,6 +8,7 @@
 - [Plugin Routing Priorities](plugin-routing-priorities.md) - GSD owns the loop; ECC+Superpowers = explicit leaf libraries; /s* deprecated (updated 2026-06-19). Canonical rule in ~/CLAUDE.md §Workflow Orchestration.
 - [ECC Memory Graph Storage](ecc-memory-graph-storage.md) — knowledge graph lives in npx cache (fragile); markdown memory = source of truth, graph = derived view; re-seed if empty
 - [EnterWorktree Busts Prompt Cache](enterworktree-busts-prompt-cache.md) — Enter/ExitWorktree regenerate CWD-dependent system-prompt sections → cache prefix bust; tool contract beats prose docs (verdict A not B)
+- [Time Machine Interrupted Loop](timemachine-interrupted-loop.md) — TM "not backing up" = lost reference snapshot → deep-scan→interrupt loop on portable USB; fix = one uninterrupted `startbackup` + `caffeinate -dimsu` (2026-07-13)
 - [Android Remote Access Stack](android-remote-access-stack.md) — Tailscale mesh + Terminus + herdr to reach bluehost/hostinger/mac from Pixel; node IPs, --ssh-off, mac socket-activated sshd (2026-07-13)
 
 ## Active Projects

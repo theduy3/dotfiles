@@ -1,7 +1,8 @@
 # Memory Index
 
 ## Environment & Configuration
-- [Claude Config chezmoi Sync](claude-config-chezmoi-sync.md) — ~/.claude synced via chezmoi to private theduy3/dotfiles; edit→`chezmoi add`→push
+- [Claude Config chezmoi Sync](claude-config-chezmoi-sync.md) — ~/.claude synced via chezmoi to private theduy3/dotfiles; edit→`chezmoi add`→push (settings.json is a .tmpl — edit source or hourly apply reverts it, incl. gsd-core installer writes)
+- [Permission Rules: Edit() not Write()](claude-permission-edit-not-write.md) — `Write(path)` rules silently ignored by the matcher; the .env/secrets/.ssh denies were inert until 2026-07-16
 - [Status Line & Hooks](statusline-and-hooks.md) - Status line setup, write hook whitelist
 - [Commands & Hooks](commands-and-hooks.md) - 18 slash commands inventory, permission hook layer stack
 - [ECC Cost-Warning Killswitch](ecc-cost-warning-killswitch.md) — `ECC_CONTEXT_MONITOR_COST_WARNINGS=off` silences $5/$10/$50 COST NOTICE prompts; user wants work done, not token-saving
@@ -10,6 +11,7 @@
 - [EnterWorktree Busts Prompt Cache](enterworktree-busts-prompt-cache.md) — Enter/ExitWorktree regenerate CWD-dependent system-prompt sections → cache prefix bust; tool contract beats prose docs (verdict A not B)
 - [Time Machine Interrupted Loop](timemachine-interrupted-loop.md) — TM "not backing up" = lost reference snapshot → deep-scan→interrupt loop on portable USB; fix = one uninterrupted `startbackup` + `caffeinate -dimsu` (2026-07-13)
 - [Android Remote Access Stack](android-remote-access-stack.md) — Tailscale mesh + Terminus + herdr to reach bluehost/hostinger/mac from Pixel; node IPs, --ssh-off, mac socket-activated sshd (2026-07-13)
+- [herdr Host = Hostinger](herdr-host-hostinger.md) — Hostinger is the always-on Claude+herdr box (6.9G free); Bluehost RAM-disqualified (990Mi, 4.5G swap at idle) — don't retry. herdr under systemd w/ 4G cgroup cap (2026-07-16)
 - [Syncthing Vault Cluster](syncthing-vault-cluster.md) — Bluehost=24/7 master, 6 devices, theduyvault+wylios-vault; .stignore per-device gotcha, never sync .git, case conflicts, versioning now ON (2026-07-13)
 
 ## Active Projects

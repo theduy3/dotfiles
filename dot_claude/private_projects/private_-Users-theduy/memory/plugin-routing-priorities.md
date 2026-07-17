@@ -1,6 +1,6 @@
 ---
 name: plugin-routing-priorities
-description: "Which plugin/skill system to use per task type — GSD owns the loop; ECC + Superpowers are explicit leaf libraries; /s* deprecated (updated 2026-06-19)"
+description: "Which plugin/skill system to use per task type — GSD owns the loop; ECC + Superpowers are explicit leaf libraries; /s* REMOVED 2026-07-17"
 metadata:
   node_type: memory
   type: feedback
@@ -12,13 +12,13 @@ metadata:
 > **Supersedes the 2026-06-08 "GSD removed, /s* owns loop" version.** GSD was reinstalled
 > globally 2026-06-10 and the user now prefers it (2026-06-19). GSD owns plan→execute→verify→ship
 > and all enforcement hooks. ECC + Superpowers stay ENABLED as **explicit-call leaf libraries** —
-> never their workflow loops. `/s*` is a rival full loop, now **deprecated** (kept on disk).
-> Never drive one task with both `/gsd-*` and `/s*`. Canonical rule: `~/CLAUDE.md` §Workflow
+> never their workflow loops. `/s*` was a rival full loop — **removed from disk 2026-07-17**
+> (dotfiles `23931ed`, see [[consolidation-into-s-star]]). Canonical rule: `~/CLAUDE.md` §Workflow
 > Orchestration. See [[gsd-reinstall-global]], [[consolidation-into-s-star]], [[gsd-orphan-project-hooks-crash]].
 
 ### The loop → GSD only
 - Plan/execute/verify/ship: `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-progress`, `gsd-resume-work`, `gsd-workspace`).
-- **Skip (rival loops):** `/s0`–`/s9`, `ship`, `deploy`, `full-ship`, `auto-ship`; `/ecc:plan`, `/ecc:feature-dev`; Superpowers workflow loop.
+- **Skip (rival loops):** `/ecc:plan`, `/ecc:feature-dev`; Superpowers workflow loop. (`/s0`–`/s9`, `ship`, `deploy`, `full-ship`, `auto-ship` deleted 2026-07-17 — don't suggest them.)
 
 ### Leaf libraries — invoke explicitly, never as a loop
 - **Superpowers skills** (no longer auto-fire): `brainstorming`, `systematic-debugging`, `test-driven-development`, `verification-before-completion`, `receiving-code-review`, `dispatching-parallel-agents`.
@@ -30,8 +30,8 @@ metadata:
 - SEO clients: `/seo-audit` | `/seo-page` | `/seo-technical`. Ad clients: `/ads-audit` | `/ads-google` | `/ads-meta`.
 - Tooling: code-review-graph MCP, caveman, claude-mem (`/mem-search` for prior-session context).
 
-### Hook conflict to watch
-`worktree-required-guard.js` (PreToolUse Write|Edit) keys off `/s*` state (`tasks/todo-*.md status: plan-approved|implementing`) and can falsely block GSD edits when a stale s* plan file exists. `worktree-path-guard.js` + `worktree-branch-guard.js` are neutral safety — keep. Same orphan-wiring class as the [[gsd-orphan-project-hooks-crash]].
+### Hook conflict — resolved 2026-07-17
+`worktree-required-guard.js` (falsely blocked GSD edits off stale `/s*` task state) deleted with the `/s*` suite. `worktree-path-guard.js` + `worktree-branch-guard.js` are neutral safety — keep.
 
 ## Quick Reference
 ```

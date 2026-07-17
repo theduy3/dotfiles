@@ -38,9 +38,10 @@ Invoke it. Task granularity is the whole game:
 
 ### 3. Write `tasks/todo-<topic>.md`
 
-The metadata block is a **contract with the harness**, not decoration.
-`~/.claude/rules/common/session-resume.md` parses these exact keys to resume a
-task after a context clear. Invent no new keys; omit none.
+The metadata block is a **contract with the consumers**, not decoration.
+`/tdd-gates` and `~/.claude/hooks/inject-vault-context.sh` read these exact keys
+to pick up and resume a `plan-approved` task after a context clear. Invent no new
+keys; omit none.
 
 ```markdown
 ---
@@ -69,10 +70,10 @@ Worktree name, base branch, baseline command to prove green before starting.
 
 | Key | Read by | Meaning |
 |---|---|---|
-| `status` | `session-resume.md` | `draft` → `plan-approved` → `implementing` |
-| `worktree` | `session-resume.md`, `/tdd-gates` | name passed to `EnterWorktree` |
-| `scope` | `session-resume.md`, this skill | selects implementation style *only* |
-| `created-at` | `session-resume.md` | staleness gate: >14 days triggers a replan prompt |
+| `status` | `/tdd-gates`, `inject-vault-context.sh` | `draft` → `plan-approved` → `implementing` |
+| `worktree` | `/tdd-gates` | name passed to `EnterWorktree` |
+| `scope` | this skill | selects implementation style *only* |
+| `created-at` | *no live reader* — the >14-day staleness-replan gate retired with `session-resume.md` (deleted 2026-07-17); kept as an informational timestamp |
 
 `scope` never routes work back to the main checkout. It selects style:
 `small` → single-context TDD. `medium`/`large` → `superpowers:subagent-driven-development`.

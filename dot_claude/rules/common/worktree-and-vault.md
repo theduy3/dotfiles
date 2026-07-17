@@ -4,17 +4,17 @@
 
 ## Worktree Workflow
 
-- **Entry**: `/s1-plan` (calls built-in `EnterWorktree`). GSD removed — no `/gsd-*` commands. Worktree entry/exit use built-in `EnterWorktree`/`ExitWorktree`. (The 79 `gsd-*` skill wrappers were removed 2026-06-08; their `~/.claude/get-shit-done/` runtime had been deleted, leaving them as dangling, misfiring orphans.)
+- **Entry**: built-in `EnterWorktree` (or `gsd-workspace` under GSD). GSD owns the plan→execute→verify→ship loop.
 - **Setup hooks** (PostToolUse on `EnterWorktree`):
   - `~/.claude/hooks/worktree-env-copy.sh` — copies `.env*` from main into worktree
   - `~/.claude/hooks/worktree-tab-rename.sh` — sets terminal tab title
-- **Cleanup**: `/s9-cleanup` (calls `ExitWorktree` + `git worktree remove`).
-- **Resume**: `~/.claude/rules/common/session-resume.md` detects `status: plan-approved` in `tasks/todo-*.md`, includes stale-age gate at >14 days.
+- **Cleanup**: `ExitWorktree` in the parent, then `git worktree remove` (see `worktree-safety.md` for the CWD-ENOENT ordering contract).
+- **Resume**: `/gsd-resume-work` restores context from `.planning/` state.
 
 ## Output Paths
 
-- Specs: `tasks/spec-<task-name>.md` (not `docs/superpowers/specs/`)
-- Plans: `tasks/todo-<task-name>.md` (not `docs/superpowers/plans/`)
+- Specs: `tasks/spec-<task-name>.md`
+- Plans: `tasks/todo-<task-name>.md`
 - User can override complexity: "this is a small task" or "use subagents for this"
 
 ## Vault Integration

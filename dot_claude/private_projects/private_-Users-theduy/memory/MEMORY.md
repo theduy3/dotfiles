@@ -32,7 +32,7 @@
 - [Discord-Driven Pipeline](discord-driven-pipeline.md) — 3-plan redesign (task-runner loop + ship/stop poller + PL-bot critic gates) replacing monolithic gsd-runner. ALL 3 PLANS + BOTH GATES PROVEN LIVE (2026-07-12): spec→critic→approve→plan→critic→in_review all clean e2e. Plan-gate block root cause = stale persistSession (June-25 session resumed w/ old flow); fixed via reset-session + origin-not-mirror AGENTS.md rule + mandatory in_review disposition. Remaining: owner approve plan → `ship WYL-44` → task-runner build → §10 diff. Specs in ~/tasks/.
 
 ## Workflow Ownership
-- [Spec-Plan-TDD Ownership](spec-plan-tdd-ownership.md) — human owns /spec+/plan (grilled, approve); Claude owns implement→gates→commit→PR→merge autonomously. As-built /tdd-gates hard-stops at green gates ("human ships") — that wall contradicts this; carry through to merge.
+- [Spec-Plan-TDD Ownership](spec-plan-tdd-ownership.md) — human owns /spec+/plan (grilled, approve); Claude owns implement→gates→commit→PR→CI→merge autonomously, FULL AUTO-MERGE (no ping, all repos, decided 2026-07-17). As-built /tdd-gates hard-stops at green gates ("human ships") — that wall contradicts this; carry through to merge.
 
 ## Safety Rules
 - [Worktree Branch Safety](feedback_worktree_branch_safety.md) - NEVER commit to main in a worktree; verify branch before any git write op

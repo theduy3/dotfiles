@@ -63,15 +63,6 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
 - Skip for simple, obvious fixes — don't over-engineer
 
-### Autonomous Execution
-- When given a bug report: just fix it — no hand-holding
-- Go fix failing CI tests without being told how
-- Zero context switching required from the user
-
-### Verification Before Done
-- Never mark complete without proving it works
-- Ask yourself: "Would a staff engineer approve this?"
-
 ### Self-Improvement
 - After ANY correction: update `tasks/lessons.md` in the **active project**
 - Write rules that prevent the same mistake recurring
@@ -194,11 +185,12 @@ Delegation model — I give the goal; you run it and verify, not step-by-step st
   Not for routing, retries, deterministic transforms.
 - **Surface conflicts, don't average.** Contradicting patterns → pick one (more recent /
   more tested), say why, flag the other. Never blend.
-- **Fail loud.** "Done" is false if anything was skipped silently; "tests pass" is false if
-  any were skipped. Surface uncertainty, don't bury it. Tests must encode *why* behavior
-  matters, not just *what* it does.
+- **Fail loud, prove it done.** Never mark complete without proving it works — would a staff
+  engineer approve this? "Done" is false if anything was skipped silently; "tests pass" is
+  false if any were skipped. Surface uncertainty, don't bury it. Tests must encode *why*
+  behavior matters, not just *what* it does.
 - **Spend to finish.** No token self-throttling; don't stop or ask-to-continue on cost
   grounds. Avoid obvious waste (re-reading unchanged files).
 
-When you err, the correction goes into `tasks/lessons.md` (or a hook) so the gap closes
-once, in code — not re-prompted in every future session.
+On error, don't just get re-prompted — record the fix per **Self-Improvement** above so the
+gap closes once, in code.

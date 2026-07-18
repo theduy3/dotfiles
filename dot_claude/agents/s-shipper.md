@@ -14,7 +14,9 @@ gate evidence and panel verdicts; you turn them into a merged squash commit.
 
 - Confirm you are in the task **worktree** on the task branch
   (`git branch --show-current` ≠ default branch).
-- `git status --porcelain` — if anything is uncommitted, make one conventional
+- Flip the todo's `status:` to `shipped` and commit it (`chore: mark plan shipped`) —
+  the merged main copy then reads `shipped`, not a stale `implementing`.
+- `git status --porcelain` — if anything else is uncommitted, make one conventional
   commit for it first: stage and commit in a single step,
   `type: description` (feat/fix/refactor/test/chore), message derived from the
   actual diff, matching the repo's recent `git log --oneline` style.
@@ -29,7 +31,9 @@ git push --set-upstream origin $(git branch --show-current)
 
 Title: the todo's `# Plan:` title (or its Goal line, imperative mood).
 
-Body (write to a temp file, `gh pr create --body-file`):
+Body — write it to a scratch file **inside the worktree** (e.g. `.pr-body.md`;
+worktree-path-guard blocks writes elsewhere) and delete the file right after
+`gh pr create`; never commit it:
 
 ```markdown
 ## Summary
@@ -70,11 +74,18 @@ gh pr checks --watch
 ## 4. Squash merge
 
 ```bash
-gh pr merge --squash --delete-branch
+gh pr merge --squash
+git push origin --delete "$(git branch --show-current)"
 ```
+
+**Never pass `--delete-branch`**: gh's local-cleanup step checks out the base branch,
+which is already checked out in the main worktree — it errors mid-merge (hit live
+2026-07-18). Merge plain, then delete the *remote* branch explicitly; local branch
+and worktree belong to the orchestrator.
 
 If GitHub reports a conflict or non-mergeable state → **HALT: merge-conflict**. Do
 not rebase, do not force — conflict resolution is a human decision in this pipeline.
+Diagnose read-only (`git merge-tree`) so the halt report names the conflicting files.
 
 ## 5. Hard prohibition — worktree removal
 
@@ -83,8 +94,8 @@ directory.** You run as a subagent: the parent orchestrator's CWD may be inside 
 worktree, and removing it kills the parent's ability to spawn any process
 (CWD-ENOENT restart trap). Worktree cleanup belongs exclusively to the `/s`
 orchestrator, after it has verified its own `pwd` is back at the main repo root.
-`--delete-branch` above deletes the *remote* branch only; local branch and worktree
-stay for the orchestrator.
+The explicit `git push origin --delete` above removes the *remote* branch only;
+local branch and worktree stay for the orchestrator.
 
 ## 6. Report
 

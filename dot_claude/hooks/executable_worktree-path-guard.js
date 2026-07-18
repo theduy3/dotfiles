@@ -89,6 +89,17 @@ process.stdin.on('end', () => {
       process.exit(0);
     }
 
+    // /s* Run-State Files live deliberately OUTSIDE every repo (~/tasks/.s-run/)
+    // so they survive worktree removal; the /s orchestrator must update them while
+    // its CWD is inside the task worktree. Exempt that one directory — it can never
+    // be a mistaken main-repo path, which is the only thing this guard exists to stop.
+    // User-approved exemption 2026-07-18 (s-star verify).
+    const os = require('os');
+    const sRunHome = path.join(process.env.HOME || os.homedir(), 'tasks', '.s-run') + path.sep;
+    if (path.resolve(rawFilePath).startsWith(sRunHome)) {
+      process.exit(0);
+    }
+
     // Normalise .. traversal so /worktree/src/../../../main/file
     // resolves to its true location before we check containment.
     const filePath = path.resolve(rawFilePath);

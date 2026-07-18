@@ -79,7 +79,9 @@ back and continue.
 1. Read the todo's metadata (`worktree`, `scope`, `spec`) and task list.
 2. `EnterWorktree` with the todo's worktree name — **exactly one Enter for the whole
    run**; no Exit until cleanup. (Each switch busts the prompt-cache prefix.)
-3. Flip the todo's `status:` to `implementing` (worktree copy — it rides the PR).
+3. Flip the todo's `status:` to `implementing` (worktree copy — it rides the PR)
+   **and commit the flip immediately** — an uncommitted flip leaves the working tree
+   dirty, which S3 correctly reports as a finding (verified live 2026-07-18).
 4. Write the Run-State File (`status: s2`).
 
 ## 3. The stages

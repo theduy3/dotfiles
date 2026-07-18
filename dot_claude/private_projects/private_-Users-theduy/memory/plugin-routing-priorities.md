@@ -1,24 +1,30 @@
 ---
 name: plugin-routing-priorities
-description: "Which plugin/skill system to use per task type — GSD owns the loop; ECC + Superpowers are explicit leaf libraries; /s* REMOVED 2026-07-17"
+description: "Which plugin/skill system to use per task type — GSD owns PROD loop; NEW distilled /s* owns LOCAL loop (rebuilt 2026-07-17, same day old suite deleted); ECC + Superpowers are explicit leaf libraries"
 metadata:
   node_type: memory
   type: feedback
   originSessionId: c5a3a6a4-3ceb-43f6-a89a-e2ac62b750ea
 ---
 
-## One loop owner per task → GSD
+## One loop owner per ARENA — GSD = prod, /s* = local (2026-07-17)
 
-> **Supersedes the 2026-06-08 "GSD removed, /s* owns loop" version.** GSD was reinstalled
-> globally 2026-06-10 and the user now prefers it (2026-06-19). GSD owns plan→execute→verify→ship
-> and all enforcement hooks. ECC + Superpowers stay ENABLED as **explicit-call leaf libraries** —
-> never their workflow loops. `/s*` was a rival full loop — **removed from disk 2026-07-17**
-> (dotfiles `23931ed`, see [[consolidation-into-s-star]]). Canonical rule: `~/CLAUDE.md` §Workflow
-> Orchestration. See [[gsd-reinstall-global]], [[consolidation-into-s-star]], [[gsd-orphan-project-hooks-crash]].
+> **Updated 2026-07-17 evening:** the OLD s0–s9 suite was deleted that morning (dotfiles
+> `23931ed`), then a NEW `/s*` was **rebuilt the same day by distillation** (spec
+> `~/tasks/spec-s-star.md`, ADRs 0001–0007 in `~/tasks/s-star/docs/adr/`). GSD owns
+> plan→execute→verify→ship **for production** (Hermes/Wylios). **`/s*` owns local
+> single-track work**: `/s0-spec` → `/s1-plan` → `/s` (autonomous S2→S5, squash auto-merge,
+> 5-halt ping surface, Run-State `~/tasks/.s-run/<slug>.md`). Distillates are self-contained
+> owned copies w/ sidecar `.manifest.yaml`; refresh via `/update-distill` (per-Source approval).
+> **Seam precedence (ADR 0007): todo at `status: plan-approved` → `/s`; `tdd-gates` is
+> explicit-call-only.** ECC + Superpowers stay ENABLED as **explicit-call leaf libraries** —
+> never their workflow loops. Canonical rule: `~/CLAUDE.md` §Workflow Orchestration. See
+> [[gsd-reinstall-global]], [[consolidation-into-s-star]], [[spec-plan-tdd-ownership]].
 
-### The loop → GSD only
-- Plan/execute/verify/ship: `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-progress`, `gsd-resume-work`, `gsd-workspace`).
-- **Skip (rival loops):** `/ecc:plan`, `/ecc:feature-dev`; Superpowers workflow loop. (`/s0`–`/s9`, `ship`, `deploy`, `full-ship`, `auto-ship` deleted 2026-07-17 — don't suggest them.)
+### The loops
+- **Local:** `/s0-spec` → `/s1-plan` → `/s` (owned `s-*` agents: implementer/gate-runner/shipper + review panel of 4 + fixer; models pinned per ADR 0006 — Fable interactive, Opus S2/S4, Sonnet S3/S5).
+- **Prod:** `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-progress`, `gsd-resume-work`, `gsd-workspace`).
+- **Skip (rival loops):** `/ecc:plan`, `/ecc:feature-dev`; Superpowers workflow loop. (Old `/s0`–`/s9`, `ship`, `deploy` wrappers deleted 2026-07-17 — different artifacts from today's `/s*`.)
 
 ### Leaf libraries — invoke explicitly, never as a loop
 - **Superpowers skills** (no longer auto-fire): `brainstorming`, `systematic-debugging`, `test-driven-development`, `verification-before-completion`, `receiving-code-review`, `dispatching-parallel-agents`.

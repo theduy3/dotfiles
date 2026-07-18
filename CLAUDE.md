@@ -75,19 +75,26 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - AskUserQuestion with options still blocks — commands use defaults instead
 - Patch script: `~/.local/bin/patch-claude-remote.sh` (auto-runs on `claude-remote` startup)
 
-## Workflow Orchestration — GSD owns the loop (updated 2026-06-19)
+## Workflow Orchestration — one loop owner per arena (updated 2026-07-17)
 
-> **One loop owner per task.** GSD (global install) owns plan→execute→verify→ship and all
-> enforcement hooks. ECC + Superpowers stay ENABLED but as **explicit-call leaf libraries**
-> (reviewers, build-resolvers, individual discipline skills) — never their workflow loops.
-> The `/s*` suite was **removed 2026-07-17** (commands, `workflow-model-routing.md`,
-> `session-resume.md`, `worktree-required-guard.js` all deleted). Full record:
-> `tasks/spec-consolidation.md`; hook audit 2026-06-19 below.
+> **One loop owner per task.** **GSD owns production** (Hermes/Wylios) plan→execute→verify→ship
+> and all enforcement hooks. **`/s*` owns local single-track work** (rebuilt 2026-07-17 by
+> distillation — spec `~/tasks/spec-s-star.md`, ADRs `~/tasks/s-star/docs/adr/`). ECC +
+> Superpowers stay ENABLED but as **explicit-call leaf libraries** — never their workflow loops.
+> (The old s0–s9 suite was deleted 2026-07-17 and replaced the same day by the distilled `/s*`.)
 
-### The loop → GSD
+### The local loop → `/s*`
+- `/s0-spec` (interview→spec→grill, Fable) → `/s1-plan` (todo + adversarial check, Fable) →
+  **`/s`** (autonomous S2→S5: implement→gates→review-panel→squash-auto-merge, unattended).
+- **Seam precedence (ADR 0007):** a `tasks/todo-*.md` at `status: plan-approved` belongs to
+  **`/s`**. `tdd-gates` is **explicit-call-only** — never auto-select it for that Seam.
+- `/s` halts+pings only on: gate red, review stuck (cap-2), CI red, CI timeout 30m, merge
+  conflict. Resume: `/s <slug>` reads `~/tasks/.s-run/<slug>.md`.
+- Refresh distillates monthly via `/update-distill` (per-Source human approval).
+
+### The prod loop → GSD
 - Plan/execute/verify/ship via `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`,
   `gsd-verify-work`, `gsd-progress`, `gsd-resume-work`, `gsd-workspace`). GSD's own hooks enforce it.
-- The former `/s*` parallel loop (s0–s9, ship, deploy wrappers) was deleted 2026-07-17.
 
 ### Leaf libraries — invoke explicitly, never as a loop
 - **Superpowers skills:** `brainstorming`, `systematic-debugging`, `test-driven-development`,

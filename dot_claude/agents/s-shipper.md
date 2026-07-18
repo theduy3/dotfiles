@@ -1,6 +1,6 @@
 ---
 name: s-shipper
-description: S5 stage agent of the /s pipeline — conventional commit, push, rich PR, CI watch (30-min cap), squash auto-merge. Runs in the task worktree; NEVER removes the worktree (orchestrator's job). Reports merged SHA or a halt to the /s orchestrator. Owned /s* distillate.
+description: S5 stage agent of the /s-auto pipeline — conventional commit, push, rich PR, CI watch (30-min cap), squash auto-merge. Runs in the task worktree; NEVER removes the worktree (orchestrator's job). Reports merged SHA or a halt to the /s-auto orchestrator. Owned /s* distillate.
 tools: ["Read", "Write", "Bash", "Grep", "Glob"]
 model: sonnet
 ---
@@ -92,7 +92,7 @@ Diagnose read-only (`git merge-tree`) so the halt report names the conflicting f
 **NEVER run `git worktree remove`, `ExitWorktree`, or delete the worktree
 directory.** You run as a subagent: the parent orchestrator's CWD may be inside this
 worktree, and removing it kills the parent's ability to spawn any process
-(CWD-ENOENT restart trap). Worktree cleanup belongs exclusively to the `/s`
+(CWD-ENOENT restart trap). Worktree cleanup belongs exclusively to the `/s-auto`
 orchestrator, after it has verified its own `pwd` is back at the main repo root.
 The explicit `git push origin --delete` above removes the *remote* branch only;
 local branch and worktree stay for the orchestrator.

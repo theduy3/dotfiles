@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: c5a3a6a4-3ceb-43f6-a89a-e2ac62b750ea
+  modified: 2026-07-18T13:53:13.940Z
 ---
 
 ## One loop owner per ARENA — GSD = prod, /s* = local (2026-07-17)
@@ -13,16 +14,17 @@ metadata:
 > `23931ed`), then a NEW `/s*` was **rebuilt the same day by distillation** (spec
 > `~/tasks/spec-s-star.md`, ADRs 0001–0007 in `~/tasks/s-star/docs/adr/`). GSD owns
 > plan→execute→verify→ship **for production** (Hermes/Wylios). **`/s*` owns local
-> single-track work**: `/s0-spec` → `/s1-plan` → `/s` (autonomous S2→S5, squash auto-merge,
+> single-track work**: `/s0-spec` → `/s1-plan` → `/s-auto` (autonomous S2→S5, squash auto-merge,
 > 5-halt ping surface, Run-State `~/tasks/.s-run/<slug>.md`). Distillates are self-contained
 > owned copies w/ sidecar `.manifest.yaml`; refresh via `/update-distill` (per-Source approval).
-> **Seam precedence (ADR 0007): todo at `status: plan-approved` → `/s`; `tdd-gates` is
+> **Seam precedence (ADR 0007): todo at `status: plan-approved` → `/s-auto`; `tdd-gates` is
 > explicit-call-only.** ECC + Superpowers stay ENABLED as **explicit-call leaf libraries** —
 > never their workflow loops. Canonical rule: `~/CLAUDE.md` §Workflow Orchestration. See
 > [[gsd-reinstall-global]], [[consolidation-into-s-star]], [[spec-plan-tdd-ownership]].
 
 ### The loops
-- **Local:** `/s0-spec` → `/s1-plan` → `/s` (owned `s-*` agents: implementer/gate-runner/shipper + review panel of 4 + fixer; models pinned per ADR 0006 — Fable interactive, Opus S2/S4, Sonnet S3/S5).
+- **Local:** `/s0-spec` → `/s1-plan` → `/s-auto` (owned `s-*` agents: implementer/gate-runner/shipper + review panel of 4 + fixer; models pinned per ADR 0006 — Fable interactive, Opus S2/S4, Sonnet S3/S5).
+- **Per-stage manual (2026-07-18):** `/s` renamed `/s-auto`; added `/s2-implement`, `/s3-gates`, `/s4-review [fix]`, `/s5-ship` — operator rerun/debug wrappers over the same pinned agents. No Seam ownership, no auto-chain, no ping; `/s5-ship` refuses without S3/S4 evidence.
 - **Prod:** `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-progress`, `gsd-resume-work`, `gsd-workspace`).
 - **Skip (rival loops):** `/ecc:plan`, `/ecc:feature-dev`; Superpowers workflow loop. (Old `/s0`–`/s9`, `ship`, `deploy` wrappers deleted 2026-07-17 — different artifacts from today's `/s*`.)
 

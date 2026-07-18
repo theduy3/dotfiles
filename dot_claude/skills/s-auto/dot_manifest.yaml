@@ -1,5 +1,5 @@
 # Distillation provenance — consumed by /update-distill
-artifact: s
+artifact: s-auto
 type: skill
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md

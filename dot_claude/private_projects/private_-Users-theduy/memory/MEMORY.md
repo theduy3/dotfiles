@@ -7,6 +7,7 @@
 - [Commands & Hooks](commands-and-hooks.md) - 18 slash commands inventory, permission hook layer stack
 - [ECC Cost-Warning Killswitch](ecc-cost-warning-killswitch.md) — `ECC_CONTEXT_MONITOR_COST_WARNINGS=off` silences $5/$10/$50 COST NOTICE prompts; user wants work done, not token-saving
 - [Plugin Routing Priorities](plugin-routing-priorities.md) - GSD owns PROD loop; NEW distilled /s* owns LOCAL loop (rebuilt 2026-07-17: /s0-spec→/s1-plan→/s auto-merge tail, Seam ADR 0007 tdd-gates=explicit-only); ECC+Superpowers = explicit leaf libraries. Canonical rule in ~/CLAUDE.md §Workflow Orchestration.
+- [/s* Pipeline Guide](s-star-pipeline-guide.md) — canonical usage guide in vault (`~/theduyvault/Notes/s-star-pipeline-guide.md`): entry rules, grill map, agents/models, halts, resume, maintenance
 - [ECC Memory Graph Storage](ecc-memory-graph-storage.md) — knowledge graph lives in npx cache (fragile); markdown memory = source of truth, graph = derived view; re-seed if empty
 - [EnterWorktree Busts Prompt Cache](enterworktree-busts-prompt-cache.md) — Enter/ExitWorktree regenerate CWD-dependent system-prompt sections → cache prefix bust; tool contract beats prose docs (verdict A not B)
 - [Time Machine Interrupted Loop](timemachine-interrupted-loop.md) — TM "not backing up" = lost reference snapshot → deep-scan→interrupt loop on portable USB; fix = one uninterrupted `startbackup` + `caffeinate -dimsu` (2026-07-13)

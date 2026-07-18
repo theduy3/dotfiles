@@ -85,11 +85,14 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 
 ### The local loop → `/s*`
 - `/s0-spec` (interview→spec→grill, Fable) → `/s1-plan` (todo + adversarial check, Fable) →
-  **`/s`** (autonomous S2→S5: implement→gates→review-panel→squash-auto-merge, unattended).
+  **`/s-auto`** (autonomous S2→S5: implement→gates→review-panel→squash-auto-merge, unattended).
 - **Seam precedence (ADR 0007):** a `tasks/todo-*.md` at `status: plan-approved` belongs to
-  **`/s`**. `tdd-gates` is **explicit-call-only** — never auto-select it for that Seam.
-- `/s` halts+pings only on: gate red, review stuck (cap-2), CI red, CI timeout 30m, merge
-  conflict. Resume: `/s <slug>` reads `~/tasks/.s-run/<slug>.md`.
+  **`/s-auto`**. `tdd-gates` is **explicit-call-only** — never auto-select it for that Seam.
+- `/s-auto` halts+pings only on: gate red, review stuck (cap-2), CI red, CI timeout 30m, merge
+  conflict. Resume: `/s-auto <slug>` reads `~/tasks/.s-run/<slug>.md`.
+- **Per-stage manual commands** (operator rerun/debug, added 2026-07-18): `/s2-implement`,
+  `/s3-gates`, `/s4-review`, `/s5-ship`. Single stage each, no Seam ownership, never
+  auto-chain — the `plan-approved` Seam still belongs to `/s-auto` alone.
 - Refresh distillates monthly via `/update-distill` (per-Source human approval).
 
 ### The prod loop → GSD

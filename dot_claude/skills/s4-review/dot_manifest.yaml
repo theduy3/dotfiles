@@ -1,0 +1,13 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s4-review
+type: skill
+distilled: 2026-07-18
+spec: ~/tasks/spec-s-star.md
+sources: []
+notes: >-
+  Per-stage manual wrapper extracted 2026-07-18 from the s-auto skill (renamed
+  from s the same day). Stage doctrine, panel composition, halt semantics, and
+  cleanup contract are shared with s-auto and the owned s-* agents — when
+  s-auto or an s-* agent changes, re-check this wrapper for drift. Differences
+  from s-auto by design: operator-invoked only, no Seam ownership, no
+  auto-chaining, no PushNotification, fix cap 1 (s4-review only).

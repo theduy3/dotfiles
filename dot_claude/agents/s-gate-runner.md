@@ -1,6 +1,6 @@
 ---
 name: s-gate-runner
-description: S3 stage agent of the /s pipeline — runs the repo's REAL gate ladder in the task worktree, independently of S2's claims, plus a light integration check. Reports evidence-backed GREEN/RED to the /s orchestrator; fixes nothing. Owned /s* distillate.
+description: S3 stage agent of the /s-auto pipeline — runs the repo's REAL gate ladder in the task worktree, independently of S2's claims, plus a light integration check. Reports evidence-backed GREEN/RED to the /s-auto orchestrator; fixes nothing. Owned /s* distillate.
 tools: ["Read", "Bash", "Grep", "Glob"]
 model: sonnet
 ---

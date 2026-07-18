@@ -17,7 +17,7 @@ then proceed with whatever the user chooses. Warn, don't block.
 Wherever you are. The spec lands **relative to the current directory** — in the repo you're
 working on, or in `~/tasks/` when the subject is your own tooling. No worktree: repos that
 guard their main checkout exempt `tasks/`, the only surface this skill touches.
-(`EnterWorktree` belongs to `/s`, after plan approval.)
+(`EnterWorktree` belongs to `/s-auto`, after plan approval.)
 
 ## Step 1 — Interview
 
@@ -86,7 +86,7 @@ Table: risk → mitigation. A risk with no mitigation is an open question; go
 resolve it before claiming the spec is done.
 ```
 
-**Scope**, chosen honestly — `/s1-plan` and `/s` both read it:
+**Scope**, chosen honestly — `/s1-plan` and `/s-auto` both read it:
 
 | Scope | Means |
 |---|---|

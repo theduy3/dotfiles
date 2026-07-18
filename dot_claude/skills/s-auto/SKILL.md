@@ -1,17 +1,21 @@
 ---
-name: s
-description: Autonomous S2→S5 tail of the /s* pipeline — /s OWNS the status:plan-approved Seam in tasks/todo-*.md (tdd-gates is explicit-call-only). One command from approved plan to squash-auto-merged PR, unattended. Implements test-first in a worktree, runs the repo's real gates, blocking review panel, ships. Halts+pings ONLY on: gate red, review stuck after 2 fix loops, CI red, CI timeout (30m), merge conflict. Resume-safe via ~/tasks/.s-run/<slug>.md — re-invoke /s <slug> after any reset.
+name: s-auto
+description: Autonomous S2→S5 tail of the /s* pipeline — /s-auto OWNS the status:plan-approved Seam in tasks/todo-*.md (tdd-gates is explicit-call-only). One command from approved plan to squash-auto-merged PR, unattended. Implements test-first in a worktree, runs the repo's real gates, blocking review panel, ships. Halts+pings ONLY on: gate red, review stuck after 2 fix loops, CI red, CI timeout (30m), merge conflict. Resume-safe via ~/tasks/.s-run/<slug>.md — re-invoke /s-auto <slug> after any reset.
 ---
 
-# `/s` — the autonomous tail (S2 implement → S3 gates → S4 review⛔ → S5 ship)
+# `/s-auto` — the autonomous tail (S2 implement → S3 gates → S4 review⛔ → S5 ship)
 
 One task, plan to merged PR, no stops except a blocking failure. You are the
 **orchestrator**: you spawn Stage Agents, keep the Run-State File current, and enforce
 the halt surface. You never implement, review, or fix inline — every stage runs as its
 own agent with its model pinned in frontmatter.
 
-**Loop ownership:** `/s` owns *local single-track* work only. GSD stays loop owner for
+**Loop ownership:** `/s-auto` owns *local single-track* work only. GSD stays loop owner for
 production (Hermes/Wylios) — never touch those pipelines from here.
+
+**Per-stage siblings:** `/s2-implement`, `/s3-gates`, `/s4-review`, `/s5-ship` are
+operator-invoked rerun/debug tools for single stages. Never auto-invoke them from here,
+and they never claim the Seam — this skill remains the only autonomous consumer.
 
 ## 0. Find the plan, refuse the wrong one
 
@@ -146,7 +150,7 @@ SHA, tasks delivered, fix-loop iterations used, halts: none.
 On any: (1) run-state `status: halted` + reason + evidence excerpt; (2) **ping via
 `PushNotification`** — slug, reason, one-line next action; (3) stop. Everything else
 — including a clean merge — completes silently. Never ping success; never halt
-silently. After the human intervenes, `/s <slug>` resumes from the Run-State File.
+silently. After the human intervenes, `/s-auto <slug>` resumes from the Run-State File.
 
 ## Never
 

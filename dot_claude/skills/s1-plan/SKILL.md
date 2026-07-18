@@ -1,13 +1,13 @@
 ---
 name: s1-plan
-description: S1 of the /s* pipeline — turn an approved tasks/spec-<topic>.md into a sequenced, dependency-ordered tasks/todo-<topic>.md, adversarially checked and grilled for ordering bugs. Use after /s0-spec, or when an approved spec needs breaking into tasks. Interactive (run on Fable; warns otherwise). Stops at user approval; writes no source, enters no worktree. On approval flips status: plan-approved — the Seam /s consumes.
+description: S1 of the /s* pipeline — turn an approved tasks/spec-<topic>.md into a sequenced, dependency-ordered tasks/todo-<topic>.md, adversarially checked and grilled for ordering bugs. Use after /s0-spec, or when an approved spec needs breaking into tasks. Interactive (run on Fable; warns otherwise). Stops at user approval; writes no source, enters no worktree. On approval flips status: plan-approved — the Seam /s-auto consumes.
 ---
 
 # `/s1-plan` — sequencing, hostile-reviewed
 
 Reads `tasks/spec-<topic>.md`. Produces `tasks/todo-<topic>.md` carrying the
 `status:` metadata block. Writes no source code. Leaves the artifact and stops —
-`/s` is the consumer, invoked by the operator after approval, never by this skill.
+`/s-auto` is the consumer, invoked by the operator after approval, never by this skill.
 
 **Model check (first thing):** tuned for Fable. If the session model is not Fable, warn
 once and proceed with whatever the user chooses. Warn, don't block.
@@ -15,7 +15,7 @@ once and proceed with whatever the user chooses. Warn, don't block.
 ## Where this runs
 
 Same directory as `/s0-spec`, reading the spec it left there. No worktree —
-`EnterWorktree` belongs to `/s`, after approval, never here.
+`EnterWorktree` belongs to `/s-auto`, after approval, never here.
 
 ## Step 1 — Read the spec
 
@@ -55,7 +55,7 @@ responsibility, not technical layer.
 
 ## Step 3 — Write `tasks/todo-<topic>.md`
 
-The metadata block is a **contract with the consumers**, not decoration. `/s` and
+The metadata block is a **contract with the consumers**, not decoration. `/s-auto` and
 `~/.claude/hooks/inject-vault-context.sh` read these exact keys to pick up and resume a
 `plan-approved` task after a context clear. Invent no new keys; omit none.
 
@@ -88,11 +88,11 @@ Worktree name, base branch, baseline command to prove green before starting.
 
 | Key | Read by | Meaning |
 |---|---|---|
-| `status` | `/s`, `inject-vault-context.sh` | `draft` → `plan-approved` → `implementing` |
-| `worktree` | `/s` | name passed to `EnterWorktree` |
-| `scope` | `/s` | selects S2 implementation *style only*, never the model |
+| `status` | `/s-auto`, `inject-vault-context.sh` | `draft` → `plan-approved` → `implementing` |
+| `worktree` | `/s-auto` | name passed to `EnterWorktree` |
+| `scope` | `/s-auto` | selects S2 implementation *style only*, never the model |
 | `created-at` | informational timestamp | no live reader |
-| `spec` | `/s` | back-reference to requirements |
+| `spec` | `/s-auto` | back-reference to requirements |
 
 `scope` style map (read by `s-implementer`): `small`/`medium` → single-context;
 `large` → dispatch workers for independent tasks, synthesis stays with the implementer.
@@ -159,13 +159,13 @@ Present the plan. On approval, flip the metadata:
 status: plan-approved
 ```
 
-Then **stop**, and tell the user: `/s` picks it up from here (autonomous S2→S5,
+Then **stop**, and tell the user: `/s-auto` picks it up from here (autonomous S2→S5,
 auto-merge on green; halts ping via notification).
 
 ## The handoff Seam
 
 `status: plan-approved` in `tasks/todo-<topic>.md` is the only coupling between planning
-and implementation. It is a **file state**, not a call. `/s1-plan` never invokes `/s`.
+and implementation. It is a **file state**, not a call. `/s1-plan` never invokes `/s-auto`.
 
 Operationally: `status: implementing` signals a live consumer already holds the plan.
 If you find a plan at `implementing` and you did not put it there, another session owns

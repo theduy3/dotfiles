@@ -10,7 +10,7 @@ sources:
       Skeleton + voice: read-spec-first (reject draft); todo template + metadata-block
       contract (exact keys incl. inject-vault-context.sh reader); sequencing grill
       questions; handoff-Seam semantics (file state not call; implementing = live
-      consumer, don't pick up). Changed: consumer table collapsed to /s (single-track);
+      consumer, don't pick up). Changed: consumer table collapsed to /s-auto (single-track);
       scope style map replaced by grill-r2 mapping (large→workers, not medium+large).
   - path: ~/.claude/skills/writing-plans/SKILL.md
     hash: 45e90359450e6cf96f2c4fad0ea8bd4fcf414165ae6f98f36f44c211e828f84b

@@ -1,0 +1,23 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-code-fixer
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/agents/gsd-code-fixer.md
+    hash: b45eaceb383c0b2a9a62ad1520ae17fcd01ce9d774d403747d2f311de684606e
+    took: >-
+      Fix doctrine: findings-are-guidance-not-patches; read-actual-source ±10
+      lines; adapt-or-skip (never force); Edit-preferred; narrow scope;
+      CLAUDE.md-respect. 3-tier verification with pre-existing-error scoping and
+      node -c file-type caveats; logic-bug limitation → 'fixed: needs re-review'
+      status (was 'requires human verification' — rerouted to panel re-run since
+      /s is unattended). Per-finding rollback via git checkout -- (never Write),
+      rollback-scope rules. Atomic commit-per-finding with all files. Partial-
+      success semantics + honest skip reporting. Changed: runs INSIDE the task
+      worktree /s owns (model opus per ADR 0006). Dropped (~500 lines): temp
+      worktree + recovery sentinel + transactional ff-merge cleanup machinery
+      (#2686/#2839/#2990 — the foreground-race failure class /s's exclusive
+      worktree ownership makes structurally impossible), REVIEW.md parser,
+      REVIEW-FIX.md artifact (results go to Run-State File), gsd_run shim,
+      phase config protocol.

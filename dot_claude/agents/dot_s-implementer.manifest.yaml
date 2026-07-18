@@ -1,0 +1,40 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-implementer
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/skills/tdd-gates/SKILL.md
+    hash: 79b2310fcd09de9e1568b46a364f5f8de74437dbd4f6b7b73c42b39033049971
+    took: >-
+      Isolation verification (worktree not main checkout, never default branch,
+      guards-are-fail-open-be-correct); baseline-green-before-touching-anything +
+      red-baseline-is-a-different-task halt; runner-include allowlist check
+      ("green CI cannot distinguish passed from never-ran"); oracle router table
+      incl. DB-function-lazy-binding and deny-path-as-untrusted-role rows.
+      Changed: worktree entry moved to /s orchestrator (agent verifies, doesn't
+      enter); "never commits" dropped — S2 commits per green task (branch
+      squashes at S5, granularity buys bisectability); runtime invocations of
+      tdd / project skills / verification-before-completion severed (ADR 0002).
+  - path: ~/.agents/skills/tdd/SKILL.md
+    hash: 13722957277ed4960061a2d254a0ed7d86f95693e88b40d1c68307e7fdc98287
+    took: >-
+      Behavior-through-public-interfaces philosophy; anti-horizontal-slicing with
+      tracer-bullet vertical slices; refactor-after-green-only; mocking/coupling
+      diagnostics (must-mock-everything = coupled design; huge setup = bad
+      interface). Dropped: planning checklist with user confirmation (plan is
+      already approved at S2), codebase-design skill reference.
+  - path: ~/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/test-driven-development/SKILL.md
+    hash: b5b4717b8b761cce15a6cfe9022e33fd959e0894c0c39d72c9cb49c23486c10e
+    took: >-
+      Iron Law verbatim; delete-means-delete (no reference, no adapting);
+      RED-verify-GREEN-verify-REFACTOR cycle with watch-it-fail-for-the-right-
+      reason and pristine-output requirements; condensed rationalization
+      red-flag list; when-stuck diagnostics. Dropped: dot-graph, extended
+      excuse-rebuttal essays (condensed to one paragraph), human-partner
+      permission protocol (autonomous pipeline halts instead).
+notes: >-
+  Scope→style map (small/medium single-context; large→Sonnet workers, no further
+  spawning, verify workers' evidence yourself) comes from the spec (grill r2),
+  not a Source. Halt taxonomy (baseline-red / task-blocked / spec-conflict) is
+  new, required by the /s halt surface.

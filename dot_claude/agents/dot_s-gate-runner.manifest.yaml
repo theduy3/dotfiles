@@ -1,0 +1,40 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-gate-runner
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/skills/tdd-gates/SKILL.md
+    hash: 79b2310fcd09de9e1568b46a364f5f8de74437dbd4f6b7b73c42b39033049971
+    took: >-
+      Real-ladder discovery (aggregate script → read CI workflow; never invent,
+      never skip-because-slow; lockfile install); the four gate traps (lint
+      script ≠ all lints; build ≠ test run; three-dot vs REMOTE main;
+      committed diff blind to working tree); skipped-tiers-must-print-why.
+      Changed: "fix red at the tier" dropped — S3 fixes nothing, RED is a
+      pipeline halt (ADR 0004 halt surface).
+  - path: ~/.claude/skills/verification-before-completion/SKILL.md
+    hash: ea52d15aabaf72bc6b558efe2c126f161b53961090ddcd712000273bfe8c7b6c
+    took: >-
+      Iron Law (no claims without fresh evidence); the gate function
+      (identify→run→read→verify→then claim); claim/requires/not-sufficient
+      table; evidence-pasted-not-inferred; skips-named rule. Dropped:
+      failure-memory rationale, satisfaction-language red flags (agent reports
+      structured data, not prose).
+  - path: ~/.claude/plugins/marketplaces/ecc/.agents/skills/verification-loop/SKILL.md
+    hash: abe40a95fc1fe7d5ff47ed2bab27600f160871e487fb1698546b0c80e45b1fbb
+    took: >-
+      Generic fallback ladder for repos with no gate script and no CI: build →
+      typecheck → lint → tests+coverage → secret scan → diff review; tabular
+      report shape. Dropped: continuous-mode checkpoints, hook-integration notes.
+  - path: ~/.claude/agents/integration-checker.md
+    hash: dd33534ae13aaf3e46196c976fa52f827b7b51a31d167489e474e5b62613b4cf
+    took: >-
+      Existence-≠-integration core (exports imported AND called; routes have
+      consumers; chains traced to display), distilled to a diff-scoped light
+      check. Dropped: phase/SUMMARY machinery, bash helper library, auth-
+      protection sweep, requirements integration map (single-task pipeline has
+      no cross-phase surface).
+notes: >-
+  Flaky-tier rule (report both results, still RED, never silently re-run to
+  green) is new, forced by unattended operation.

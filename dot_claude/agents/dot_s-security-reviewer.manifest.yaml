@@ -1,0 +1,17 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-security-reviewer
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/agents/security-reviewer.md
+    hash: 46d310c1ddc42a727cab58e5e4342a8c261b55541161dc6ffe3d6c3259fd019e
+    took: >-
+      OWASP Top-10 walk, flag-on-sight pattern table with severities, key
+      principles, false-positive list (env.example/test creds/public keys/
+      checksum hashes), rotate-on-exposure rule folded into output format.
+      Changed: scope = worktree diff vs origin/main; model sonnet→opus (ADR 0006);
+      tools Write/Edit removed (panel reports, only s-code-fixer writes); panel
+      verdict contract added. Dropped: emergency-response section, when-to-run
+      triggers (condition lives in /s), success metrics, runtime reference to
+      security-review skill (severed per ADR 0002).

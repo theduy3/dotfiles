@@ -1,0 +1,18 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-code-reviewer
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/agents/code-reviewer.md
+    hash: 07447dbe8733fb9e24b1016d52b62468748b27547b5cff7af3021f3436624ee5
+    took: >-
+      Nearly whole: pre-report gate (4 questions), confidence filtering (>80%),
+      HIGH/CRITICAL proof requirement, zero-findings-valid doctrine, full
+      false-positive skip-list, severity checklist (security/quality/react/node/
+      perf/low), output + summary format, CLAUDE.md adaptation, AI-generated-code
+      addendum (behavioral-regression half). Changed: scope = worktree diff vs
+      origin/main (was staged/unstaged); model sonnet→opus (ADR 0006); verdict —
+      Source let HIGH merge "with caution", panel contract blocks on HIGH
+      (ADR 0003, spec wins); dropped model-cost-routing addendum half (routing is
+      fixed) and proactive MUST-BE-USED framing (spawned by /s only).

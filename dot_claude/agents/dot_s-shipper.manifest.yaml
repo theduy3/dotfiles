@@ -1,0 +1,37 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-shipper
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/plugins/marketplaces/claude-plugins-official/plugins/commit-commands/commands/commit.md
+    hash: d1acbc2bf0c50164f48d6bda872de6a343cd9390954ce903c3431c3119e7f8c4
+    took: >-
+      Single-shot stage+commit flow with message derived from the actual diff
+      and recent-log style. Extended with conventional-commit typing.
+  - path: ~/.claude/gsd-core/workflows/ship.md
+    hash: 8163adccc03e4e693bae2646cdb9d1ee8642db1426d5574568f23d596644a16b
+    took: >-
+      Rich PR-body pattern (Summary w/ goal+status, Changes w/ key files,
+      Verification checklist, Key decisions; --body-file flow), remapped from
+      GSD artifacts (ROADMAP/SUMMARY/VERIFICATION) to /s artifacts (spec, todo,
+      S3 gate report, S4 panel verdicts, Run-State deviations). Dropped: config
+      pr_body_sections token namespace, audit trailer, review-trigger step,
+      merge tracking (S5 watches and merges itself).
+  - path: ~/.claude/plugins/marketplaces/ecc/skills/github-ops/SKILL.md
+    hash: 4028e3e0eba91b9f5458cb7c0e08fb768b4c011d8e50667be73be58cc6e66c3a
+    took: >-
+      CI operations: gh pr checks, run view --log-failed investigation
+      (investigate-don't-blind-rerun), flaky-vs-real triage with single
+      rerun --failed allowance. Dropped: issue triage, stale policy, release
+      management, security monitoring (out of pipeline scope).
+  - path: ~/.claude/rules/common/worktree-safety.md
+    hash: a285bf6080a9c9ea4325524228363216c7b6f23a2dfc264994146f445cf1f965
+    took: >-
+      CWD-ENOENT restart trap, encoded as the subagent-side HARD PROHIBITION:
+      s-shipper never removes the worktree/ExitWorktree; cleanup belongs to the
+      parent orchestrator after verifying its own pwd (the ordering contract
+      itself lives in the /s skill).
+notes: >-
+  Squash auto-merge, 30-min CI cap, and the halt taxonomy (ci-red / ci-timeout /
+  merge-conflict) come from the spec (ADR 0004), not a Source.

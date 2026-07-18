@@ -1,0 +1,12 @@
+# Distillation provenance — consumed by /update-distill
+artifact: update-distill
+type: skill
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources: []
+notes: >-
+  New artifact — no upstream Sources. The per-Source approval flow, sidecar
+  manifest format, and rejected-hash memory come from the spec (CONTEXT.md
+  Manifest + update-distill rows, grill sessions 2026-07-17). Diff-UX open item
+  resolved at build: summarized upstream changelog + inline diff of the proposed
+  distillate edit, both, per Source.

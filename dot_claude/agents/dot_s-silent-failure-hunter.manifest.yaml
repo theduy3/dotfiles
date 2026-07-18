@@ -1,0 +1,14 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-silent-failure-hunter
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/agents/silent-failure-hunter.md
+    hash: 4d67604088738bbb7576e7a319a9d315e384e088dab5c26db8c83227fe2cbd7d
+    took: >-
+      All five hunt targets (empty catches, inadequate logging, dangerous
+      fallbacks, propagation issues, missing handling) and per-finding output
+      fields. Added (new): diff scoping vs origin/main, surrounding-context rule,
+      panel verdict contract with severity calibration test, zero-findings-valid.
+      Changed: model sonnet→opus (ADR 0006).

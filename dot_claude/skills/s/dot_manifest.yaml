@@ -1,0 +1,28 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s
+type: skill
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/gsd-core/workflows/debug.md
+    hash: 68acb5badf94a13008eb28e6b05b9ec2ed0422c2a52befdb7efa6ca9e27f1b18
+    took: >-
+      Persistent-state model for the Run-State File: slug file with frontmatter
+      status fields, Current Focus block (stage + next_action), timestamped
+      Evidence log, resume-by-reading-the-file (the file IS the context),
+      DATA_START/DATA_END bounding of untrusted pasted content, slug
+      sanitization regex. Changed: location ~/tasks/.s-run/ (home dir — guard-
+      hook and worktree-removal immunity, per review amendment); orchestrator
+      is sole writer; double-merge guard on status: merged.
+  - path: ~/.claude/rules/common/worktree-safety.md
+    hash: a285bf6080a9c9ea4325524228363216c7b6f23a2dfc264994146f445cf1f965
+    took: >-
+      Parent-side CWD-ENOENT ordering contract verbatim as Cleanup steps 1-4
+      (enumerate → ExitWorktree in parent → verify pwd = main root → only then
+      remove); one-Enter-per-run cache-bust budget.
+notes: >-
+  The stage flow, panel composition + conditional triggers, fix-loop cap 2,
+  5-condition halt surface, PushNotification ping, and Seam-ownership
+  description clause come from the spec + ADRs 0001/0003/0004/0006/0007, not
+  from Sources. Stage content lives in the owned s-* agents (see their
+  manifests); this skill is orchestration only, by design.

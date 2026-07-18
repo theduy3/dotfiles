@@ -1,0 +1,38 @@
+# Distillation provenance — consumed by /update-distill (re-hash, scoped diff, per-Source approval)
+artifact: s1-plan
+type: skill
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/skills/plan/SKILL.md
+    hash: 3e4219234385458cfd661baa1b76d4405c9f62299d93dcff897dae0d8da8750a
+    took: >-
+      Skeleton + voice: read-spec-first (reject draft); todo template + metadata-block
+      contract (exact keys incl. inject-vault-context.sh reader); sequencing grill
+      questions; handoff-Seam semantics (file state not call; implementing = live
+      consumer, don't pick up). Changed: consumer table collapsed to /s (single-track);
+      scope style map replaced by grill-r2 mapping (large→workers, not medium+large).
+  - path: ~/.claude/skills/writing-plans/SKILL.md
+    hash: 45e90359450e6cf96f2c4fad0ea8bd4fcf414165ae6f98f36f44c211e828f84b
+    took: >-
+      Granularity doctrine: zero-context-engineer framing; file-structure-before-tasks;
+      independently-verifiable bite-sized tasks; exact-paths/complete-code/expected-output;
+      full no-placeholders list; self-review trio (coverage, placeholder scan, type
+      consistency) folded into Step 4. Dropped: docs/superpowers path, execution-handoff
+      options, checkbox step format (todo template keeps RED/GREEN rows).
+  - path: ~/.agents/skills/grilling/SKILL.md
+    hash: fe00af3e1815f97c0a7644605479328a726b5cd95ba6ef56a4be2a92fae6c20f
+    took: >-
+      Grill method inlined into Step 5: one-at-a-time, recommended answer per question,
+      explore-codebase-instead-of-asking.
+  - path: ~/.claude/agents/gsd-plan-checker.md
+    hash: dd3b5ca53779fb6c5718570f0912663cc58c36e7eec054fa784d1f82ecf7f846
+    took: >-
+      The transferable adversarial method, self-run (Step 4): assume-flawed stance;
+      goal-backward verification chain; mandatory BLOCKER/WARNING classification;
+      requirement-coverage walk; task-completeness (read fields not titles); wiring vs
+      creation; scope-reduction detection (always BLOCKER, never invent versioning);
+      verify-command sanity (swallowed-error patterns); live measurement over stale
+      claims; CLAUDE.md compliance. Dropped: all GSD machinery — gsd_run shim, PLAN.md
+      XML schema, waves, Nyquist dimension, PATTERNS/RESEARCH/CONTEXT.md dimensions,
+      structured YAML returns, orchestrator protocol (~95% of the file).

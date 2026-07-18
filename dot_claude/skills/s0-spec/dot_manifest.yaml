@@ -1,0 +1,32 @@
+# Distillation provenance — consumed by /update-distill (re-hash, scoped diff, per-Source approval)
+artifact: s0-spec
+type: skill
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/skills/spec/SKILL.md
+    hash: 831971e288e632c47bdd192fdcc2b08b9cfd791588e2edb5e77a589635c737a8
+    took: >-
+      Skeleton + voice: interview→draft→grill→self-review→stop flow; tasks/spec-<topic>.md
+      template (all 8 sections); scope table read by downstream stages; smell table;
+      where-this-runs (no worktree, tasks/ exempt); verified-vs-assumed stop protocol;
+      never-advances-on-its-own rule.
+  - path: ~/.claude/skills/brainstorming/SKILL.md
+    hash: bba47904a7f6bbee3bf8a107ebbe84e65d392be683bbb898ded736b29e415f90
+    took: >-
+      Interview discipline: explore-context-first; one-question-at-a-time; multiple-choice
+      preferred; decomposition check for multi-subsystem requests; propose 2-3 approaches
+      with recommendation; YAGNI. Dropped: Visual Companion, HARD-GATE framing,
+      docs/superpowers path, writing-plans handoff, commit step.
+  - path: ~/.agents/skills/grilling/SKILL.md
+    hash: fe00af3e1815f97c0a7644605479328a726b5cd95ba6ef56a4be2a92fae6c20f
+    took: >-
+      Whole method, inlined into Step 3: relentless one-at-a-time questioning; recommended
+      answer per question; explore-codebase-instead-of-asking; walk design-tree branches
+      resolving decision dependencies.
+  - path: ~/.claude/skills/unknowns/SKILL.md
+    hash: f2b561b75446fc6ff81d6af168c1d04592d72666aa58283e208a17b8e4d42902
+    took: >-
+      Blind-spot pass (3-7 real unknowns, cost-if-discovered-late ranking) folded into
+      Step 1; unknowns-ledger close folded into Step 5. Dropped: arg routing, prototype
+      triage, post-implementation quiz.

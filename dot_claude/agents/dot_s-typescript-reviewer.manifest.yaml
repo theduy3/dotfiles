@@ -1,0 +1,18 @@
+# Distillation provenance — consumed by /update-distill
+artifact: s-typescript-reviewer
+type: agent
+distilled: 2026-07-17
+spec: ~/tasks/spec-s-star.md
+sources:
+  - path: ~/.claude/agents/typescript-reviewer.md
+    hash: fcb0a9fa95cb3d5f7eb36b8c5a19dcb5f032727340e52f7fd1447873f83fcaab
+    took: >-
+      Full priority ladder (CRITICAL security; HIGH type-safety/async/error-
+      handling/idiomatic/node; MEDIUM react/perf/practices), typecheck-first
+      workflow incl. correct-tsconfig selection and JS-only skip, eslint step,
+      report-only stance. Changed: scope = worktree diff vs origin/main; model
+      sonnet→opus (ADR 0006); diff-caused vs pre-existing failure distinction
+      made explicit; panel verdict contract (HIGH blocks). Dropped: PR
+      merge-readiness gh checks (S5's job — panel runs pre-PR), react-reviewer
+      cross-invocation and skill references (severed per ADR 0002; react block
+      retained inline as MEDIUM fallback).

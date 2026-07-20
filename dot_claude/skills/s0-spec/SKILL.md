@@ -1,6 +1,6 @@
 ---
 name: s0-spec
-description: S0 of the /s* pipeline — interview, draft tasks/spec-<topic>.md, grill the requirements, self-review, stop at user approval. Use when starting a feature, refactor, or bugfix whose shape is not yet obvious. Interactive (run on Fable; warns otherwise). Writes no source code; hands off to /s1-plan. Never advances on its own.
+description: S0 of the /s* pipeline — interview, draft tasks/spec-<topic>.md, grill the requirements, self-review, stop at user approval. Use when starting a feature, refactor, or bugfix whose shape is not yet obvious. Interactive (run on Fable or Opus 4.8; warns otherwise). Writes no source code; hands off to /s1-plan. Never advances on its own.
 ---
 
 # `/s0-spec` — specification, hostile-reviewed
@@ -8,9 +8,11 @@ description: S0 of the /s* pipeline — interview, draft tasks/spec-<topic>.md, 
 Produces exactly one artifact: `tasks/spec-<topic>.md`. Writes no source code.
 Hands off to `/s1-plan`. Never invokes it, never enters a worktree, never commits.
 
-**Model check (first thing):** this stage is tuned for Fable. If the session model is not
-Fable, say so once — "S0 runs best on Fable; you're on <model>. Continue or `/model fable`" —
-then proceed with whatever the user chooses. Warn, don't block.
+**Model check (first thing):** this stage is tuned for Fable, with **Opus 4.8 as an accepted
+fallback** (co-equal per ADR 0006 — use it when Fable is unavailable, e.g. weekly-limited).
+On Fable or Opus 4.8 → no warning, proceed. On any other model, say so once — "S0 runs best
+on Fable or Opus 4.8; you're on <model>. Continue, `/model fable`, or `/model opus`" — then
+proceed with whatever the user chooses. Warn, don't block.
 
 ## Where this runs
 

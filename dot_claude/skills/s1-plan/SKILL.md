@@ -1,6 +1,6 @@
 ---
 name: s1-plan
-description: S1 of the /s* pipeline — turn an approved tasks/spec-<topic>.md into a sequenced, dependency-ordered tasks/todo-<topic>.md, adversarially checked and grilled for ordering bugs. Use after /s0-spec, or when an approved spec needs breaking into tasks. Interactive (run on Fable; warns otherwise). Stops at user approval; writes no source, enters no worktree. On approval flips status: plan-approved — the Seam /s-auto consumes.
+description: S1 of the /s* pipeline — turn an approved tasks/spec-<topic>.md into a sequenced, dependency-ordered tasks/todo-<topic>.md, adversarially checked and grilled for ordering bugs. Use after /s0-spec, or when an approved spec needs breaking into tasks. Interactive (run on Fable or Opus 4.8; warns otherwise). Stops at user approval; writes no source, enters no worktree. On approval flips status: plan-approved — the Seam /s-auto consumes.
 ---
 
 # `/s1-plan` — sequencing, hostile-reviewed
@@ -9,8 +9,11 @@ Reads `tasks/spec-<topic>.md`. Produces `tasks/todo-<topic>.md` carrying the
 `status:` metadata block. Writes no source code. Leaves the artifact and stops —
 `/s-auto` is the consumer, invoked by the operator after approval, never by this skill.
 
-**Model check (first thing):** tuned for Fable. If the session model is not Fable, warn
-once and proceed with whatever the user chooses. Warn, don't block.
+**Model check (first thing):** tuned for Fable, with **Opus 4.8 as an accepted fallback**
+(co-equal per ADR 0006 — use it when Fable is unavailable, e.g. weekly-limited). On Fable or
+Opus 4.8 → no warning, proceed. On any other model, warn once ("S1 runs best on Fable or
+Opus 4.8; you're on <model>. Continue, `/model fable`, or `/model opus`") and proceed with
+whatever the user chooses. Warn, don't block.
 
 ## Where this runs
 

@@ -120,6 +120,9 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
   `worktree-branch-guard.js` (no commit to default branch in a worktree).
 - **REMOVED 2026-07-17:** `worktree-required-guard.js` (was armed by `/s*` task state; deleted with
   the `/s*` suite — it was already unwired from settings.json).
+- **ADDED 2026-07-21:** `worktree-s-auto-enforcer.sh` (PostToolUse on `EnterWorktree`) — every
+  worktree entry injects the mandate to run the full `/s-auto` pipeline (S2→S5). Exempt: GSD repos
+  (`.planning/` present) and worktrees already claimed by an active run in `~/tasks/.s-run/*.md`.
 - **Redundant, not contradictory:** `gsd-validate-commit.sh` + `worktree-branch-guard.js` both gate
   `git commit` (different checks, both fail-open) — fine to leave.
 

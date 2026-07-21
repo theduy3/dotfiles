@@ -35,6 +35,18 @@ warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*" >&2; }
 err()  { printf '\033[1;31m[error]\033[0m %s\n' "$*" >&2; }
 run()  { if [ "${DRY_RUN:-0}" = 1 ]; then printf '  DRY: %s\n' "$*"; else "$@"; fi; }
 
+# Install a plugin; on failure, refresh its marketplace once and retry.
+# A pre-existing marketplace can carry a STALE cache (present != current) whose
+# plugin ids no longer resolve — `marketplace update` re-syncs it. Idempotent.
+install_plugin() {
+  local key="$1" scope="$2" mkt
+  if run claude plugin install "$key" --scope "$scope"; then return 0; fi
+  mkt="${key#*@}"
+  warn "install failed for $key — refreshing marketplace '$mkt' (stale cache?) and retrying"
+  run claude plugin marketplace update "$mkt" || true
+  run claude plugin install "$key" --scope "$scope"
+}
+
 # --- node prerequisite ----------------------------------------------------
 # Claude Code plugin RUNTIMES + GSD (npx @opengsd/gsd-core) need Node >= 18.
 NODE_MIN=18
@@ -211,7 +223,7 @@ for entry in "${PLUGINS[@]}"; do
     log "already installed: $key"
   else
     log "installing: $key (scope=$scope)"
-    run claude plugin install "$key" --scope "$scope" || { warn "install failed: $key"; FAILED+=("pl:$key"); }
+    install_plugin "$key" "$scope" || { warn "install failed: $key"; FAILED+=("pl:$key"); }
   fi
 done
 

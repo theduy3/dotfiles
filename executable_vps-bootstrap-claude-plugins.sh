@@ -261,4 +261,10 @@ Caveats to check manually on the VPS:
   * postiz@skills-dir is a LOCAL skill (not from a marketplace); it loads only if
     ~/.claude/skills/postiz exists (arrives via chezmoi from ~/.agents/skills, if managed).
   * social-media-skills was project-scoped to a Mac path — re-scope it per repo.
+  * Marketplace NAME DRIFT: if "plugin@mkt" fails and `marketplace update <mkt>` says
+    "Marketplace '<mkt>' not found", a pre-existing copy of that repo is registered under
+    an OLD manifest name. Fix once, by hand:
+      claude plugin marketplace remove <old-name>   # e.g. everything-claude-code
+      claude plugin marketplace add <owner/repo>     # re-registers under current name
+      claude plugin install <plugin>@<mkt> --scope user
 NOTE

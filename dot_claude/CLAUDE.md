@@ -1,7 +1,9 @@
-## MCP: code-review-graph vs GitNexus — graph-tool precedence (don't blend the two)
+## Code intelligence — graph-tool routing (don't blend the three)
 
-Both `code-review-graph` and the `gitnexus-*` skills wrap an overlapping codebase
-knowledge-graph MCP. For in-repo graph queries, prefer **`code-review-graph`**. Use GitNexus
-only when explicitly asked. Tiebreaker: check `list_graph_stats` first — if `code-review-graph`
-reports `Nodes: 0` (graph unbuilt for the current repo, as it is at the `~` home-dir level),
-neither graph helps; fall back to Grep/Glob rather than silently switching tools.
+Use **CodeGraph** (`codegraph_*`) for whole-repository exploration, dependency tracing,
+architecture questions, and refactor planning.
+Use **code-review-graph** only for commit, diff, or PR reviews; obtain minimal review
+context (`detect_changes`, `get_review_context`) before reading files manually.
+Use GitNexus only when explicitly asked. Tiebreaker: if the chosen server reports an
+unbuilt graph for the current repo (`codegraph_status` / `list_graph_stats` → 0 nodes —
+as at the `~` home-dir level), fall back to Grep/Glob rather than silently switching tools.

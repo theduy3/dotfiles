@@ -35,7 +35,10 @@ never edit code; only `s-code-fixer` does, and only with the `fix` argument.
    Borderline → spawn it (a reviewer that finds nothing is cheap; a missed
    CRITICAL is not).
 3. **Spawn all members in parallel, one message.** Models are pinned in their
-   frontmatter.
+   frontmatter. Before spawning, print one banner line per member with its live
+   pin (`grep '^model:' ~/.claude/agents/<member>.md`), e.g.
+   `▶ S4 · s-code-reviewer · model: opus` — same for `s-code-fixer` and any
+   re-spawned `s-gate-runner` in the fix pass.
 4. Aggregate: **all APPROVE** → report verdicts + notable non-blocking findings;
    suggest `/s5-ship`. **Any BLOCK** → report the CRITICAL/HIGH findings verbatim.
 5. **`fix` argument only:** spawn `s-code-fixer` with the CRITICAL/HIGH findings

@@ -22,6 +22,9 @@ after the last gate run) → same refusal.
 1. **Locate the worktree** (cwd if inside one, else slug → todo metadata →
    `EnterWorktree`).
 2. **Spawn `s-shipper`** with the gate evidence + panel verdicts for the PR body.
+   Before the spawn, print the stage banner with the live pin
+   (`grep '^model:' ~/.claude/agents/s-shipper.md`):
+   `▶ S5 · s-shipper · model: <pin>`.
    It commits (conventional format), pushes, opens the PR, watches CI (30m cap),
    squash-auto-merges.
 3. On `merged` → **Cleanup, the CWD-ENOENT ordering contract** (parent-side,

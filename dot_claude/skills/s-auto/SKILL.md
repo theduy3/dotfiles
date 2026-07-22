@@ -93,6 +93,19 @@ back and continue.
 Spawn each stage as its agent; models are pinned in their frontmatter. Pass each one:
 the todo path, the spec path, the worktree path, and what the previous stage recorded.
 
+**Stage banner — print before EVERY spawn.** Read the live pin, never recite from
+memory: `grep '^model:' ~/.claude/agents/<agent>.md`. Then print one line per agent:
+
+```
+▶ S2 · s-implementer · model: opus
+```
+
+For the S4 panel, one banner line per member (and for `s-code-fixer` and every
+re-spawn in the fix loop). If the grep disagrees with this file's prose, the
+frontmatter wins — the banner shows what will actually run. Tag each Evidence
+entry in the Run-State File with the model used, e.g.
+`S3: GREEN (s-gate-runner@sonnet)`.
+
 **S2 — spawn `s-implementer`** (Opus). It verifies isolation, proves the baseline
 green, implements test-first per task, commits per green slice. Its report:
 per-task evidence, or a halt (`baseline-red` / `task-blocked` / `spec-conflict`).

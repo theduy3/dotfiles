@@ -33,7 +33,10 @@ implement inline — spawning IS the model routing.
 3. If the todo is still `plan-approved`: flip to `implementing` in the worktree copy
    **and commit the flip immediately** (an uncommitted flip leaves the tree dirty,
    which S3 correctly reports as a finding).
-4. **Spawn `s-implementer`** with the todo path, spec path, and worktree path. It
+4. **Spawn `s-implementer`** with the todo path, spec path, and worktree path.
+   Before the spawn, print the stage banner with the live pin
+   (`grep '^model:' ~/.claude/agents/s-implementer.md`):
+   `▶ S2 · s-implementer · model: <pin>`. It
    verifies isolation, proves the baseline green, implements test-first per task,
    commits per green slice.
 5. Record its per-task evidence. On its halt (`baseline-red` / `task-blocked` /

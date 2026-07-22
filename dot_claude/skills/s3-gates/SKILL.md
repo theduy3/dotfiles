@@ -22,7 +22,10 @@ inference — the agent runs the repo's REAL gate ladder, not a guessed subset.
 1. **Locate the worktree.** Already inside a task worktree (`git worktree list` +
    `pwd`) → use it. Otherwise: argument slug → todo's `worktree` metadata →
    `EnterWorktree` (one Enter, no Exit at the end — operator continues here).
-2. **Spawn `s-gate-runner`** with the worktree path and todo path. It runs the full
+2. **Spawn `s-gate-runner`** with the worktree path and todo path. Before the
+   spawn, print the stage banner with the live pin
+   (`grep '^model:' ~/.claude/agents/s-gate-runner.md`):
+   `▶ S3 · s-gate-runner · model: <pin>`. It runs the full
    ladder independently of any prior claims, plus a light integration check, and
    names every skip.
 3. Record the verdict with pasted evidence (bounded `DATA_START`/`DATA_END` in the

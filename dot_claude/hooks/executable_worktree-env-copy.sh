@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
-# PostToolUse hook — auto-copy .env* files into new worktrees
+# PostToolUse hook — materialize untracked-but-needed files into new worktrees
 # Matcher: EnterWorktree
-# Copies untracked .env* files from the main repo root into the new
-# worktree so the app can start without manual cp.
+# `git worktree add` only materializes TRACKED content, so untracked files
+# never reach a new worktree. Two classes need copying:
+#   1. .env* — so the app can start without a manual cp
+#   2. worktree config (.mcp.json, .claude/settings.local.json) — so
+#      project-scoped MCP servers are registered AND opted into. Missing
+#      .mcp.json means the server is not registered at all; missing
+#      settings.local.json means it is registered but not enabled. Both
+#      are required for the server to load (e.g. code-review-graph in salonx,
+#      which /s4-review depends on).
 # Never blocks Claude: every error path exits 0.
 
 # Require jq for JSON parsing
@@ -38,35 +45,60 @@ MAIN_REPO_ROOT=$(dirname "$COMMON_GIT_DIR")
 # Guard: skip if worktree IS the main repo (not actually a worktree)
 [[ "$MAIN_REPO_ROOT" == "$WORKTREE_PATH" ]] && exit 0
 
-# ─── Copy untracked .env* files (root + nested package dirs) ──────
+# ─── Shared copy path ────────────────────────────
+# Takes a repo-relative path; echoes "copied" or "skipped" so callers stay
+# side-effect free apart from their own counters. Copies (not symlinks) for
+# worktree isolation, and never overwrites an existing file.
+copy_if_needed() {
+  local rel="$1"
+  local src="$MAIN_REPO_ROOT/$rel"
+
+  # Nothing to copy
+  [[ -f "$src" ]] || { echo skipped; return; }
+
+  # Tracked files already arrive via `git worktree add`
+  git -C "$MAIN_REPO_ROOT" ls-files --error-unmatch "$rel" &>/dev/null && { echo skipped; return; }
+
+  # Don't overwrite manual edits in the worktree
+  [[ -f "$WORKTREE_PATH/$rel" ]] && { echo skipped; return; }
+
+  mkdir -p "$(dirname "$WORKTREE_PATH/$rel")" 2>/dev/null
+  cp "$src" "$WORKTREE_PATH/$rel" 2>/dev/null && { echo copied; return; }
+  echo skipped
+}
+
+# ─── Pass 1: untracked .env* files (root + nested package dirs) ──────
 # Recurses the repo but prunes node_modules/.git/worktrees, and keeps
 # the package-relative path so monorepo packages/*/.env land correctly
 # (basename alone would collapse multiple .env files onto each other).
-COPIED=0
-SKIPPED=0
+ENV_COPIED=0
+ENV_SKIPPED=0
 
 while IFS= read -r ENV_FILE; do
   REL="${ENV_FILE#"$MAIN_REPO_ROOT"/}"
-
-  # Skip if file is tracked by git
-  if git -C "$MAIN_REPO_ROOT" ls-files --error-unmatch "$REL" &>/dev/null; then
-    SKIPPED=$((SKIPPED + 1))
-    continue
+  if [[ "$(copy_if_needed "$REL")" == copied ]]; then
+    ENV_COPIED=$((ENV_COPIED + 1))
+  else
+    ENV_SKIPPED=$((ENV_SKIPPED + 1))
   fi
-
-  # Skip if file already exists in worktree (don't overwrite manual edits)
-  if [[ -f "$WORKTREE_PATH/$REL" ]]; then
-    SKIPPED=$((SKIPPED + 1))
-    continue
-  fi
-
-  # Copy (not symlink) for isolation, recreating package subdirs
-  mkdir -p "$(dirname "$WORKTREE_PATH/$REL")" 2>/dev/null
-  cp "$ENV_FILE" "$WORKTREE_PATH/$REL" 2>/dev/null && COPIED=$((COPIED + 1))
 done < <(find "$MAIN_REPO_ROOT" \
   \( -name node_modules -o -name .git -o -path "$MAIN_REPO_ROOT/.claude/worktrees" \) -prune \
   -o -name '.env*' -type f -print 2>/dev/null)
 
-echo "worktree-env-copy: copied $COPIED, skipped $SKIPPED .env* file(s)" >&2
+# ─── Pass 2: worktree config (fixed list, root-relative) ─────────────
+# Explicit list rather than a glob: these are the only untracked configs a
+# worktree needs, and a wildcard over .claude/ would drag in state files.
+CFG_COPIED=0
+CFG_SKIPPED=0
+
+for REL in ".mcp.json" ".claude/settings.local.json"; do
+  if [[ "$(copy_if_needed "$REL")" == copied ]]; then
+    CFG_COPIED=$((CFG_COPIED + 1))
+  else
+    CFG_SKIPPED=$((CFG_SKIPPED + 1))
+  fi
+done
+
+echo "worktree-env-copy: env copied $ENV_COPIED skipped $ENV_SKIPPED | config copied $CFG_COPIED skipped $CFG_SKIPPED" >&2
 
 exit 0

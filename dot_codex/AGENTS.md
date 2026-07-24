@@ -119,15 +119,15 @@ from the library and follow it. Re-curate with `~/.codex/sync-claude-inventory.s
 (edit the CURATED array). Some skill bodies reference Claude-only mechanics
 (Task/Agent tool, subagent spawning, Claude hooks) — do the equivalent work inline.
 
-## Custom Prompts (deprecated slash commands)
+## Imported Claude Command Skills
 
-`~/.codex/prompts/*.md` are COPIES of `~/.claude/commands/*.md` (same sync script;
-symlinks don't work — see openai/codex #4383). Claude-only frontmatter keys
-(`context: fork`, `allowed-tools`, `model`) are stripped at copy time; `description`
-and `argument-hint` survive. Codex namespaces these prompts: invoke them as
-`/prompts:<filename>` (for example, `/prompts:init-tests`), not `/<filename>`.
-They load at session start, so restart Codex after syncing. After adding or editing
-a command in `~/.claude/commands/`, re-run `~/.codex/sync-claude-inventory.sh`.
+`~/.claude/commands/*.md` are converted into regular Codex skills under
+`~/.codex/skills/<filename>/` by the sync script. Codex 0.145 does not surface
+deprecated `~/.codex/prompts` entries in the slash popup. Invoke an imported
+command as `$<filename>` (for example, `$init-tests`) or browse it with `/skills`.
+Restart Codex after syncing because skills load at session start. After adding or
+editing a command in `~/.claude/commands/`, re-run
+`~/.codex/sync-claude-inventory.sh`.
 
 ## Infra Quick Facts (verify in memory files before acting)
 

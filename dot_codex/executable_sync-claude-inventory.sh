@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # sync-claude-inventory.sh — mirror the Claude Code skill/command library into Codex.
 #
-# COPIES, not symlinks: Codex ignores symlinked entries in ~/.codex/prompts and
-# is unreliable with symlinked skill dirs (openai/codex #3637, #4383, #5040).
-# Managed copies carry a `.synced-from-claude` marker (skills) or are listed in
-# `~/.codex/prompts/.synced-from-claude` (prompts); manual files are never touched.
+# COPIES, not symlinks: Codex is unreliable with symlinked skill dirs
+# (openai/codex #3637, #4383, #5040). Managed skill copies carry a
+# `.synced-from-claude` marker; command-derived skills carry a
+# `.synced-command-from-claude` marker. Manual skill directories are never touched.
 #
 # Codex enforces a skills context budget (~2% of context): syncing all ~460 Claude
 # skills strips every description and silently drops most of the list. So the
@@ -17,8 +17,8 @@
 #   sync-claude-inventory.sh --all    # copy everything (NOT recommended: blows budget)
 #
 # Idempotent: prunes stale symlinks/copies and re-copies on every run.
-# Also copies ~/.claude/commands/*.md -> ~/.codex/prompts (custom prompts),
-# stripping Claude-only frontmatter keys Codex doesn't understand.
+# Also converts ~/.claude/commands/*.md into ~/.codex/skills/<command>/SKILL.md.
+# Codex 0.145 does not expose deprecated ~/.codex/prompts entries in the TUI.
 
 set -euo pipefail
 
@@ -26,6 +26,7 @@ CLAUDE_DIR="$HOME/.claude"
 CODEX_SKILLS="$HOME/.codex/skills"
 CODEX_PROMPTS="$HOME/.codex/prompts"
 SKILL_MARKER=".synced-from-claude"
+COMMAND_SKILL_MARKER=".synced-command-from-claude"
 PROMPT_MANIFEST="$CODEX_PROMPTS/.synced-from-claude"
 MODE="${1:-curated}"
 
@@ -125,55 +126,101 @@ copy_skill() {
 }
 for name in "${!SELECTED[@]}"; do copy_skill "$name"; done
 
-# --- Claude commands -> deprecated Codex custom prompts ---
-# Invoke copied prompts as /prompts:<filename>, not /<filename>.
-# Codex understands only `description` / `argument-hint`; keys like `context: fork`,
-# `allowed-tools`, `model` are Claude-only and are dropped from the copy.
+# --- remove deprecated managed prompt copies ---
+# Only files recorded in the old manifest are removed; manual prompt files survive.
 while IFS= read -r -d '' link; do
   rm -- "$link"                                      # pre-copy-era symlinks
 done < <(find "$CODEX_PROMPTS" -maxdepth 1 -type l -print0)
 if [ -f "$PROMPT_MANIFEST" ]; then
   while IFS= read -r old; do
     [ -n "$old" ] || continue
-    [ -f "$CLAUDE_DIR/commands/$old" ] || rm -f -- "$CODEX_PROMPTS/$old"
+    rm -f -- "$CODEX_PROMPTS/$old"
   done < "$PROMPT_MANIFEST"
 fi
-
-prompts=0
 : > "$PROMPT_MANIFEST"
+
+# --- Claude commands -> Codex skills ---
+# Explicit invocation is $<command-name>; /skills opens the discoverable skill list.
+declare -A COMMAND_DESCRIPTIONS=(
+  [analytics-agent]="Run dbt analytics workflows for model creation, review, testing, and documentation. Use for analytics engineering tasks and dbt model work."
+  [db-check]="Check Supabase database health, schema quality, performance, and operational risks. Use when auditing or diagnosing a Supabase database."
+  [dep-audit]="Audit project dependencies for security vulnerabilities, freshness, duplication, and unused packages. Use for dependency health reviews."
+  [emergency-pr-revert]="Safely revert the most recently merged pull request and redeploy. Use only for an explicitly requested emergency rollback."
+  [init-tests]="Bootstrap Vitest, Testing Library, and jsdom in a Vite React TypeScript project. Use when initializing the project's test setup."
+  [security-scan]="Scan application source for security vulnerabilities and unsafe patterns. Use for a focused source-code security review."
+  [state-diagram]="Generate a Mermaid stateDiagram-v2 from a described workflow or existing implementation. Use when visualizing application state transitions."
+  [sync-context]="Summarize recent project activity and restore working context. Use when resuming work or preparing a concise project-context update."
+  [vault-save]="Save a session summary and major architecture decisions to the configured Obsidian vault. Use when preserving project context or ADRs."
+)
+
+# Prune command-derived skills whose Claude source was deleted.
+for existing in "$CODEX_SKILLS"/*/; do
+  [ -d "${existing%/}" ] || continue
+  [ -f "${existing%/}/$COMMAND_SKILL_MARKER" ] || continue
+  name="$(basename "${existing%/}")"
+  [ -f "$CLAUDE_DIR/commands/$name.md" ] || {
+    rm -rf -- "${existing%/}"
+    pruned=$((pruned + 1))
+  }
+done
+
+command_skills=0
+skipped_commands=0
 for f in "$CLAUDE_DIR"/commands/*.md; do
   [ -f "$f" ] || continue
-  name="$(basename "$f")"
-  python3 - "$f" "$CODEX_PROMPTS/$name" <<'PY'
+  name="$(basename "$f" .md)"
+  dst="$CODEX_SKILLS/$name"
+  if [ -d "$dst" ] && [ ! -f "$dst/$COMMAND_SKILL_MARKER" ]; then
+    skipped_commands=$((skipped_commands + 1))
+    echo "  skip command skill (existing): $name" >&2
+    continue
+  fi
+  rm -rf -- "$dst"
+  mkdir -p "$dst/agents"
+  python3 - "$f" "$dst/SKILL.md" "$dst/agents/openai.yaml" "$name" \
+    "${COMMAND_DESCRIPTIONS[$name]:-Run the imported Claude command workflow named $name.}" <<'PY'
+import json
 import sys
 
-src, dst = sys.argv[1], sys.argv[2]
+src, skill_dst, ui_dst, name, description = sys.argv[1:6]
 with open(src, encoding="utf-8") as fh:
     text = fh.read()
 
-ALLOWED = {"description", "argument-hint"}
-out = text
+# Strip all Claude command frontmatter; synthesize valid Codex skill metadata.
+body = text
 if text.startswith("---\n"):
     end = text.find("\n---", 4)
     if end != -1:
-        head, body = text[4:end], text[end + 4:].lstrip("\n")
-        kept, keep = [], False
-        for line in head.splitlines():
-            if line[:1] in (" ", "\t"):          # continuation of previous key
-                if keep:
-                    kept.append(line)
-                continue
-            key = line.split(":", 1)[0].strip().lower()
-            keep = key in ALLOWED
-            if keep:
-                kept.append(line)
-        out = "---\n" + "\n".join(kept) + "\n---\n\n" + body if kept else body
+        body = text[end + 4:].lstrip("\n")
+body = body.replace("$ARGUMENTS", "the arguments supplied with this skill invocation")
 
-with open(dst, "w", encoding="utf-8") as fh:
-    fh.write(out)
+frontmatter = (
+    "---\n"
+    f"name: {name}\n"
+    f"description: {json.dumps(description)}\n"
+    "---\n\n"
+)
+instructions = (
+    f"# {name}\n\n"
+    f"Follow this workflow imported from `{src}`. Treat text supplied after "
+    f"`${name}` as the command arguments.\n\n"
+)
+with open(skill_dst, "w", encoding="utf-8") as fh:
+    fh.write(frontmatter + instructions + body)
+
+display_name = name.replace("-", " ").title()
+short_description = description if len(description) <= 64 else description[:61].rstrip() + "..."
+default_prompt = f"Use ${name} to run this workflow for the current project."
+with open(ui_dst, "w", encoding="utf-8") as fh:
+    fh.write(
+        "interface:\n"
+        f"  display_name: {json.dumps(display_name)}\n"
+        f"  short_description: {json.dumps(short_description)}\n"
+        f"  default_prompt: {json.dumps(default_prompt)}\n"
+    )
 PY
-  printf '%s\n' "$name" >> "$PROMPT_MANIFEST"
-  prompts=$((prompts + 1))
+  printf '%s\n' "$f" > "$dst/$COMMAND_SKILL_MARKER"
+  command_skills=$((command_skills + 1))
 done
 
-echo "mode=$MODE copied=$copied missing=$missing skipped_manual=$skipped_manual pruned_old=$pruned prompts=$prompts"
+echo "mode=$MODE copied=$copied missing=$missing skipped_manual=$skipped_manual pruned_old=$pruned command_skills=$command_skills skipped_commands=$skipped_commands"

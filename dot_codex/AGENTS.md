@@ -70,7 +70,7 @@ Codex has no subagent registry — do the work in-session instead of spawning ag
 - NEVER commit to main/master from a linked worktree. Verify branch before any git
   write operation.
 
-## Worktree Safety (no hook enforcement in Codex — follow as hard rules)
+## Worktree Safety (enforced by Codex hooks and prose)
 
 1. Writes stay inside the active worktree; never write absolute paths that resolve to
    the main checkout while working in a worktree.
@@ -78,6 +78,10 @@ Codex has no subagent registry — do the work in-session instead of spawning ag
    worktree being removed (cd to main repo root first), then remove. A shell whose CWD
    is unlinked dies with `posix_spawn '/bin/sh'` ENOENT on every subsequent command.
 3. One worktree enter + one exit per task.
+
+The neutral Claude worktree path and branch guards are wired through
+`~/.codex/hooks.json`. Keep the prose rules because lifecycle hooks are guardrails,
+not a complete security boundary.
 
 ## Security (before ANY commit)
 

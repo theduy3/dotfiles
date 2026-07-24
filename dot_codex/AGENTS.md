@@ -98,9 +98,13 @@ Codex has no subagent registry — do the work in-session instead of spawning ag
 
 ## Skills
 
-`~/.codex/skills/` holds a curated symlink set (~42) from the Claude Code skill
-library — Codex's skills context budget truncates anything larger. The FULL library
-(~460 skills) remains readable on demand:
+`~/.codex/skills/` holds a curated set (~42) COPIED from the Claude Code skill
+library — copies, not symlinks, because Codex ignores symlinked entries
+(openai/codex #3637, #4383, #5040). Each managed copy carries a
+`.synced-from-claude` marker with its source path; re-run
+`~/.codex/sync-claude-inventory.sh` after editing a source skill to refresh.
+Codex's skills context budget truncates anything larger than the curated set.
+The FULL library (~460 skills) remains readable on demand:
 
 - `~/.claude/skills/<name>/SKILL.md` — user library (gitnexus, seo, ads, gsd, …)
 - `~/.claude/plugins/cache/*/*/*/skills/<name>/SKILL.md` — plugin libraries
@@ -110,6 +114,15 @@ When a task matches a known skill that isn't in the visible list, read its SKILL
 from the library and follow it. Re-curate with `~/.codex/sync-claude-inventory.sh`
 (edit the CURATED array). Some skill bodies reference Claude-only mechanics
 (Task/Agent tool, subagent spawning, Claude hooks) — do the equivalent work inline.
+
+## Custom Prompts (slash commands)
+
+`~/.codex/prompts/*.md` are COPIES of `~/.claude/commands/*.md` (same sync script;
+symlinks don't work — see openai/codex #4383). Claude-only frontmatter keys
+(`context: fork`, `allowed-tools`, `model`) are stripped at copy time; `description`
+and `argument-hint` survive. Invoke as `/<filename>` in the Codex TUI (loaded at
+session start — restart Codex after a sync). After adding or editing a command in
+`~/.claude/commands/`, re-run `~/.codex/sync-claude-inventory.sh`.
 
 ## Infra Quick Facts (verify in memory files before acting)
 

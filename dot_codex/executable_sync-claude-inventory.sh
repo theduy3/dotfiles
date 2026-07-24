@@ -125,7 +125,8 @@ copy_skill() {
 }
 for name in "${!SELECTED[@]}"; do copy_skill "$name"; done
 
-# --- slash commands -> custom prompts (copy + strip Claude-only frontmatter) ---
+# --- Claude commands -> deprecated Codex custom prompts ---
+# Invoke copied prompts as /prompts:<filename>, not /<filename>.
 # Codex understands only `description` / `argument-hint`; keys like `context: fork`,
 # `allowed-tools`, `model` are Claude-only and are dropped from the copy.
 while IFS= read -r -d '' link; do

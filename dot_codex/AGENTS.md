@@ -119,14 +119,15 @@ from the library and follow it. Re-curate with `~/.codex/sync-claude-inventory.s
 (edit the CURATED array). Some skill bodies reference Claude-only mechanics
 (Task/Agent tool, subagent spawning, Claude hooks) — do the equivalent work inline.
 
-## Custom Prompts (slash commands)
+## Custom Prompts (deprecated slash commands)
 
 `~/.codex/prompts/*.md` are COPIES of `~/.claude/commands/*.md` (same sync script;
 symlinks don't work — see openai/codex #4383). Claude-only frontmatter keys
 (`context: fork`, `allowed-tools`, `model`) are stripped at copy time; `description`
-and `argument-hint` survive. Invoke as `/<filename>` in the Codex TUI (loaded at
-session start — restart Codex after a sync). After adding or editing a command in
-`~/.claude/commands/`, re-run `~/.codex/sync-claude-inventory.sh`.
+and `argument-hint` survive. Codex namespaces these prompts: invoke them as
+`/prompts:<filename>` (for example, `/prompts:init-tests`), not `/<filename>`.
+They load at session start, so restart Codex after syncing. After adding or editing
+a command in `~/.claude/commands/`, re-run `~/.codex/sync-claude-inventory.sh`.
 
 ## Infra Quick Facts (verify in memory files before acting)
 

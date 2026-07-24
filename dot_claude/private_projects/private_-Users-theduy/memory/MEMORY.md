@@ -14,7 +14,7 @@
 - [Time Machine Interrupted Loop](timemachine-interrupted-loop.md) — TM "not backing up" = lost reference snapshot → deep-scan→interrupt loop on portable USB; fix = one uninterrupted `startbackup` + `caffeinate -dimsu` (2026-07-13)
 - [Android Remote Access Stack](android-remote-access-stack.md) — Tailscale mesh + Terminus + herdr to reach bluehost/hostinger/mac from Pixel; node IPs, --ssh-off, mac socket-activated sshd (2026-07-13)
 - [herdr Host = Hostinger](herdr-host-hostinger.md) — Hostinger is the always-on Claude+herdr box (6.9G free); Bluehost RAM-disqualified (990Mi, 4.5G swap at idle) — don't retry. herdr under systemd w/ 4G cgroup cap (2026-07-16)
-- [Codex ⇄ Claude Inventory Mirror](codex-claude-inventory-mirror.md) — ~/.codex mirrors Claude setup: AGENTS.md digest, curated 42-skill symlinks (2% budget cap, --all breaks it), 10 MCP ported; sync via ~/.codex/sync-claude-inventory.sh
+- [Codex ⇄ Claude Inventory Mirror](codex-claude-inventory-mirror.md) — ~/.codex mirrors Claude setup via COPIES (Codex ignores symlinks — openai/codex #4383; fixed 2026-07-24): 42 curated skills + 9 command prompts w/ frontmatter strip, 10 MCP ported; re-run ~/.codex/sync-claude-inventory.sh after edits, restart Codex
 - [Syncthing Vault Cluster](syncthing-vault-cluster.md) — Bluehost=24/7 master, 6 devices, theduyvault+wylios-vault; .stignore per-device gotcha, never sync .git, case conflicts, versioning now ON (2026-07-13)
 
 ## Active Projects

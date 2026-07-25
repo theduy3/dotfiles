@@ -18,6 +18,7 @@
 - [Syncthing Vault Cluster](syncthing-vault-cluster.md) — Bluehost=24/7 master, 6 devices, theduyvault+wylios-vault; .stignore per-device gotcha, never sync .git, case conflicts, versioning now ON (2026-07-13)
 
 ## Active Projects
+- [Graph Engineering Lesson Store](graph-engineering-lesson-store.md) — Move 1 LIVE 2026-07-25 (886de84): 20 Lessons + 1 Invariant in ~/theduyvault/Notes/Claude-Context/lessons/, `bun recall.ts --repo X --areas Y` ranks+caps at 7, policy read from ontology.yaml (retune there, not in code); WIRED into /s-auto §2 Setup + s-implementer `lessons:` report (chezmoi 152afb8, advisory/fail-open); edge log empty until next real run
 - [Task Queue](task-queue.md) — persistent cross-session task queue; scan Active section on session start, update on completion
 - [Consolidation into /s*](consolidation-into-s-star.md) — RESOLVED opposite way: /s* suite deleted 2026-07-17, GSD sole loop owner. Harvested agents/skills survive. Historical record.
 - [GSD Reinstalled Globally](gsd-reinstall-global.md) — `@opengsd/gsd-core` 1.4.4 `--claude --global` (2026-06-10); manifest-idempotent + chezmoi-ignore for agents; supersedes "GSD removed" claims
@@ -43,6 +44,7 @@
 - [Spec-Plan-TDD Ownership](spec-plan-tdd-ownership.md) — human owns /spec+/plan (grilled, approve); Claude owns implement→gates→commit→PR→CI→merge autonomously, FULL AUTO-MERGE (no ping, all repos, decided 2026-07-17). As-built /tdd-gates hard-stops at green gates ("human ships") — that wall contradicts this; carry through to merge.
 
 ## Safety Rules
+- [BG Isolation Guard Scope](bg-isolation-guard-scope.md) — `bgIsolation:none` exempts only sessions whose PROJECT DIR is that repo; `cd`-ing in from a `~`-rooted bg session arms the guard mid-session (verified both directions 2026-07-25); use `(cd X && cmd)` subshells
 - [Entrypoint Exec-Bit Strip](entrypoint-exec-bit-strip.md) — editing entrypoint.wylios.sh via mv/os.replace/sed-i strips +x → container exit 126 crash loop (bash -n won't catch it); chmod 755 after ANY edit before docker restart
 - [Worktree Branch Safety](feedback_worktree_branch_safety.md) - NEVER commit to main in a worktree; verify branch before any git write op
 - [ExitPlanMode Hook](feedback_exitplanmode_hook.md) - ExitPlanMode cannot be auto-approved on Android: neither allow list nor hooks bypass requiresUserInteraction() interactive UI

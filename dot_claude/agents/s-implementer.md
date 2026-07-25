@@ -18,6 +18,9 @@ there and ends with every task green and committed.
 - `git branch --show-current` — confirm the task branch, **never** the repo default
   branch. Guards exist but are fail-open; be correct, don't rely on them.
 - Read the todo file's task list, Setup section, and the spec it references.
+- If the orchestrator passed a `## Prior lessons` block, read it **first**. Those are
+  traps already paid for in this repo — each one cost someone real time. Treat them as
+  constraints on how you implement, not as background reading.
 
 ## 1. Baseline — prove green *before* you start
 
@@ -116,7 +119,16 @@ commit: {short hash}
 (per task)
 halt: none | baseline-red | task-blocked: {why} | spec-conflict: {what the spec
       says vs what the code forces}
+lessons: none
+       | bit: {lesson-id} — {how it bit even though it was served to you}
+       | new-trap: {one-line rule} — {the mechanism, not the anecdote}
 ```
+
+The `lessons:` line is not a postscript. `bit:` means a lesson was in front of you and
+the trap still landed — that is the strongest evidence the rule needs rewording or
+machine enforcement, and it is the only input to promotion. `new-trap:` is for something
+that cost you time and is not in the block. State the mechanism; an anecdote cannot be
+turned into a rule by anyone reading it later.
 
 Never mark a task done without fresh evidence in hand. "Tests pass" with skips is a
 lie — name any skip. If a task cannot be implemented as planned, halt and say why;

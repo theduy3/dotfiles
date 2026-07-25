@@ -81,12 +81,28 @@ back and continue.
 ## 2. Setup
 
 1. Read the todo's metadata (`worktree`, `scope`, `spec`) and task list.
-2. `EnterWorktree` with the todo's worktree name — **exactly one Enter for the whole
+2. **Recall prior lessons** — the durable lesson graph's read path, run from the main
+   checkout *before* entering the worktree. `--repo` is the basename of the main
+   checkout path; add `--areas` only when the todo names a subsystem already in the
+   store's vocabulary (`--explain` lists it):
+
+   ```bash
+   bun ~/tasks/graph-engineering/tools/src/recall.ts \
+     --repo <repo-basename> [--areas <area>] --run <slug>
+   ```
+
+   Keep the output block — you hand it to S2 below. `--run` appends one
+   CONSTRAINED_BY edge per lesson served; that edge is the whole payoff metric, so
+   never drop the flag. **Advisory and fail-open:** on any error (bun missing, store
+   unreadable, empty result) write one `WARN` line to Evidence and continue. Recall
+   must never become a sixth halt reason.
+3. `EnterWorktree` with the todo's worktree name — **exactly one Enter for the whole
    run**; no Exit until cleanup. (Each switch busts the prompt-cache prefix.)
-3. Flip the todo's `status:` to `implementing` (worktree copy — it rides the PR)
+4. Flip the todo's `status:` to `implementing` (worktree copy — it rides the PR)
    **and commit the flip immediately** — an uncommitted flip leaves the working tree
    dirty, which S3 correctly reports as a finding (verified live 2026-07-18).
-4. Write the Run-State File (`status: s2`).
+5. Write the Run-State File (`status: s2`), recording the recall in Evidence:
+   `S2: recalled N lesson(s) for <repo>/<area>`.
 
 ## 3. The stages
 
@@ -106,11 +122,27 @@ frontmatter wins — the banner shows what will actually run. Tag each Evidence
 entry in the Run-State File with the model used, e.g.
 `S3: GREEN (s-gate-runner@sonnet)`.
 
-**S2 — spawn `s-implementer`** (Opus). It verifies isolation, proves the baseline
-green, implements test-first per task, commits per green slice. Its report:
-per-task evidence, or a halt (`baseline-red` / `task-blocked` / `spec-conflict`).
-A halt here → Halt Protocol with reason `gate red` (baseline) or `review stuck`
-(spec-conflict — a human decision either way). Record evidence; `status: s3`.
+**S2 — spawn `s-implementer`** (Opus). Hand it the §2 recall output verbatim under a
+`## Prior lessons` heading — this is curated internal guidance meant to be *acted on*,
+so it is **not** DATA_START-bounded (that marker is for untrusted pasted content).
+It verifies isolation, proves the baseline green, implements test-first per task,
+commits per green slice. Its report: per-task evidence, or a halt (`baseline-red` /
+`task-blocked` / `spec-conflict`). A halt here → Halt Protocol with reason `gate red`
+(baseline) or `review stuck` (spec-conflict — a human decision either way).
+
+If its report's `lessons:` line names a served lesson that bit anyway, or a new trap,
+record it — this is the other half of the metric and the only input to promotion:
+
+```bash
+# a served lesson did not prevent the trap
+printf '%s\n' '{"edge":"REDISCOVERED","from":"run:<slug>","to":"lesson:<id>","at":"<ISO>"}' \
+  >> ~/tasks/.s-run/edges.jsonl
+```
+
+A **new** trap is not an edge — it is a missing node. Put the one-line rule in Evidence
+and leave it for the human; authoring a Lesson needs judgement about scope and
+mechanism, and a store that accepts auto-generated nodes becomes the pile this replaced.
+Record evidence; `status: s3`.
 
 **S3 — spawn `s-gate-runner`** (Sonnet). Independent full ladder + light integration
 check; evidence pasted, skips named. `RED` → Halt Protocol (`gate red`). `GREEN` →

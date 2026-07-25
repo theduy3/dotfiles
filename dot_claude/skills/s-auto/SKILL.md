@@ -84,7 +84,10 @@ back and continue.
 2. **Recall prior lessons** — the durable lesson graph's read path, run from the main
    checkout *before* entering the worktree. `--repo` is the basename of the main
    checkout path; add `--areas` only when the todo names a subsystem already in the
-   store's vocabulary (`--explain` lists it):
+   store's vocabulary — read it with
+   `grep -h '^areas:' ~/theduyvault/Notes/Claude-Context/lessons/*.md | sort -u`.
+   An unknown area is not an error, it just matches nothing, so omitting `--areas`
+   (repo-wide) is the safe default:
 
    ```bash
    bun ~/tasks/graph-engineering/tools/src/recall.ts \

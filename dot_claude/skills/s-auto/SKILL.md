@@ -64,6 +64,7 @@ next_action: <the single next thing to do on resume>
 - <ISO> S2: tasks 1-4 done, commits abc123..def456
 - <ISO> S3: GREEN (ladder: build/types/lint/tests/integration)
 - <ISO> S4: code-reviewer BLOCK (2 HIGH), fixer iteration 1 → fixed
+- <ISO> S4.5: plan-verdict minor-gaps; 1 foreseeable, 1 discovered; 1 lesson candidate
 ...
 
 ## S4 Findings (current iteration)
@@ -196,6 +197,19 @@ not).
   (fixes can break gates), then re-run the panel (same members). Increment
   `fix-iterations`.
 - **Still blocked at `fix-iterations: 2`** → Halt Protocol (`review stuck`).
+
+**S4.5 — spawn `s-plan-reviewer`** (Opus). Runs once S4 settles, on APPROVE **and** on a
+`review stuck` halt — the halt is where it is most useful. It judges the PLAN, not the
+code, using what execution revealed, and splits every blocking finding into FORESEEABLE
+(a plan defect) or DISCOVERED (only knowable by attempting it). Naming the DISCOVERED ones
+matters as much: without that split every rejection reads as a planning failure and someone
+"fixes" a plan that was correct.
+
+**Advisory — it is not a gate.** It never blocks the ship, never sets a halt reason, and
+never edits anything. Record its report verbatim in Evidence as `S4.5:` and continue. If it
+errors, log one `WARN` and carry on; like recall, it must never become a sixth halt reason.
+It may propose lesson candidates — those go in Evidence for the human to author, never
+straight into the store.
 
 **S5 — spawn `s-shipper`** (Sonnet), passing gate evidence + panel verdicts for the
 PR body. Its report: `merged` + SHA, or `ci-red` / `ci-timeout` / `merge-conflict` —

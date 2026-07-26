@@ -27,22 +27,37 @@ implement inline — spawning IS the model routing.
    - `status: draft` → refuse: "plan not approved — run /s1-plan".
    - `status: implementing` with a Run-State File that is **not** `halted` →
      a live `/s-auto` run owns it. Refuse — don't race the orchestrator.
-2. **Enter the worktree** named in the todo's metadata — exactly one Enter; no Exit
+2. **Recall prior lessons**, before entering the worktree, from the main checkout:
+
+   ```bash
+   bun ~/tasks/graph-engineering/tools/src/recall.ts \
+     --repo <repo-basename> [--areas <area>] --run <slug>
+   ```
+
+   Hand the output to `s-implementer` in step 4 under a `## Prior lessons` heading —
+   the same block `/s-auto` passes, so a manual S2 is not a lesson-blind S2. Advisory
+   and fail-open: on any error, note it and continue. This duplicates `/s-auto` §2
+   deliberately; the alternative is an operator path that silently skips the traps
+   the autonomous path is protected from.
+3. **Enter the worktree** named in the todo's metadata — exactly one Enter; no Exit
    at the end (operator continues here; each switch busts the prompt-cache prefix).
    If the branch exists but the worktree is gone, `git worktree add` it back.
-3. If the todo is still `plan-approved`: flip to `implementing` in the worktree copy
+4. If the todo is still `plan-approved`: flip to `implementing` in the worktree copy
    **and commit the flip immediately** (an uncommitted flip leaves the tree dirty,
    which S3 correctly reports as a finding).
-4. **Spawn `s-implementer`** with the todo path, spec path, and worktree path.
+5. **Spawn `s-implementer`** with the todo path, spec path, worktree path, and the
+   step-2 recall block under `## Prior lessons` (not DATA-bounded — curated guidance
+   is meant to be acted on).
    Before the spawn, print the stage banner with the live pin
    (`grep '^model:' ~/.claude/agents/s-implementer.md`):
    `▶ S2 · s-implementer · model: <pin>`. It
    verifies isolation, proves the baseline green, implements test-first per task,
    commits per green slice.
-5. Record its per-task evidence. On its halt (`baseline-red` / `task-blocked` /
+6. Record its per-task evidence, including its `lessons:` line. If it reports
+   `bit: <id>`, append a REDISCOVERED edge to `~/tasks/.s-run/edges.jsonl`. On its halt (`baseline-red` / `task-blocked` /
    `spec-conflict`) report the reason and evidence verbatim — no PushNotification;
    the operator is present.
-6. **Report and stop:** tasks done, commits, remaining tasks, halts. Next step is
+7. **Report and stop:** tasks done, commits, remaining tasks, halts. Next step is
    the operator's call (`/s3-gates`).
 
 ## Never

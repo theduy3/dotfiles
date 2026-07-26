@@ -34,7 +34,8 @@ implement inline — spawning IS the model routing.
      --repo <repo-basename> [--areas <area>] --run <slug>
    ```
 
-   Hand the output to `s-implementer` in step 4 under a `## Prior lessons` heading —
+   Area names come from `~/theduyvault/Notes/Claude-Context/lessons/AREAS.yaml`; recall
+   warns on an unknown one. Hand the output to `s-implementer` in step 4 under a `## Prior lessons` heading —
    the same block `/s-auto` passes, so a manual S2 is not a lesson-blind S2. Advisory
    and fail-open: on any error, note it and continue. This duplicates `/s-auto` §2
    deliberately; the alternative is an operator path that silently skips the traps

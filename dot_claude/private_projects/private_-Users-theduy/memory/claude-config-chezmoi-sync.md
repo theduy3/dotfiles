@@ -11,7 +11,7 @@ metadata:
 
 **Scope synced:** CLAUDE.md, RTK.md, settings.json (as `settings.json.tmpl`), statusline.sh, rules/, commands/, hooks/, agents/, skills/ source. **Excluded** via `.chezmoiignore`: `.credentials.json` (OAuth — auth per-machine), skill venvs/node_modules/__pycache__, 9 externally-symlinked skills, all heavy/transient dirs (projects/, plugins/).
 
-**Two files are chezmoi templates** using `{{ .chezmoi.homeDir }}` (so they port to the Linux VPS): `settings.json.tmpl` (statusline path) and `hooks/gitnexus/gitnexus-hook.cjs.tmpl` (npm-global cliPath).
+**One file is a chezmoi template** using `{{ .chezmoi.homeDir }}` (so it ports to the Linux VPS): `settings.json.tmpl` (statusline path).
 
 **How to apply:** To change global config, edit the live file then `chezmoi add ~/.claude/<file>` → `chezmoi cd` → commit → push. Or `chezmoi edit ~/.claude/<file>` → `chezmoi apply`. On another machine: `chezmoi update` (= git pull + apply). New machine bootstrap: `chezmoi init --apply git@github.com:theduy3/dotfiles.git`.
 

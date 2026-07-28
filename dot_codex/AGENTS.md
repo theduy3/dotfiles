@@ -110,7 +110,7 @@ library — copies, not symlinks, because Codex ignores symlinked entries
 Codex's skills context budget truncates anything larger than the curated set.
 The FULL library (~460 skills) remains readable on demand:
 
-- `~/.claude/skills/<name>/SKILL.md` — user library (gitnexus, seo, ads, gsd, …)
+- `~/.claude/skills/<name>/SKILL.md` — user library (seo, ads, gsd, …)
 - `~/.claude/plugins/cache/*/*/*/skills/<name>/SKILL.md` — plugin libraries
   (ecc catalog: patterns/testing/security references for ~30 languages/stacks)
 

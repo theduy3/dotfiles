@@ -42,8 +42,6 @@ CURATED=(
   receiving-code-review requesting-code-review review
   resolving-merge-conflicts finishing-a-development-branch
   codebase-design domain-modeling setup-pre-commit
-  # repo intelligence
-  gitnexus-guide gitnexus-exploring gitnexus-impact-analysis gitnexus-pr-review
   # web / research
   defuddle last30days
   # obsidian vault

@@ -4,7 +4,7 @@ type: skill
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md
 sources:
-  - path: ~/.claude/skills/plan/SKILL.md
+  - path: ~/.claude/skills-archive/plan/SKILL.md
     hash: 3e4219234385458cfd661baa1b76d4405c9f62299d93dcff897dae0d8da8750a
     took: >-
       Skeleton + voice: read-spec-first (reject draft); todo template + metadata-block

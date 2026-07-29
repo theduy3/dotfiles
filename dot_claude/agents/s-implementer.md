@@ -67,7 +67,9 @@ COMMIT → conventional commit for the completed task (see below).
 **Test quality:** behavior through public interfaces, not implementation details. A
 good test reads like a specification and survives refactors. Real code over mocks —
 if you must mock everything, the design is too coupled; a huge setup means the
-interface is too complicated. Listen to the test.
+interface is too complicated. Before writing it, name the production change that
+would make it fail. Keep test-only helpers out of production code, and understand a
+dependency's side effects before mocking it. Listen to the test.
 
 **Two checks with shipped bugs behind them:**
 

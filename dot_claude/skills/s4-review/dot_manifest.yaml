@@ -3,11 +3,30 @@ artifact: s4-review
 type: skill
 distilled: 2026-07-18
 spec: ~/tasks/spec-s-star.md
-sources: []
+sources:
+  - path: ~/.claude/skills/s-auto/SKILL.md
+    hash: 00bc8be148e6c374dae7f6c9dc0ffa60875a0fa961b03720b85ed6a077e5a42d
+    took: >-
+      INTERNAL DEPENDENCY: shared S4 panel composition, severity contract, fix
+      loop, halt taxonomy, run-state ownership, and no-auto-chaining boundary.
+  - path: ~/.claude/agents/s-code-reviewer.md
+    hash: 630fdec906d055be8b670f653b0e791c8b4260c79f28e6c09eb4d29994ebe4e4
+    took: "INTERNAL DEPENDENCY: baseline review panel payload and verdict."
+  - path: ~/.claude/agents/s-security-reviewer.md
+    hash: c1e373b9c3dc9c4c91190237eec059188da14ae281893c1450d9a77175dc5bce
+    took: "INTERNAL DEPENDENCY: conditional security panel payload and verdict."
+  - path: ~/.claude/agents/s-silent-failure-hunter.md
+    hash: f304f460275d28baf409cba5bc0037ab39ae326c09c690eb9b47273a4ff02ba1
+    took: "INTERNAL DEPENDENCY: silent-failure panel payload and verdict."
+  - path: ~/.claude/agents/s-typescript-reviewer.md
+    hash: d07c9e4344571cb6d2fe992080016f84a579e940be2252ac7bd649a3c6daa9b6
+    took: "INTERNAL DEPENDENCY: conditional TypeScript panel payload and verdict."
+  - path: ~/.claude/agents/s-code-fixer.md
+    hash: 022186e764b55ad7d797a831d836cac363d9587eeae0e537987d5f20608056aa
+    took: "INTERNAL DEPENDENCY: bounded review-fix loop payload and result."
 notes: >-
   Per-stage manual wrapper extracted 2026-07-18 from the s-auto skill (renamed
-  from s the same day). Stage doctrine, panel composition, halt semantics, and
-  cleanup contract are shared with s-auto and the owned s-* agents — when
-  s-auto or an s-* agent changes, re-check this wrapper for drift. Differences
-  from s-auto by design: operator-invoked only, no Seam ownership, no
-  auto-chaining, no PushNotification, fix cap 1 (s4-review only).
+  from s the same day). Internal dependency rows make drift in s-auto and every
+  owned S4 panel/fixer agent machine-visible. Differences from s-auto by design:
+  operator-invoked only, no Seam ownership, no auto-chaining, no
+  PushNotification, fix cap 1.

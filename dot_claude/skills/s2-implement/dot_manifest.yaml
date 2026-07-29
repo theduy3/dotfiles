@@ -3,11 +3,20 @@ artifact: s2-implement
 type: skill
 distilled: 2026-07-18
 spec: ~/tasks/spec-s-star.md
-sources: []
+sources:
+  - path: ~/.claude/skills/s-auto/SKILL.md
+    hash: 00bc8be148e6c374dae7f6c9dc0ffa60875a0fa961b03720b85ed6a077e5a42d
+    took: >-
+      INTERNAL DEPENDENCY: shared S2 stage contract, halt taxonomy, run-state
+      ownership, lesson recall handoff, and no-auto-chaining boundary.
+  - path: ~/.claude/agents/s-implementer.md
+    hash: e5af55b9312b2c50d7d4711c7bdf521bfc58c83c590424f6f0e096d41fdf3feb
+    took: >-
+      INTERNAL DEPENDENCY: manual wrapper invocation payload and result contract
+      must remain compatible with the owned S2 agent.
 notes: >-
   Per-stage manual wrapper extracted 2026-07-18 from the s-auto skill (renamed
-  from s the same day). Stage doctrine, panel composition, halt semantics, and
-  cleanup contract are shared with s-auto and the owned s-* agents — when
-  s-auto or an s-* agent changes, re-check this wrapper for drift. Differences
-  from s-auto by design: operator-invoked only, no Seam ownership, no
-  auto-chaining, no PushNotification, fix cap 1 (s4-review only).
+  from s the same day). Internal dependency rows make drift in s-auto and the
+  owned stage agent machine-visible. Differences from s-auto by design:
+  operator-invoked only, no Seam ownership, no auto-chaining, no
+  PushNotification, fix cap 1 (s4-review only).

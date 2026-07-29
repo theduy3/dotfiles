@@ -4,7 +4,7 @@ type: skill
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md
 sources:
-  - path: ~/.claude/skills/spec/SKILL.md
+  - path: ~/.claude/skills-archive/spec/SKILL.md
     hash: 831971e288e632c47bdd192fdcc2b08b9cfd791588e2edb5e77a589635c737a8
     took: >-
       Skeleton + voice: interview→draft→grill→self-review→stop flow; tasks/spec-<topic>.md

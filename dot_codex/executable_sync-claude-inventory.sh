@@ -33,24 +33,19 @@ MODE="${1:-curated}"
 # Claude-only loop owners — never sync even with --all (subagent/hook dependent).
 EXCLUDE_REGEX='^(gsd-.*|s0-spec|s1-plan|s2-implement|s3-gates|s4-review|s5-ship|s-auto)$'
 
-# Curated set: process discipline, code quality, and the domains in active use.
+# Curated set: Claude-only skills not already supplied by ~/.agents/skills or
+# an enabled Codex plugin. Keeping one provider per skill avoids duplicate
+# triggers and preserves the Codex skills-description context budget.
 CURATED=(
   # process / quality
-  brainstorming systematic-debugging tdd test-driven-development
-  verification-before-completion writing-plans executing-plans
-  grilling grill-with-docs unknowns diagnosing-bugs decision-mapping
-  receiving-code-review requesting-code-review review
-  resolving-merge-conflicts finishing-a-development-branch
-  codebase-design domain-modeling setup-pre-commit
+  unknowns
   # web / research
-  defuddle last30days
-  # obsidian vault
-  obsidian-markdown obsidian-bases obsidian-cli obsidian-vault json-canvas
+  last30days
   # active business domains
-  seo seo-audit seo-geo seo-technical seo-schema
+  seo seo-geo seo-technical seo-schema
   ads ads-audit ads-plan
   # misc
-  caveman supabase-postgres-best-practices frontend-design
+  caveman frontend-design
 )
 
 mkdir -p "$CODEX_SKILLS" "$CODEX_PROMPTS"

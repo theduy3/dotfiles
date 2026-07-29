@@ -102,13 +102,17 @@ not a complete security boundary.
 
 ## Skills
 
-`~/.codex/skills/` holds a curated set (~42) COPIED from the Claude Code skill
-library — copies, not symlinks, because Codex ignores symlinked entries
+Codex loads skills from `~/.codex/skills/`, `~/.agents/skills/`, built-ins, and
+enabled plugins. Keep exactly one active provider per skill to avoid ambiguous
+triggers and description-budget truncation. `~/.codex/skills/` currently holds
+11 curated Claude-only COPIES plus 9 imported command skills. Skills already
+available from `~/.agents/skills/` or a Codex plugin must not be mirrored there.
+
+Copies, not symlinks, are required because Codex ignores symlinked entries
 (openai/codex #3637, #4383, #5040). Each managed copy carries a
 `.synced-from-claude` marker with its source path; re-run
 `~/.codex/sync-claude-inventory.sh` after editing a source skill to refresh.
-Codex's skills context budget truncates anything larger than the curated set.
-The FULL library (~460 skills) remains readable on demand:
+The FULL Claude library (~460 skills) remains readable on demand:
 
 - `~/.claude/skills/<name>/SKILL.md` — user library (seo, ads, gsd, …)
 - `~/.claude/plugins/cache/*/*/*/skills/<name>/SKILL.md` — plugin libraries
@@ -116,8 +120,11 @@ The FULL library (~460 skills) remains readable on demand:
 
 When a task matches a known skill that isn't in the visible list, read its SKILL.md
 from the library and follow it. Re-curate with `~/.codex/sync-claude-inventory.sh`
-(edit the CURATED array). Some skill bodies reference Claude-only mechanics
-(Task/Agent tool, subagent spawning, Claude hooks) — do the equivalent work inline.
+(edit the CURATED array), but first check `~/.agents/skills/` and enabled plugins
+to prevent another provider collision. GSD remains Claude-owned: do not install
+`gsd-*` Codex adapters into `~/.agents/skills/`. Some skill bodies reference
+Claude-only mechanics (Task/Agent tool, subagent spawning, Claude hooks) — do the
+equivalent work inline.
 
 ## Imported Claude Command Skills
 

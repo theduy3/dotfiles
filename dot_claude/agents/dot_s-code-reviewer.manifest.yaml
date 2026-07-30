@@ -4,7 +4,7 @@ type: agent
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md
 sources:
-  - path: ~/.claude/agents/code-reviewer.md
+  - path: ~/.claude/agents-archive/runtime-sources/code-reviewer.md
     hash: 07447dbe8733fb9e24b1016d52b62468748b27547b5cff7af3021f3436624ee5
     took: >-
       Nearly whole: pre-report gate (4 questions), confidence filtering (>80%),

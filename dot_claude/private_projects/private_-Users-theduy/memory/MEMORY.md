@@ -15,6 +15,7 @@
 - [Android Remote Access Stack](android-remote-access-stack.md) — Tailscale mesh + Terminus + herdr to reach bluehost/hostinger/mac from Pixel; node IPs, --ssh-off, mac socket-activated sshd (2026-07-13)
 - [herdr Host = Hostinger](herdr-host-hostinger.md) — Hostinger is the always-on Claude+herdr box (6.9G free); Bluehost RAM-disqualified (990Mi, 4.5G swap at idle) — don't retry. herdr under systemd w/ 4G cgroup cap (2026-07-16)
 - [Codex ⇄ Claude Inventory Mirror](codex-claude-inventory-mirror.md) — single-provider layout since 2026-07-29: 11 Claude-only copies + 9 command skills in ~/.codex; shared ~/.agents and enabled plugins stay canonical; 71 GSD Codex adapters removed; re-run sync then restart Codex
+- [Claude Minimal /s* Runtime](claude-minimal-s-runtime.md) — active Claude engineering runtime is only 9 /s*+graph skills and 9 s-* agents (plus app/built-ins); 951 upstream components stay archived and disabled for reviewed monthly `$update-distill`
 - [Syncthing Vault Cluster](syncthing-vault-cluster.md) — Bluehost=24/7 master, 6 devices, theduyvault+wylios-vault; .stignore per-device gotcha, never sync .git, case conflicts, versioning now ON (2026-07-13)
 
 ## Active Projects

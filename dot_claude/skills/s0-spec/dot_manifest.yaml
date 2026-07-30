@@ -11,7 +11,7 @@ sources:
       template (all 8 sections); scope table read by downstream stages; smell table;
       where-this-runs (no worktree, tasks/ exempt); verified-vs-assumed stop protocol;
       never-advances-on-its-own rule.
-  - path: ~/.claude/skills/brainstorming/SKILL.md
+  - path: ~/.claude/skills-archive/runtime-sources/brainstorming/SKILL.md
     hash: bba47904a7f6bbee3bf8a107ebbe84e65d392be683bbb898ded736b29e415f90
     took: >-
       Interview discipline: explore-context-first; one-question-at-a-time; multiple-choice
@@ -24,7 +24,7 @@ sources:
       Whole method, inlined into Step 3: relentless one-at-a-time questioning; recommended
       answer per question; explore-codebase-instead-of-asking; walk design-tree branches
       resolving decision dependencies.
-  - path: ~/.claude/skills/unknowns/SKILL.md
+  - path: ~/.claude/skills-archive/runtime-sources/unknowns/SKILL.md
     hash: f2b561b75446fc6ff81d6af168c1d04592d72666aa58283e208a17b8e4d42902
     took: >-
       Blind-spot pass (3-7 real unknowns, cost-if-discovered-late ranking) folded into

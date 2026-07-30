@@ -12,7 +12,7 @@ sources:
       questions; handoff-Seam semantics (file state not call; implementing = live
       consumer, don't pick up). Changed: consumer table collapsed to /s-auto (single-track);
       scope style map replaced by grill-r2 mapping (large→workers, not medium+large).
-  - path: ~/.claude/skills/writing-plans/SKILL.md
+  - path: ~/.claude/skills-archive/runtime-sources/writing-plans/SKILL.md
     hash: 45e90359450e6cf96f2c4fad0ea8bd4fcf414165ae6f98f36f44c211e828f84b
     took: >-
       Granularity doctrine: zero-context-engineer framing; file-structure-before-tasks;
@@ -25,7 +25,7 @@ sources:
     took: >-
       Grill method inlined into Step 5: one-at-a-time, recommended answer per question,
       explore-codebase-instead-of-asking.
-  - path: ~/.claude/agents/gsd-plan-checker.md
+  - path: ~/.claude/agents-archive/runtime-sources/gsd-plan-checker.md
     hash: dd3b5ca53779fb6c5718570f0912663cc58c36e7eec054fa784d1f82ecf7f846
     took: >-
       The transferable adversarial method, self-run (Step 4): assume-flawed stance;

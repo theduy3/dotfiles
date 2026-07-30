@@ -59,6 +59,8 @@ bash ~/.claude/skills/update-distill/scripts/catalog.sh diff
 
 The catalog covers archived skills/agents, `~/.agents/skills`, GSD workflow
 Sources, and every currently installed plugin version whether enabled or disabled.
+Additional project archives are listed one absolute path per line in
+`~/.claude/update-distill/catalog-roots.txt`.
 For each `NEW` or `CHANGED` component, inspect its name and description first.
 Read the body only when it could improve an existing `/s*` stage or close a known
 coverage gap. Do not expand `/s*` merely because upstream added something.

@@ -4,7 +4,7 @@ type: agent
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md
 sources:
-  - path: ~/.claude/agents/security-reviewer.md
+  - path: ~/.claude/agents-archive/runtime-sources/security-reviewer.md
     hash: 46d310c1ddc42a727cab58e5e4342a8c261b55541161dc6ffe3d6c3259fd019e
     took: >-
       OWASP Top-10 walk, flag-on-sight pattern table with severities, key

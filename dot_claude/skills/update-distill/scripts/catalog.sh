@@ -29,14 +29,25 @@ state_file="${state_file:-$task_home/.claude/update-distill/source-catalog.tsv}"
 component_paths() {
   local component_root
 
-  for component_root in \
-    "$task_home/.claude/skills-archive" \
-    "$task_home/.claude/agents-archive" \
-    "$task_home/.agents/skills" \
-    "$task_home/.claude/gsd-core/workflows"; do
-    [[ -d "$component_root" ]] || continue
-    find "$component_root" -type f \( -name 'SKILL.md' -o -name '*.md' \)
-  done
+  component_root="$task_home/.claude/skills-archive"
+  [[ ! -d "$component_root" ]] || find "$component_root" -type f -iname 'skill.md'
+
+  component_root="$task_home/.claude/agents-archive"
+  [[ ! -d "$component_root" ]] || find "$component_root" -type f -name '*.md'
+
+  component_root="$task_home/.agents/skills"
+  [[ ! -d "$component_root" ]] || find "$component_root" -type f -iname 'skill.md'
+
+  component_root="$task_home/.claude/gsd-core/workflows"
+  [[ ! -d "$component_root" ]] || find "$component_root" -type f -name '*.md'
+
+  catalog_roots="$task_home/.claude/update-distill/catalog-roots.txt"
+  if [[ -f "$catalog_roots" ]]; then
+    while read -r component_root; do
+      [[ -n "$component_root" && -d "$component_root" ]] || continue
+      find "$component_root" -type f -iname 'skill.md'
+    done < "$catalog_roots"
+  fi
 
   installed_plugins="$task_home/.claude/plugins/installed_plugins.json"
   [[ -f "$installed_plugins" ]] || return 0
@@ -44,9 +55,12 @@ component_paths() {
   jq -r '.plugins | to_entries[] | .value[0].installPath' "$installed_plugins" |
     while read -r component_root; do
       [[ -d "$component_root" ]] || continue
-      find "$component_root/skills" -mindepth 2 -maxdepth 2 -type f -name 'SKILL.md' 2>/dev/null
-      find "$component_root/agents" -maxdepth 1 -type f -name '*.md' 2>/dev/null
-      find "$component_root/commands" -maxdepth 1 -type f -name '*.md' 2>/dev/null
+      [[ ! -d "$component_root/skills" ]] ||
+        find "$component_root/skills" -mindepth 2 -maxdepth 2 -type f -iname 'skill.md'
+      [[ ! -d "$component_root/agents" ]] ||
+        find "$component_root/agents" -maxdepth 1 -type f -name '*.md'
+      [[ ! -d "$component_root/commands" ]] ||
+        find "$component_root/commands" -maxdepth 1 -type f -name '*.md'
     done
 }
 

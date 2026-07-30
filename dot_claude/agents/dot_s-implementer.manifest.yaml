@@ -4,7 +4,7 @@ type: agent
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md
 sources:
-  - path: ~/.claude/skills/tdd-gates/SKILL.md
+  - path: ~/.claude/skills-archive/runtime-sources/tdd-gates/SKILL.md
     hash: 79b2310fcd09de9e1568b46a364f5f8de74437dbd4f6b7b73c42b39033049971
     took: >-
       Isolation verification (worktree not main checkout, never default branch,

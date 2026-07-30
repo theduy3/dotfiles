@@ -4,7 +4,7 @@ type: agent
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md
 sources:
-  - path: ~/.claude/agents/typescript-reviewer.md
+  - path: ~/.claude/agents-archive/runtime-sources/typescript-reviewer.md
     hash: fcb0a9fa95cb3d5f7eb36b8c5a19dcb5f032727340e52f7fd1447873f83fcaab
     took: >-
       Full priority ladder (CRITICAL security; HIGH type-safety/async/error-

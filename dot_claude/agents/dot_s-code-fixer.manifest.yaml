@@ -4,7 +4,7 @@ type: agent
 distilled: 2026-07-17
 spec: ~/tasks/spec-s-star.md
 sources:
-  - path: ~/.claude/agents/gsd-code-fixer.md
+  - path: ~/.claude/agents-archive/runtime-sources/gsd-code-fixer.md
     hash: b45eaceb383c0b2a9a62ad1520ae17fcd01ce9d774d403747d2f311de684606e
     took: >-
       Fix doctrine: findings-are-guidance-not-patches; read-actual-source ±10

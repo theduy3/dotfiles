@@ -42,6 +42,7 @@
 - [/s* Cost + MCP Bloat](s-star-cost-and-mcp-bloat.md) — Fable=78% of spend is the session-model ORCHESTRATOR not agents (agents tiered right); lever APPLIED 2026-07-24: s0/s1 default = Opus 5, pinned `claude-opus-5[1m]` in chezmoi settings.json.tmpl (Fable pin there was re-imposed hourly, overriding /model); ADR 0006 amended; MCP layers + trims applied (postiz removed, playwright+chrome-devtools plugins disabled @e1802ea); account connectors ~150 tools = biggest /s* bloat, only killable via /mcp or claude.ai
 
 ## Workflow Ownership
+- [/s* Grill + HTML Gates](s-star-grill-and-html-gates.md) — user's running order (2026-07-31): s0-spec → grill-with-docs → HTML artifact → approve → s1-plan → grill-with-docs → HTML artifact → approve → /s-auto. Both gates are hard stops. `grill-with-docs` is disable-model-invocation (user types it, or run `grilling`+`domain-modeling`); supersedes "no external grill needed" in the pipeline guide.
 - [Spec-Plan-TDD Ownership](spec-plan-tdd-ownership.md) — human owns /spec+/plan (grilled, approve); Claude owns implement→gates→commit→PR→CI→merge autonomously, FULL AUTO-MERGE (no ping, all repos, decided 2026-07-17). As-built /tdd-gates hard-stops at green gates ("human ships") — that wall contradicts this; carry through to merge.
 
 ## Safety Rules

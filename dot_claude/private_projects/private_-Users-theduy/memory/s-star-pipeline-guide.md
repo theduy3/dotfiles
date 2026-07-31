@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: reference
   originSessionId: 698605e9-2911-4689-b178-b801b9b42336
-  modified: 2026-07-18T15:44:43.428Z
+  modified: 2026-07-31T21:22:46.755Z
 ---
 
 Full /s* pipeline guide: `~/theduyvault/Notes/s-star-pipeline-guide.md` (written 2026-07-18,
@@ -22,6 +22,11 @@ with named skips, conditional panel (3 join / 1 named skip), transient-403 panel
 precondition-gated ship, CWD-ENOENT cleanup order — all exercised. Rename `/s`→`/s-auto` swept
 through docs same day (CONTEXT.md, ADRs 0001/0003/0004/0007, spec-s-star.md, s1-plan manifest);
 skills+agents were already renamed and chezmoi-synced.
+
+**SUPERSEDED 2026-07-31 (grill map only):** the "built-in grill map — no external grill skill
+needed" line above no longer reflects how the user runs it. Each of s0/s1 is now followed by
+`grill-with-docs` + an HTML approval artifact — see [[s-star-grill-and-html-gates]]. Everything
+else in this note still stands.
 
 Related: [[plugin-routing-priorities]] (arena split, Seam precedence),
 [[claude-permission-edit-not-write]] (why the tail is promptless).

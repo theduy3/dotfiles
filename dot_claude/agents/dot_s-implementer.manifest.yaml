@@ -1,7 +1,7 @@
 # Distillation provenance — consumed by /update-distill
 artifact: s-implementer
 type: agent
-distilled: 2026-07-17
+distilled: 2026-07-31
 spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/skills-archive/runtime-sources/tdd-gates/SKILL.md
@@ -17,13 +17,30 @@ sources:
       squashes at S5, granularity buys bisectability); runtime invocations of
       tdd / project skills / verification-before-completion severed (ADR 0002).
   - path: ~/.agents/skills/tdd/SKILL.md
-    hash: 13722957277ed4960061a2d254a0ed7d86f95693e88b40d1c68307e7fdc98287
+    hash: 5363bb2775679fe9311fbb67947f95359169c6e7f1fac77c0f25e190bca6cf2f
     took: >-
       Behavior-through-public-interfaces philosophy; anti-horizontal-slicing with
       tracer-bullet vertical slices; refactor-after-green-only; mocking/coupling
       diagnostics (must-mock-everything = coupled design; huge setup = bad
       interface). Dropped: planning checklist with user confirmation (plan is
       already approved at S2), codebase-design skill reference.
+      Added 2026-07-31: (1) tautological-test anti-pattern — assertion recomputes
+      the expected value the way the code does, so it passes by construction;
+      expected values must come from an independent source of truth. Sharpened for
+      S2, where the same agent writes test and implementation. (2) CONTEXT.md + ADR
+      reading in §0, so test names and interface vocabulary match the domain
+      language; adapted to name S0/S1 grilling as the writer of those docs.
+      (3) Seams — name the boundary under test before writing, effort lands on
+      critical paths; adapted from "confirm seams with the user" to "read the seams
+      out of the approved plan" (same reason the planning checklist was dropped),
+      with an underdetermined seam routed to halt: task-blocked.
+      Rejected 2026-07-31 (hash 5363bb27): upstream moved refactoring OUT of the
+      red-green loop into its review stage. Kept our REFACTOR-after-green-only step.
+      Why: S4 is a blocking panel with a 2-iteration fix cap, not a refactoring
+      stage; the move would inflate the loop the halt taxonomy bounds, drops
+      "never refactor while RED" with no replacement, and delegates to upstream's
+      code-review skill — a severed reference (ADR 0002). Do not re-propose unless
+      the Source's rationale changes.
   - path: ~/.claude/plugins/cache/claude-plugins-official/superpowers/6.2.0/skills/test-driven-development/SKILL.md
     hash: bf1b8216e523851a411e91d429a7c1c2a173e79d88957bc78e348218d50edd54
     took: >-

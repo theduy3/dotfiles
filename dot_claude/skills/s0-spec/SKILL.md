@@ -113,6 +113,12 @@ answer with each question. If a question can be answered by exploring the codeba
 instead of asking. Walk each branch of the design tree, resolving dependencies between
 decisions one by one.
 
+**Facts you look up; decisions you ask.** Exploring aggressively is right for facts and
+wrong for decisions — the pull is to infer the user's choice from what the codebase
+happens to do and move on. Put every decision to the user and **wait for the answer**
+before asking the next question. A decision you resolved by inference is an assumption
+wearing a spec's clothes.
+
 Fold every answer back into the spec. An unanswered grill question stays in **Risks** as an
 open question — never silently dropped.
 

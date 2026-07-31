@@ -1,7 +1,7 @@
 # Distillation provenance — consumed by /update-distill (re-hash, scoped diff, per-Source approval)
 artifact: s0-spec
 type: skill
-distilled: 2026-07-17
+distilled: 2026-07-31
 spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/skills-archive/spec/SKILL.md
@@ -19,11 +19,14 @@ sources:
       with recommendation; YAGNI. Dropped: Visual Companion, HARD-GATE framing,
       docs/superpowers path, writing-plans handoff, commit step.
   - path: ~/.agents/skills/grilling/SKILL.md
-    hash: fe00af3e1815f97c0a7644605479328a726b5cd95ba6ef56a4be2a92fae6c20f
+    hash: 44331dda57f461db4fec3f2efb6ddabe7aaaa0a57ae0f88a883bc61aed8a0587
     took: >-
       Whole method, inlined into Step 3: relentless one-at-a-time questioning; recommended
       answer per question; explore-codebase-instead-of-asking; walk design-tree branches
-      resolving decision dependencies.
+      resolving decision dependencies. Added 2026-07-31: the fact/decision boundary — facts
+      are looked up, decisions belong to the user and each is put to them and *waited on*
+      before the next question. The complement of explore-instead-of-asking; without it an
+      aggressive explorer infers the user's choice from what the codebase happens to do.
   - path: ~/.claude/skills-archive/runtime-sources/unknowns/SKILL.md
     hash: f2b561b75446fc6ff81d6af168c1d04592d72666aa58283e208a17b8e4d42902
     took: >-

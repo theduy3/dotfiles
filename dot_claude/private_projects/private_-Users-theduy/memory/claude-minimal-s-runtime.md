@@ -1,10 +1,11 @@
 ---
 name: claude-minimal-s-runtime
-description: "Claude runtime is intentionally limited to /s*, graph engineering, and their nine s-* agents; 951 upstream components remain archived for reviewed monthly distillation"
-metadata:
+description: "Claude runtime is intentionally limited to /s*, graph engineering, and their nine s-* agents; 951 upstream components remain archived for reviewed weekly distillation"
+metadata: 
   node_type: memory
   type: project
-  modified: 2026-07-29
+  modified: 2026-07-31T21:27:10.873Z
+  originSessionId: 2fc43f97-0ad9-457d-97ce-fe1c730e3b94
 ---
 
 Claude Code uses a deliberately minimal active engineering runtime:
@@ -27,7 +28,8 @@ archives. Global recovery roots are `~/.claude/skills-archive/runtime-sources/`,
 `~/.claude/commands-archive/runtime-sources/`. SalonX project sources are under
 `~/Repo/salonx/.claude/skills-archive/runtime-sources/`.
 
-Run `$update-distill` monthly and after upstream/plugin upgrades. Its manifest
+Run `$update-distill` **weekly** (cadence changed monthly→weekly 2026-07-31) and after
+upstream/plugin upgrades. Its manifest
 sweep checks registered provenance; its catalog checks the full inactive library
 (951 component entrypoints as of 2026-07-29). Upstream changes are reviewed per
 Source and never auto-applied. Do not reactivate a source provider just to

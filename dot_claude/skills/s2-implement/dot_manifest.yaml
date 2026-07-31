@@ -10,10 +10,16 @@ sources:
       INTERNAL DEPENDENCY: shared S2 stage contract, halt taxonomy, run-state
       ownership, lesson recall handoff, and no-auto-chaining boundary.
   - path: ~/.claude/agents/s-implementer.md
-    hash: e5af55b9312b2c50d7d4711c7bdf521bfc58c83c590424f6f0e096d41fdf3feb
+    hash: f02357010498d1bc3cb12ed0bc8e6cee892028e7001ee52b04c477268bc5b46a
     took: >-
       INTERNAL DEPENDENCY: manual wrapper invocation payload and result contract
       must remain compatible with the owned S2 agent.
+      Re-verified 2026-07-31 after the tdd-Source refresh added CONTEXT.md/ADR
+      reading, seams-from-the-plan, and the tautological-test rule to the agent.
+      Contract UNCHANGED, no wrapper edit: the new reads are done by the agent from
+      the worktree, not passed in the payload; the seam rule reuses the existing
+      halt: task-blocked rather than adding a reason step 6 would have to handle.
+      Re-hash only.
 notes: >-
   Per-stage manual wrapper extracted 2026-07-18 from the s-auto skill (renamed
   from s the same day). Internal dependency rows make drift in s-auto and the

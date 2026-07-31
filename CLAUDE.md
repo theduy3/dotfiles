@@ -93,7 +93,8 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - **Per-stage manual commands** (operator rerun/debug, added 2026-07-18): `/s2-implement`,
   `/s3-gates`, `/s4-review`, `/s5-ship`. Single stage each, no Seam ownership, never
   auto-chain — the `plan-approved` Seam still belongs to `/s-auto` alone.
-- Refresh distillates monthly via `/update-distill` (per-Source human approval).
+- Refresh distillates **weekly** via `/update-distill` (per-Source human approval). Cadence
+  changed monthly→weekly 2026-07-31.
 
 ### The prod loop → GSD
 - Plan/execute/verify/ship via `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`,

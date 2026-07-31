@@ -154,6 +154,10 @@ answer it, explore instead of asking:
 - Which task is actually three tasks?
 - Which "independent" tasks share mutable state?
 
+**Facts you look up; decisions you ask.** Ordering questions look answerable from the
+codebase, and the dependency facts are — but which of two valid orders to ship is the
+user's call. Put each such decision to them and **wait for the answer** before moving on.
+
 Reorder. Split. Merge. Then re-grill the parts you changed.
 
 ## Step 6 — Stop, and hand off

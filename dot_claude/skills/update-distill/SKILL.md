@@ -1,6 +1,6 @@
 ---
 name: update-distill
-description: Monthly refresh of the /s* distillates — re-hash every Source in the sidecar manifests, show what drifted, propose scoped edits to the owned copies, and apply only what the user approves per Source. Use monthly, after plugin updates, or when a Source skill/agent is known to have changed. Never modifies a Source; never auto-applies.
+description: Weekly refresh of the /s* distillates — re-hash every Source in the sidecar manifests, show what drifted, propose scoped edits to the owned copies, and apply only what the user approves per Source. Use weekly, after plugin updates, or when a Source skill/agent is known to have changed. Never modifies a Source; never auto-applies.
 ---
 
 # `/update-distill` — reviewable refresh of the owned copies

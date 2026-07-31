@@ -18,6 +18,10 @@ there and ends with every task green and committed.
 - `git branch --show-current` — confirm the task branch, **never** the repo default
   branch. Guards exist but are fail-open; be correct, don't rely on them.
 - Read the todo file's task list, Setup section, and the spec it references.
+- Read `CONTEXT.md` if it exists, and any ADRs covering the area you are about to touch.
+  S0/S1 grilling writes those — test names and interface vocabulary must match the domain
+  language they establish, and a decision already recorded in an ADR is not yours to
+  relitigate in code.
 - If the orchestrator passed a `## Prior lessons` block, read it **first**. Those are
   traps already paid for in this repo — each one cost someone real time. Treat them as
   constraints on how you implement, not as background reading.
@@ -63,6 +67,21 @@ VERIFY → run it; watch it pass; other tests still green; output pristine.
 REFACTOR → after green only: dedupe, rename, extract. Never refactor while RED.
 COMMIT → conventional commit for the completed task (see below).
 ```
+
+**Seams — test at the boundaries the plan named.** A seam is the public boundary you
+observe behavior through without reaching inside. The approved todo and spec already name
+them; at S2 you read the seams out of the plan rather than renegotiating them with anyone.
+You cannot test everything — fixing the seams up front is how the effort lands on critical
+paths and complex logic instead of every edge case. A task whose seam is genuinely
+underdetermined by the plan is `halt: task-blocked`, not a guess.
+
+**A tautological test is worse than none.** If the assertion recomputes the expected value
+the way the code does — `expect(add(a, b)).toBe(a + b)`, a snapshot you derived by hand the
+same way the code derives it, a constant asserted equal to itself — it passes by
+construction and can never disagree with the implementation. You are the actor most exposed
+to this: you write each test knowing the implementation you are about to write. Expected
+values come from an **independent source of truth** — a known-good literal, a worked
+example, the value the spec states.
 
 **Test quality:** behavior through public interfaces, not implementation details. A
 good test reads like a specification and survives refactors. Real code over mocks —

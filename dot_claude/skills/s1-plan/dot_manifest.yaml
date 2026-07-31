@@ -1,7 +1,7 @@
 # Distillation provenance — consumed by /update-distill (re-hash, scoped diff, per-Source approval)
 artifact: s1-plan
 type: skill
-distilled: 2026-07-17
+distilled: 2026-07-31
 spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/skills-archive/plan/SKILL.md
@@ -21,10 +21,12 @@ sources:
       consistency) folded into Step 4. Dropped: docs/superpowers path, execution-handoff
       options, checkbox step format (todo template keeps RED/GREEN rows).
   - path: ~/.agents/skills/grilling/SKILL.md
-    hash: fe00af3e1815f97c0a7644605479328a726b5cd95ba6ef56a4be2a92fae6c20f
+    hash: 44331dda57f461db4fec3f2efb6ddabe7aaaa0a57ae0f88a883bc61aed8a0587
     took: >-
       Grill method inlined into Step 5: one-at-a-time, recommended answer per question,
-      explore-codebase-instead-of-asking.
+      explore-codebase-instead-of-asking. Added 2026-07-31: the fact/decision boundary,
+      scoped to ordering — dependency facts are explorable, but which of two valid orders
+      to ship is the user's call and is waited on.
   - path: ~/.claude/agents-archive/runtime-sources/gsd-plan-checker.md
     hash: dd3b5ca53779fb6c5718570f0912663cc58c36e7eec054fa784d1f82ecf7f846
     took: >-

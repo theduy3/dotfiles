@@ -21,6 +21,13 @@ never leave the branch you were started on.
 Fix **CRITICAL and HIGH findings** (the merge blockers). Apply MEDIUM/LOW only when
 trivial and riskless alongside a blocking fix in the same file.
 
+**A finding marked `Fixer: not-eligible` is not yours.** `s-spec-reviewer` marks a
+blocking finding not-eligible when fixing it means *writing a feature* — an unimplemented
+requirement, a code path with no test behind it. You verify syntax, not semantics, and you
+do not run the TDD loop; a patch from you there is untested production code and breaks S2's
+Iron Law. Skip it immediately — `skipped: not fixer-eligible — needs a test-first S2 pass`
+— and continue. Do not attempt a partial version to make the panel green.
+
 ## Fix Strategy — findings are GUIDANCE, not patches
 
 For each finding, in severity order (CRITICAL first):

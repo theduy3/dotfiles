@@ -1,10 +1,10 @@
 ---
 name: claude-minimal-s-runtime
-description: "Claude runtime is intentionally limited to /s*, graph engineering, and their nine s-* agents; 951 upstream components remain archived for reviewed weekly distillation"
+description: "Claude runtime is intentionally limited to /s*, graph engineering, and their ten s-* agents; 951 upstream components remain archived for reviewed weekly distillation"
 metadata: 
   node_type: memory
   type: project
-  modified: 2026-07-31T21:27:10.873Z
+  modified: 2026-07-31T21:40:39.837Z
   originSessionId: 2fc43f97-0ad9-457d-97ce-fe1c730e3b94
 ---
 
@@ -15,7 +15,10 @@ Claude Code uses a deliberately minimal active engineering runtime:
   `cua-driver` is supplied separately by the installed app.
 - Custom agents: `s-code-fixer`, `s-code-reviewer`, `s-gate-runner`,
   `s-implementer`, `s-plan-reviewer`, `s-security-reviewer`, `s-shipper`,
-  `s-silent-failure-hunter`, and `s-typescript-reviewer`.
+  `s-silent-failure-hunter`, `s-spec-reviewer`, and `s-typescript-reviewer`.
+  `s-spec-reviewer` was added 2026-07-31 as the always-on S4 spec axis — the only
+  panelist that asks whether the code is what was *approved* rather than whether it
+  is *good*.
 - Enabled user plugins: only the two output styles and TypeScript LSP. Capability
   plugins, including Superpowers and ECC, remain installed but disabled.
 - `/s-auto` recalls graph-engineering lessons directly through

@@ -5,10 +5,12 @@ distilled: 2026-07-18
 spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/skills/s-auto/SKILL.md
-    hash: 00bc8be148e6c374dae7f6c9dc0ffa60875a0fa961b03720b85ed6a077e5a42d
+    hash: 2bade915acf379d9db8401dbeaa31d8efcdc2e4e08f80e917bbb89ed76bf52ba
     took: >-
       INTERNAL DEPENDENCY: shared S2 stage contract, halt taxonomy, run-state
       ownership, lesson recall handoff, and no-auto-chaining boundary.
+      Re-verified 2026-07-31 after the S4 spec-axis change: it touched S4 only and
+      added no halt reason, so the S2 contract is unchanged. Re-hash only.
   - path: ~/.claude/agents/s-implementer.md
     hash: f02357010498d1bc3cb12ed0bc8e6cee892028e7001ee52b04c477268bc5b46a
     took: >-

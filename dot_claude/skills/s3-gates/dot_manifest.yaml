@@ -5,10 +5,12 @@ distilled: 2026-07-18
 spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/skills/s-auto/SKILL.md
-    hash: 00bc8be148e6c374dae7f6c9dc0ffa60875a0fa961b03720b85ed6a077e5a42d
+    hash: 2bade915acf379d9db8401dbeaa31d8efcdc2e4e08f80e917bbb89ed76bf52ba
     took: >-
       INTERNAL DEPENDENCY: shared S3 stage contract, halt taxonomy, run-state
       ownership, and no-auto-chaining boundary.
+      Re-verified 2026-07-31 after the S4 spec-axis change: it touched S4 only and
+      added no halt reason, so the S3 contract is unchanged. Re-hash only.
   - path: ~/.claude/agents/s-gate-runner.md
     hash: e19b39d435b8c09665fee72c05df5411a2befcddd1673230483872b9a109a4ca
     took: >-

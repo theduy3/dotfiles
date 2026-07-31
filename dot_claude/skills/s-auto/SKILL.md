@@ -181,9 +181,16 @@ record; `status: s4`.
 | Agent | When |
 |---|---|
 | `s-code-reviewer` | always |
+| `s-spec-reviewer` | always — skips itself and approves when the todo names no spec |
 | `s-security-reviewer` | diff touches auth, API endpoints, secrets, input handling, or payments |
 | `s-silent-failure-hunter` | diff changes error handling (try/catch, fallbacks, logging) |
 | `s-typescript-reviewer` | diff contains `.ts/.tsx/.js/.jsx` |
+
+`s-spec-reviewer` is the **spec axis**: every other panelist asks whether the code is
+good, it asks whether the code is what was approved. Code that passes every gate and
+implements the wrong feature is invisible to all of them — including to a green suite
+written by the same agent that misread the spec. Pass it the todo path *and* the spec
+path; its review surface is the requirements the todo claims, never the whole spec.
 
 Decide conditionals from `git diff origin/main...HEAD --stat` + a quick grep — when
 borderline, spawn it (a reviewer that finds nothing is cheap; a missed CRITICAL is
@@ -196,6 +203,12 @@ not).
   findings (bounded DATA_START/END). After its report: re-spawn `s-gate-runner`
   (fixes can break gates), then re-run the panel (same members). Increment
   `fix-iterations`.
+- **Every blocking finding marked `Fixer: not-eligible`** → skip the fix loop and go
+  straight to Halt Protocol (`review stuck`). Those need a test-first S2 pass, not a
+  patch; running the loop would burn two Opus iterations to reach the same halt, and a
+  fixer that "solves" them writes untested production code. A *mixed* set still runs the
+  loop — the eligible findings get fixed, the rest carry to the halt report. This adds
+  no halt reason; it reaches the existing one sooner.
 - **Still blocked at `fix-iterations: 2`** → Halt Protocol (`review stuck`).
 
 **S4.5 — spawn `s-plan-reviewer`** (Opus). Runs once S4 settles, on APPROVE **and** on a

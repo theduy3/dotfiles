@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: c5b1847c-8c65-4b25-91a5-c49aadbf78be
+  modified: 2026-08-04T12:53:36.971Z
 ---
 
 `~/.claude` config is version-controlled with **chezmoi** (source at `~/.local/share/chezmoi`, branch `main`) and pushed to private GitHub repo **theduy3/dotfiles**. Set up 2026-05-23.
@@ -20,6 +21,8 @@ metadata:
 **⚠️ settings.json is a TEMPLATE — live edits revert.** The push job runs `chezmoi apply --force` hourly, which regenerates `~/.claude/settings.json` FROM `dot_claude/settings.json.tmpl`. `chezmoi re-add` does NOT pull edits back into templates. So editing live settings.json alone gets reverted within the hour. **Must edit `~/.local/share/chezmoi/dot_claude/settings.json.tmpl` too**, then verify `chezmoi diff ~/.claude/settings.json` is empty before relying on it.
 
 **⚠️ Third-party installers lose the race (2026-07-16).** Anything that writes `~/.claude/settings.json` directly — `npx @opengsd/gsd-core` upgrades especially — is reverted at the next hourly `chezmoi apply --force`. Observed: the 1.7.0 upgrade at 09:42 added `Write(.planning/*)` + `Write(STATE.md)` allow rules and registered a new `gsd-worktree-path-guard.js` hook; `chezmoi apply` at 09:47:51 wiped all three (~5 min later). Symptoms while in that window: startup prints `Permission allow rule ... Write(X) is not matched by file permission checks` (see [[claude-permission-edit-not-write]] — `Write()` rules are inert, `Edit()` covers all file tools). Warnings print **twice per rule** when cwd is `~`, because `/Users/theduy` is both the home dir and the project dir, so `~/.claude/settings.json` loads as user AND project settings.
+
+**⚠️ Claude Code's OWN `claude plugin` CLI hits this too (2026-08-03).** `claude plugin marketplace add <repo>` + `claude plugin install <p>@<m>` write `extraKnownMarketplaces` and `enabledPlugins` straight into live settings.json ("declared in user settings") — `chezmoi diff` then shows both entries queued for deletion at the next apply, i.e. a silent plugin uninstall. Verified installing agentmemory. Same fix: append the two entries to `settings.json.tmpl` **in the same block position the installer used** (both append last), since chezmoi diffs rendered text, not parsed JSON. The installer also *reorders/reformats* unrelated keys, so the textual diff stays noisy afterward — compare parsed dicts (keys-added / keys-lost / values-changed) to prove nothing is actually lost. Note `claude plugin` exposes non-interactive `marketplace add` / `install` / `enable` / `disable` / `details` subcommands, so plugin installs don't need the interactive `/plugin` UI.
 
 **Rule:** after any installer touches `~/.claude`, hand-lift the changes you want into `~/.local/share/chezmoi/dot_claude/settings.json.tmpl` **within the hour**, or they evaporate. Hook *files* written to `~/.claude/hooks/` survive (not chezmoi-managed if ignored) but become orphans — on disk, unregistered, never firing. Also: a read-then-write on any chezmoi-managed file races the timer; diff against a backup instead of trusting your own edit succeeded.
 

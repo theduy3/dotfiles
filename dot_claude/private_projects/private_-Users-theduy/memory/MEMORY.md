@@ -1,7 +1,7 @@
 # Memory Index
 
 ## Environment & Configuration
-- [Claude Config chezmoi Sync](claude-config-chezmoi-sync.md) — ~/.claude synced via chezmoi to private theduy3/dotfiles; edit→`chezmoi add`→push (settings.json is a .tmpl — edit source or hourly apply reverts it, incl. gsd-core installer writes)
+- [Claude Config chezmoi Sync](claude-config-chezmoi-sync.md) — ~/.claude synced via chezmoi to private theduy3/dotfiles; edit→`chezmoi add`→push (settings.json is a .tmpl — edit source or hourly apply reverts it, incl. gsd-core AND `claude plugin install` writes)
 - [Claude Plugins Not chezmoi-Synced](claude-plugins-not-chezmoi-synced.md) — ~/.claude/plugins has 0 chezmoi-managed files; marketplace/npx plugins reinstall (not sync) on VPS via `~/vps-bootstrap-claude-plugins.sh` (snapshot script, tracked, commit 8c6113f); chezmoi is not a live mirror (untracked skills stay untracked until `chezmoi add`)
 - [Permission Rules: Edit() not Write()](claude-permission-edit-not-write.md) — `Write(path)` rules silently ignored by the matcher; the .env/secrets/.ssh denies were inert until 2026-07-16
 - [Status Line & Hooks](statusline-and-hooks.md) - Status line setup, write hook whitelist
@@ -19,6 +19,7 @@
 - [Syncthing Vault Cluster](syncthing-vault-cluster.md) — Bluehost=24/7 master, 6 devices, theduyvault+wylios-vault; .stignore per-device gotcha, never sync .git, case conflicts, versioning now ON (2026-07-13)
 
 ## Active Projects
+- [agentmemory Install](agentmemory-install.md) — v0.9.28 live 2026-08-04: plugin (15 skills/12 hooks/53 MCP tools) + launchd `com.theduy.agentmemory` on :3111/:3113; deliberately **zero-LLM** (Codex OAuth can't substitute; never write a non-working key — GEMINI_API_KEY breaks embeddings too)
 - [Graph Engineering Lesson Store](graph-engineering-lesson-store.md) — Move 1 LIVE 2026-07-25 (886de84): 20 Lessons + 1 Invariant in ~/theduyvault/Notes/Claude-Context/lessons/, `bun recall.ts --repo X --areas Y` ranks+caps at 7, policy read from ontology.yaml (retune there, not in code); WIRED into /s-auto §2 Setup + s-implementer `lessons:` report (chezmoi 152afb8, advisory/fail-open); edge log empty until next real run
 - [Task Queue](task-queue.md) — persistent cross-session task queue; scan Active section on session start, update on completion
 - [Consolidation into /s*](consolidation-into-s-star.md) — RESOLVED opposite way: /s* suite deleted 2026-07-17, GSD sole loop owner. Harvested agents/skills survive. Historical record.

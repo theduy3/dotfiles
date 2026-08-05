@@ -79,8 +79,9 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 
 > **One loop owner per task.** **GSD owns production** (Hermes/Wylios) plan→execute→verify→ship
 > and all enforcement hooks. **`/s*` owns local single-track work** (rebuilt 2026-07-17 by
-> distillation — spec `~/tasks/spec-s-star.md`, ADRs `~/tasks/s-star/docs/adr/`). ECC +
-> Superpowers stay ENABLED but as **explicit-call leaf libraries** — never their workflow loops.
+> distillation — spec `~/tasks/spec-s-star.md`, ADRs `~/tasks/s-star/docs/adr/`). **Superpowers
+> stays ENABLED** as an **explicit-call leaf library** — never its workflow loops. **ECC is
+> DISABLED** (2026-08-04) — see Leaf libraries below.
 > (The old s0–s9 suite was deleted 2026-07-17 and replaced the same day by the distilled `/s*`.)
 
 ### The local loop → `/s*`
@@ -104,17 +105,35 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - **Superpowers skills:** `brainstorming`, `systematic-debugging`, `test-driven-development`,
   `verification-before-completion`, `receiving-code-review`, `dispatching-parallel-agents`.
   Call at the trigger point; they no longer auto-fire (SessionStart injector gone).
-- **ECC agents:** language reviewers (`ecc:python-reviewer`, `ecc:typescript-reviewer`, …),
-  build-resolvers, `ecc:security-reviewer`. Avoid `/ecc:plan` / `/ecc:feature-dev` — those are rival loops.
-- **One TDD enforcer per task:** inside GSD use `gsd-verify-work` + `nyquist-auditor`; standalone use
-  `superpowers:test-driven-development`.
+- **ECC is DISABLED (2026-08-04) — `ecc:`-prefixed names DO NOT resolve.** Do not call
+  `ecc:python-reviewer` / `ecc:typescript-reviewer` / `ecc:security-reviewer`; use the **unprefixed**
+  agents below instead. Rationale: ECC's 249 skills overflow the skill-listing budget
+  (`skillListingBudgetFraction`, default 1% of context), which silently truncates *every* skill's
+  description and degrades selection accuracy across `/s*`, bmad, ponytail and caveman — a global tax
+  to obtain a handful of agents. `/ecc:plan` and `/ecc:feature-dev` are now unreachable, which is
+  desirable: they were rival loops. **ECC's cache remains a file source** — individual agents can be
+  copied out of `~/.claude/plugins/cache/ecc/ecc/2.0.0-rc.1/agents/` without enabling the plugin.
+  `npx ecc-agentshield` is a separate npm CLI and is unaffected.
+- **One TDD enforcer per task:** inside GSD use `gsd-verify-work` + **`gsd-nyquist-auditor`**
+  (gsd-core ships all 34 of its agents `gsd-`prefixed — the bare `nyquist-auditor` does NOT resolve);
+  standalone use `superpowers:test-driven-development`.
 
 ### Harvested agents (`~/.claude/agents/`) — neutral, use under any loop
+**INSTALLED (6, verified 2026-08-04)** — these resolve today:
 - Review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`
-- Verify/debug: `verifier`, `debugger`, `integration-checker`, `nyquist-auditor`
-- Build/perf: `build-error-resolver`, `performance-optimizer`, `refactor-cleaner`
-- Plan/map/security: `planner`, `codebase-mapper`, `security-auditor`
-- Pass `tasks/` paths explicitly (`tasks/spec-*.md`, `tasks/todo-*.md`) — their prose still says `.planning/`.
+- Build: `build-error-resolver` · Plan: `planner` (opus-tier — pricier than the sonnet reviewers)
+- All six are `.planning/`-free, so pass `tasks/` paths normally; no path caveat applies.
+
+**NOT installed — archived at `~/.claude/agents-archive/runtime-sources/`.** Named here for
+provenance only; calling them fails until restored (`cp` the file into `~/.claude/agents/`):
+- Verify/debug: `verifier`, `debugger`, `integration-checker`, `nyquist-auditor` — **under GSD do
+  not restore these**; gsd-core already supplies `gsd-verifier`, `gsd-debugger`,
+  `gsd-integration-checker`, `gsd-nyquist-auditor` at runtime.
+- Build/perf: `performance-optimizer`, `refactor-cleaner` · Map/security: `codebase-mapper`,
+  `security-auditor` — no runtime equivalent; restore from the archive if wanted.
+- ⚠️ The archived copies are the **GSD runtime** variants — their prose says `.planning/` and some
+  are `gsd-*` orchestrator-internal (the archived `planner.md` is a GSD planner, *not* the neutral
+  one installed above). Restore deliberately, and pass `tasks/` paths explicitly to those.
 
 ### Hook audit (2026-06-19, updated 2026-07-17) — `~/.claude/settings.json`
 - **KEEP (orchestrator-neutral safety):** `worktree-path-guard.js` (writes stay in active worktree),

@@ -15,6 +15,13 @@ if [ "${CLAUDE_VAULT_FORCE:-0}" != "1" ]; then
   if [ -d "./tasks" ]; then
     ACTIVE_TASK=$(grep -l "status: plan-approved" ./tasks/todo-*.md 2>/dev/null | head -1)
   fi
+  # Some repos ARE the tasks directory (e.g. ~/tasks) and keep todo-*.md at the root,
+  # so the ./tasks/ probe above can never match there. Additive fallback: never fires
+  # less than before, only more. (Added 2026-08-04 — the ./tasks/ assumption silently
+  # skipped ~/tasks, which had 3 plan-approved todos at the time.)
+  if [ -z "$ACTIVE_TASK" ]; then
+    ACTIVE_TASK=$(grep -l "status: plan-approved" ./todo-*.md 2>/dev/null | head -1)
+  fi
   if [ -z "$ACTIVE_TASK" ]; then
     exit 0
   fi
@@ -22,7 +29,16 @@ fi
 
 # Check for project-specific vault note
 if [ -f "$REGISTRY" ]; then
-  PROJECT_NOTE=$(grep -F "$CWD" "$REGISTRY" 2>/dev/null | grep -oE '\[\[Projects/[^]]+\]\]' | tr -d '[[]]' | head -1)
+  # Match the cwd against the registry's BACKTICK-QUOTED path, not as a bare substring.
+  # A bare `grep -F "$CWD"` matches every row whose path CONTAINS the cwd, so a short path
+  # matches all its descendants and `head -1` returns whichever is listed first — running in
+  # /Users/theduy resolved to SalonX rather than codex-setup. Anchoring on the closing
+  # backtick makes the match exact: `/Users/theduy/repo/salonx` does not contain
+  # `/Users/theduy` followed by a backtick. (Fixed 2026-08-04.)
+  # NOTE: this requires registry paths to stay backtick-quoted, which they are.
+  # A nested cwd (e.g. <project>/apps/web) still resolves to nothing, as before — walking up
+  # to the nearest registered ancestor would be a behaviour change, deliberately not made here.
+  PROJECT_NOTE=$(grep -F "\`$CWD\`" "$REGISTRY" 2>/dev/null | grep -oE '\[\[Projects/[^]]+\]\]' | tr -d '[[]]' | head -1)
   if [ -n "$PROJECT_NOTE" ]; then
     NOTE_PATH="$VAULT/$PROJECT_NOTE.md"
     if [ -f "$NOTE_PATH" ]; then

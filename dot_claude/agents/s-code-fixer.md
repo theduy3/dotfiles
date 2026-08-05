@@ -46,6 +46,28 @@ For each finding, in severity order (CRITICAL first):
 **If the code context differs so much the finding no longer applies:** skip it —
 `skipped: code context differs from review` — and continue. Never force a broken fix.
 
+### What a fix OWES — the plan's defences expire here
+
+The plan's dimensional tables cover the code the plan described. They cannot cover code that
+did not exist when they were written — which is every line you are about to add. Fixes have
+shipped defects of exactly the class the panel had already caught twice in the same run,
+because no gate held jurisdiction over them.
+
+If your fix **adds a comparison, swaps an operand of one, or introduces a symbol other code
+will call**, state in the commit message body:
+
+- comparison or operand swap → what real-world **event** each side measures. Not its type;
+  matching types are how these defects pass review.
+- new symbol → every field of an unvalidated payload it reads, and whether each is validated
+  at the boundary.
+
+Two or three lines. If you cannot state them, you do not yet know whether the fix is
+correct — and the re-gate will not tell you, because the tests will inherit your assumption.
+
+**Swapping an operand is the highest-risk edit available to you.** A constant calibrated
+against the old operand is wrong for the new one *even though it never moved*, and the
+existing tests will keep asserting the old behaviour is right.
+
 **Respect the repo's `CLAUDE.md`** conventions (immutability, error handling, type
 rules) in every fix.
 

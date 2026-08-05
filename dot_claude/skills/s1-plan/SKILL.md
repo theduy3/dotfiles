@@ -136,6 +136,45 @@ Goal-backward, from the spec:
 7. **Project rules** — the plan violates nothing in the repo's `CLAUDE.md`
    (conventions, forbidden patterns, required steps).
 
+### The dimensional pass — required before Step 4 is done
+
+The seven checks above audit the plan on its **reference** axis: is each claim true, does
+each goal have a task. They will not catch a plan whose claims are all true and whose
+arithmetic is still wrong, because two operands of one comparison measure different things.
+That defect ships silently — every test passes, because the tests inherit the plan's
+assumption.
+
+Produce two tables **in the plan document**. They are deliverables, not scratch work.
+
+**Table A — one row per comparison OPERATOR.** Not per rendered fraction. Every `<`, `>=`,
+`===`, every filter predicate, every "N of M" the plan writes:
+
+| Comparison | Left operand — what EVENT does it measure? | Right operand — what EVENT? | Same thing? |
+
+The event column is the whole point. *"Both are ISO instants"* is not an answer — that is
+the type, and matching types is precisely how these defects pass review. Write what happened
+in the world: *"when the run record was first written"* versus *"when the code that writes
+this edge first existed"*. Stated that way a mismatch is unmissable; stated as types it is
+invisible.
+
+A comparison that **filters** rather than divides has no numerator and no denominator, so a
+ratio-shaped table cannot hold a row for it — and those are the rows most worth writing. If
+your table's columns are Numerator / Denominator, it is the wrong table.
+
+**Table B — every field of an unvalidated payload the plan newly READS**, marked validated
+or not, and at which boundary. Promoting a field from inert payload to map key, comparator,
+or the receiver of a method call makes it load-bearing. Validation is a property of the
+payload, not of the one field that happened to motivate the guard.
+
+Two executable checks, pasted into the plan **with their output**:
+
+- **Output strings** — for every message this plan rewords, `git grep -F '<old literal>'`
+  across the whole tree **including `.test.*`**. A reworded string is not a signature, so no
+  symbol-name grep will ever find its consumers.
+- **Constants citing a source** — any constant whose comment cites a commit, file, or
+  release is pasted from a command that reads it (`git show -s --format=%cI <sha>`), never
+  from memory and never truncated to a friendlier precision.
+
 Fix BLOCKERs now; fix or explicitly accept WARNINGs. Then re-check only what you changed.
 
 ## Step 5 — Grill the sequencing

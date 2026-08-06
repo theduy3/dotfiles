@@ -42,6 +42,14 @@ after the last gate run) → same refusal.
 5. **Report:** PR URL, merge SHA, tasks delivered. On `ci-red` / `ci-timeout` /
    `merge-conflict` → report the shipper's evidence and stop; no PushNotification —
    the operator is present.
+6. **On merge only — `/agentmemory:remember`**, after step 3's cleanup, never before it.
+   Save what the shipment changed in behaviour and anything that surprised the run; 2–5
+   specific lowercased concepts, because they are the retrieval surface. **Fail-open: a
+   failed save is a note in the report, never a reason to stop** — the run is already
+   merged, and nothing downstream depends on it. **"Nothing to save" is a valid outcome**
+   for a mechanical shipment; generic entries make `recall` worse. `s-shipper` cannot do
+   this — it has no `Skill` tool. Full guidance lives in `/s-auto` §4; it is not restated
+   here, because a policy written in two files drifts into two policies.
 
 ## Never
 

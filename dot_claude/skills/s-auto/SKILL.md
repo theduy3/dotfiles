@@ -244,6 +244,37 @@ subsequent tool call (`posix_spawn ENOENT`) — restart required, run stranded.
 Then: run-state `status: merged`, final Evidence entry, and report: PR URL, merge
 SHA, tasks delivered, fix-loop iterations used, halts: none.
 
+### After the merge — `/agentmemory:remember` (fail-open, never a halt)
+
+One call, on a merge and only on a merge, **after cleanup** — by then the worktree is gone,
+so any file path you cite resolves against the main checkout rather than a directory that no
+longer exists. It is yours, not `s-shipper`'s: that agent has no `Skill` tool and physically
+cannot invoke this.
+
+**This step can never halt the run.** The halt surface is exactly the five reasons in §5 and
+this is not one of them. If the skill errors, the MCP server is down, or the save returns
+nothing — note one line in Evidence and finish reporting `merged`. A memory that failed to
+save is a lost note; a run that halted because a note failed to save is a lost merge.
+
+Save the DURABLE part, not the changelog. Git holds the diff and `.s-run/<slug>.md` holds the
+evidence trail; neither is searchable from a future session. Worth saving:
+
+- what the shipment changed in BEHAVIOUR, in a sentence or two
+- what surprised the run — a fix-loop finding, a halt and how it resolved, a reviewer's
+  diagnosis that outlived the finding that prompted it
+- decisions a later run would otherwise re-litigate
+
+**"Nothing to save" is a valid outcome.** Skip it when the run was mechanical and taught
+nothing. A store full of "shipped slug X" entries makes `recall` worse, not better — every
+generic memory competes for retrieval against a specific one.
+
+Concepts are the retrieval surface: 2–5 specific lowercased phrases.
+`run-provenance-batch-scoping` retrieves; `tasks, merge, pipeline` does not.
+
+**Not a substitute for a lesson node.** If what the run learned is a transferable RULE, its
+home is the lesson store `recall.ts` reads and S2 opens with — propose it there instead, or
+as well. This memory is for run-shaped context; the lesson store is for laws.
+
 ## 5. Halt Protocol — the ONLY five pings
 
 `gate red` · `review stuck` (CRITICAL/HIGH after cap-2) · `CI red` · `CI timeout

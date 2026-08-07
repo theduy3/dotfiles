@@ -26,6 +26,20 @@ Argument = topic slug, or auto-detect: exactly one `tasks/todo-*.md` at
 - `status: implementing` and **no** Run-State File of yours for this slug → another
   session owns it. Refuse. Do not pick it up.
 - Ambiguous (several plan-approved todos) → ask which; single-track means one.
+
+**Never trust the todo's `status:` as the lock.** You flip it inside the worktree, so it
+rides the PR and every other session still reads `plan-approved` from the main checkout.
+On 2026-08-05 two sessions built `peer-eval-rpc-authz` in parallel for hours on exactly
+that blind spot, and the session that won was not running `/s-auto` at all — so no
+cooperative marker of yours could have stopped it. The authoritative check runs from the
+**main checkout** and looks for traces an uncooperative session cannot avoid leaving:
+
+```bash
+node scripts/claim.mjs status <slug>     # ledger + local/remote branches + worktrees + open PRs
+```
+
+Any conflict reported → refuse and report it. If it says the claim is STALE, do not
+silently take it: say so and let the operator call `claim steal`.
 - Sanitize the slug before using it in paths: must match `^[a-z0-9][a-z0-9-]*$`,
   max 40 chars, no `..` or slashes.
 
@@ -122,12 +136,24 @@ back and continue.
    never drop the flag. **Advisory and fail-open:** on any error (bun missing, store
    unreadable, empty result) write one `WARN` line to Evidence and continue. Recall
    must never become a sixth halt reason.
-3. `EnterWorktree` with the todo's worktree name — **exactly one Enter for the whole
+3. **Claim the slug, from the main checkout, before entering any worktree.** This is the
+   only marker other sessions can see; it is also enforced — a PreToolUse guard blocks
+   `EnterWorktree` and `git worktree add` for an unclaimed slug.
+
+   ```bash
+   node scripts/claim.mjs acquire <slug> --agent claude --scope "<what done means>"
+   ```
+
+   It refuses if the ledger, a local or remote branch, a worktree, or an open PR already
+   matches the slug — print that evidence and halt rather than working around it. The
+   claim writes the `## Active` entry in `tasks/assigned.md` for you; that file is a
+   generated projection of the locks, so never hand-edit it.
+4. `EnterWorktree` with the todo's worktree name — **exactly one Enter for the whole
    run**; no Exit until cleanup. (Each switch busts the prompt-cache prefix.)
-4. Flip the todo's `status:` to `implementing` (worktree copy — it rides the PR)
+5. Flip the todo's `status:` to `implementing` (worktree copy — it rides the PR)
    **and commit the flip immediately** — an uncommitted flip leaves the working tree
    dirty, which S3 correctly reports as a finding (verified live 2026-07-18).
-5. Capture `git rev-parse origin/main` **before** any commits land — that value is
+6. Capture `git rev-parse origin/main` **before** any commits land — that value is
    `base-sha`, and it is the only way to tell later whether a run branched from a
    stale base. Then write the Run-State File (`status: s2`), recording the recall in
    Evidence: `S2: recalled N lesson(s) for <repo>/<area>`.
@@ -237,6 +263,15 @@ Stage agents never remove the worktree; that is yours, in this exact order:
 2. `ExitWorktree` **in this parent session** (a subagent's cd changes nothing here).
 3. Verify `pwd` == the main repo root (first entry of `git worktree list`).
 4. Only then: `git worktree remove <path>` and delete the local task branch.
+5. **Release the claim** — from the main checkout, where you now are:
+
+   ```bash
+   node scripts/claim.mjs release <slug>
+   ```
+
+   Do this on a merge *and* on a halt you are abandoning. An unreleased claim blocks the
+   next session on that slug until someone runs `claim steal`, and the staleness report
+   only starts calling it stale after 48h of branch silence.
 
 Skipping step 3 and removing a worktree your own CWD is inside kills every
 subsequent tool call (`posix_spawn ENOENT`) — restart required, run stranded.

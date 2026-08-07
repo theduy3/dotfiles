@@ -147,10 +147,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "code-review-graph status",
+            "command": "git rev-parse --git-dir >/dev/null 2>&1 && code-review-graph status || true",
             "timeout": 10
           }
-        ]
+        ],
+        "_comment": "DOCTOR 2026-08-07: gated on git-repo. Ran unconditionally incl. ~ (not a git repo, graph 0 nodes) costing 5.4s median at every SessionStart. rev-parse costs ~5ms to skip it."
       }
     ],
     "PreToolUse": [

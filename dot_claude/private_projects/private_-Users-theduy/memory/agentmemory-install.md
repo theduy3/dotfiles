@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 52a30290-489a-4367-8ded-f4107d3a895f
-  modified: 2026-08-07T11:47:28.675Z
+  modified: 2026-08-07T16:53:37.460Z
 ---
 
 **rohitg00/agentmemory 0.9.28** installed 2026-08-03/04 on the MacBook (was NOT installed before — a prior audit found only empty `AgentMemory/` stub dirs in both vaults, which belong to the unrelated Hermes VPS export, plus past session-transcript mentions).
@@ -29,7 +29,18 @@ metadata:
 2. **State path was relative** — `iii-config.yaml` had `file_path: ./data/state_store.db` and the plist sets `WorkingDirectory=/Users/theduy`, so the store materialised as a stray `~/data/`. Any process with a different cwd forks its own empty store; the MCP bridges already run from `/Users/theduy/Repo/salonx`. FIXED: pinned to `/Users/theduy/.agentmemory/data/`.
    **⚠️ That edit lives in `~/.npm-global/lib/node_modules/@agentmemory/agentmemory/dist/iii-config.yaml` — `npm i -g` WIPES IT.** Reapply after every upgrade or the store silently splits again.
 
-3. **BM25 scoring is degenerate — NOT fixed, likely upstream.** `memory_smart_search` returns results whose scores are `0.01639, 0.01613, 0.01587…` = exactly `1/61, 1/62, 1/63` — positional decay, **identical across completely unrelated queries**. It ranks by recency and ignores query terms. Also logs `Empty provider response on summarize {"provider":"resilient(noop)"}`. Non-empty results make this look healthy; check whether scores *vary by query* before trusting recall.
+3. **`import` persists observations but never indexes them — NOT fixed, filed upstream as
+   [rohitg00/agentmemory#1163](https://github.com/rohitg00/agentmemory/issues/1163).**
+   Imported obs are retrievable by `sessionId` but invisible to `smart-search` forever. Proof:
+   `mem:obs:*` keys went 30 → 1,878 on import while `mem:index:bm25*` keys stayed at **8**.
+   No endpoint reindexes them — `graph/build`/`consolidate`/`reflect` return 200 and do nothing,
+   `migrate` 400, `graph/snapshot-rebuild` 503. Silent failure: 200s, correct `export` counts.
+
+   **⚠️ Do NOT repeat this misdiagnosis:** scores of `0.01639/0.01613/0.01587` are exactly
+   `1/61, 1/62, 1/63` — normal **RRF fusion, k=60** (`1/(k+rank)`). They look degenerate and are
+   not. Constant scores across queries are expected; RRF discards relevance and uses rank only.
+   The discriminating test is whether the *results* change, not the scores. They do — live-captured
+   obs rank fine. Search works; the index is just missing everything `import` wrote.
 
 Why no key, so this isn't re-litigated:
 - No provider API key exists on this machine; Claude Code here is **OAuth subscription** auth (`.credentials.json`).

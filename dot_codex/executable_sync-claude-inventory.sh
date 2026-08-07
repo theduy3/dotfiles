@@ -30,6 +30,15 @@ COMMAND_SKILL_MARKER=".synced-command-from-claude"
 PROMPT_MANIFEST="$CODEX_PROMPTS/.synced-from-claude"
 MODE="${1:-curated}"
 
+# Claude->Codex porting switch (2026-08-07). OFF by default: operator policy is
+# "no Claude-ported skills in Codex". Codex already reads ~/.agents/skills, its own
+# plugin caches and ~/.codex/.agents/skills directly, so ports only duplicated
+# triggers and consumed the ~2% skills-description budget. Measured before turning
+# this off: 11 ports, only seo(8) seo-geo(4) ads-audit(1) frontend-design(1)
+# vault-save(1) ever invoked across 61 sessions.
+# Set PORT_CLAUDE=1 to restore porting — the prune logic reverses cleanly next run.
+PORT_CLAUDE="${PORT_CLAUDE:-0}"
+
 # Claude-only loop owners — never sync even with --all (subagent/hook dependent).
 EXCLUDE_REGEX='^(gsd-.*|s0-spec|s1-plan|s2-implement|s3-gates|s4-review|s5-ship|s-auto)$'
 
@@ -89,6 +98,33 @@ if [ "$MODE" = "--all" ]; then
 else
   for name in "${CURATED[@]}"; do SELECTED[$name]=1; done
 fi
+
+# Porting off: select nothing, so the prune loop below removes every managed copy.
+if [ "$PORT_CLAUDE" != "1" ]; then
+  unset SELECTED
+  declare -A SELECTED
+fi
+
+# --- single-provider guard: drop anything Codex already loads from another provider ---
+# Codex reads these roots directly, so a copy in ~/.codex/skills is a duplicate trigger
+# and pure waste of the ~2% skills-description budget. Until now the rule lived only in
+# the comment above CURATED, so a skill added to one of these roots LATER silently
+# became a duplicate (`ads`, 2026-08-07). Dropping from SELECTED here also lets the
+# prune loop below delete any stale managed copy — no separate cleanup needed.
+OTHER_PROVIDER_ROOTS=(
+  "$HOME/.agents/skills"
+  "$HOME/.codex/.agents/skills"
+)
+dropped_duplicate=0
+for name in "${!SELECTED[@]}"; do
+  for root in "${OTHER_PROVIDER_ROOTS[@]}"; do
+    [ -f "$root/$name/SKILL.md" ] || continue
+    unset 'SELECTED[$name]'
+    dropped_duplicate=$((dropped_duplicate + 1))
+    echo "  drop (already provided by $root): $name" >&2
+    break
+  done
+done
 
 # --- prune: old symlinks (pre-copy era) and managed copies no longer selected ---
 pruned=0
@@ -151,15 +187,16 @@ for existing in "$CODEX_SKILLS"/*/; do
   [ -d "${existing%/}" ] || continue
   [ -f "${existing%/}/$COMMAND_SKILL_MARKER" ] || continue
   name="$(basename "${existing%/}")"
-  [ -f "$CLAUDE_DIR/commands/$name.md" ] || {
+  if [ "$PORT_CLAUDE" != "1" ] || [ ! -f "$CLAUDE_DIR/commands/$name.md" ]; then
     rm -rf -- "${existing%/}"
     pruned=$((pruned + 1))
-  }
+  fi
 done
 
 command_skills=0
 skipped_commands=0
 for f in "$CLAUDE_DIR"/commands/*.md; do
+  [ "$PORT_CLAUDE" = "1" ] || continue
   [ -f "$f" ] || continue
   name="$(basename "$f" .md)"
   dst="$CODEX_SKILLS/$name"
@@ -216,4 +253,4 @@ PY
   command_skills=$((command_skills + 1))
 done
 
-echo "mode=$MODE copied=$copied missing=$missing skipped_manual=$skipped_manual pruned_old=$pruned command_skills=$command_skills skipped_commands=$skipped_commands"
+echo "mode=$MODE copied=$copied missing=$missing skipped_manual=$skipped_manual dropped_duplicate=$dropped_duplicate pruned_old=$pruned command_skills=$command_skills skipped_commands=$skipped_commands"

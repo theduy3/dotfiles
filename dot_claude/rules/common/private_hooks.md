@@ -1,3 +1,10 @@
+---
+paths:
+  - ".claude/**"
+  - "**/CLAUDE.md"
+  - "**/settings*.json"
+---
+
 # Hooks System
 
 ## Hook Types

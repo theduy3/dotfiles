@@ -1,3 +1,9 @@
+---
+paths:
+  - "**/*.{ts,tsx,js,jsx,py,go,rs,rb,java,sh}"
+  - "**/.github/**"
+---
+
 # Git Workflow
 
 ## Commit Message Format

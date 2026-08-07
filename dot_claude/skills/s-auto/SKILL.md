@@ -39,7 +39,10 @@ node scripts/claim.mjs status <slug>     # ledger + local/remote branches + work
 ```
 
 Any conflict reported → refuse and report it. If it says the claim is STALE, do not
-silently take it: say so and let the operator call `claim steal`.
+silently take it: say so and let the operator call `claim steal`. **This script is absent in
+some repos** (it ships in `salonx`, not `~/tasks`) — a command that failed to run is not a
+clean bill of health. Use the inline fallback in §2 step 3 rather than reading silence as
+"no conflict".
 - Sanitize the slug before using it in paths: must match `^[a-z0-9][a-z0-9-]*$`,
   max 40 chars, no `..` or slashes.
 
@@ -116,6 +119,28 @@ back and continue.
 
 ## 2. Setup
 
+**Step zero — `git fetch origin` from the main checkout, before every numbered step below.**
+
+`EnterWorktree`'s default `baseRef: fresh` branches from `origin/<default-branch>`, which reads
+like a freshness guarantee and is not one. `origin/main` is a **remote-tracking ref** — a file
+on disk that moves only when you fetch — so "fresh" means *fresh as of your last fetch*, which
+may be days old. Skip this and three things go wrong at once: you build on stale code and hit
+`merge conflict` at S5, manufacturing a halt out of nothing; S3 gates a baseline current `main`
+would fail; and S4's reviewers read `git diff origin/main...HEAD`, which against a stale ref
+includes **other people's already-merged commits as though they were yours** — five Opus agents
+reviewing code the run never wrote.
+
+**`fetch`, never `pull`.** Fetch updates `origin/main`, the only ref that matters here, and
+touches neither your working tree nor local `main`. `pull` also fast-forwards the main checkout
+and will collide with uncommitted work there — which in `~/tasks` is the normal steady state,
+since `.s-run/*.md` is written by live runs.
+
+**Fail-open, but record the caveat.** Working offline is legitimate: on fetch failure write one
+`WARN` to Evidence and continue — this is not a sixth halt reason. But mark `base-sha`
+unverified in that case, because **`base-sha` cannot detect its own staleness**: read from a
+stale ref it records the stale value, and every later comparison against it agrees perfectly.
+The detector and the defect share an input.
+
 1. Read the todo's metadata (`worktree`, `scope`, `spec`) and task list.
 2. **Recall prior lessons** — the durable lesson graph's read path, run from the main
    checkout *before* entering the worktree. `--repo` is the basename of the main
@@ -148,15 +173,35 @@ back and continue.
    matches the slug — print that evidence and halt rather than working around it. The
    claim writes the `## Active` entry in `tasks/assigned.md` for you; that file is a
    generated projection of the locks, so never hand-edit it.
+
+   **`scripts/claim.mjs` is not in every repo** — it ships in `salonx` and is absent from
+   `~/tasks`. Check before calling it; a missing script must not read as "no conflict",
+   which is the failure mode of running an absent checker and seeing no output. When it is
+   absent, run the four checks it performs, inline, and treat any hit exactly as the script's
+   refusal:
+
+   ```bash
+   git ls-remote --heads origin | grep -i -- "<slug>"   # remote branch — LIVE, no fetch needed
+   git branch --list "*<slug>*"                          # local branch
+   git worktree list | grep -i -- "<slug>"               # existing worktree
+   gh pr list --state open --search "<slug>" 2>/dev/null # open PR
+   ```
+
+   There is no ledger to write in that case, so the claim is advisory rather than enforced —
+   say so in Evidence, because a run that believes it holds a lock it never took is worse off
+   than one that knows it has none.
 4. `EnterWorktree` with the todo's worktree name — **exactly one Enter for the whole
    run**; no Exit until cleanup. (Each switch busts the prompt-cache prefix.)
 5. Flip the todo's `status:` to `implementing` (worktree copy — it rides the PR)
    **and commit the flip immediately** — an uncommitted flip leaves the working tree
    dirty, which S3 correctly reports as a finding (verified live 2026-07-18).
-6. Capture `git rev-parse origin/main` **before** any commits land — that value is
-   `base-sha`, and it is the only way to tell later whether a run branched from a
-   stale base. Then write the Run-State File (`status: s2`), recording the recall in
-   Evidence: `S2: recalled N lesson(s) for <repo>/<area>`.
+6. Capture `git rev-parse origin/main` — **after step zero's fetch**, and before any commits
+   land. That value is `base-sha`, the only way to tell later whether a run branched from a
+   stale base; captured before the fetch it is worse than absent, because it reports a stale
+   base as a confirmed one. If the fetch failed, write the SHA followed by ` (unverified —
+   fetch failed)` so the graph carries the doubt instead of inheriting a silent lie. Then
+   write the Run-State File (`status: s2`), recording the recall in Evidence:
+   `S2: recalled N lesson(s) for <repo>/<area>`.
 
 ## 3. The stages
 

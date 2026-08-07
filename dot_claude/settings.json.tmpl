@@ -131,7 +131,8 @@
         ]
       },
       {
-        "matcher": "Edit|Write|Bash",
+        "_comment": "DOCTOR 2026-08-07: narrowed from Edit|Write|Bash. Fired on 11,406 Bash calls in 2.8 days (~9.3h blocking) re-indexing a 0-node graph. Restore by adding |Bash back.",
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
@@ -331,6 +332,7 @@
     "type": "command",
     "command": "{{ .chezmoi.homeDir }}/.claude/statusline.sh"
   },
+  "skillListingBudgetFraction": 0.25,
   "enabledPlugins": {
     "commit-commands@claude-plugins-official": false,
     "explanatory-output-style@claude-plugins-official": true,
@@ -338,23 +340,19 @@
     "frontend-design@claude-plugins-official": false,
     "learning-output-style@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": false,
-    "claude-mem@thedotmack": false,
-    "ui-ux-pro-max@ui-ux-pro-max-skill": false,
+    "claude-mem@thedotmack": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
     "typescript-lsp@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": false,
-    "last30days@last30days-skill": false,
-    "caveman@caveman": false,
-    "chrome-devtools-mcp@claude-plugins-official": false,
-    "playwright@claude-plugins-official": false,
+    "superpowers@claude-plugins-official": true,
+    "last30days@last30days-skill": true,
+    "caveman@caveman": true,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
     "obsidian@obsidian-skills": false,
-    "ecc@ecc": false,
+    "ecc@ecc": true,
     "agentmemory@agentmemory": true
   },
-  "deniedMcpServers": [
-    { "serverName": "memory" },
-    { "serverName": "playwright" },
-    { "serverName": "github" }
-  ],
+  "deniedMcpServers": [],
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
       "source": {

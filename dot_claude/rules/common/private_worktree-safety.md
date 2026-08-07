@@ -1,3 +1,10 @@
+---
+paths:
+  - ".claude/**"
+  - "**/CLAUDE.md"
+  - "**/settings*.json"
+---
+
 # Worktree Safety
 
 > Single source of truth for worktree safety. The worktree guard hooks defer here.

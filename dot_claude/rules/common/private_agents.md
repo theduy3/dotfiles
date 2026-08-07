@@ -1,3 +1,10 @@
+---
+paths:
+  - ".claude/**"
+  - "**/CLAUDE.md"
+  - "**/settings*.json"
+---
+
 # Agent Orchestration
 
 ## Available Agents

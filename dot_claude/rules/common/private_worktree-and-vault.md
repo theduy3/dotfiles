@@ -1,3 +1,10 @@
+---
+paths:
+  - ".claude/**"
+  - "**/CLAUDE.md"
+  - "**/settings*.json"
+---
+
 # Worktree Workflow & Vault Integration
 
 > Lazy-loaded from `~/CLAUDE.md`. Reference only when session involves worktree creation, task resumption, or vault queries.

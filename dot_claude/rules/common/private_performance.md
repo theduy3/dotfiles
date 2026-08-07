@@ -1,3 +1,8 @@
+---
+paths:
+  - "**/*.{ts,tsx,js,jsx,mjs,cjs,py,go,rs,rb,java,kt,swift,php,c,h,cpp,cs,sql}"
+---
+
 # Performance Optimization
 
 ## Model Selection Strategy

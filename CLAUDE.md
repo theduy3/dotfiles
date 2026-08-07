@@ -105,32 +105,38 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - **Superpowers skills:** `brainstorming`, `systematic-debugging`, `test-driven-development`,
   `verification-before-completion`, `receiving-code-review`, `dispatching-parallel-agents`.
   Call at the trigger point; they no longer auto-fire (SessionStart injector gone).
-- **ECC is DISABLED (2026-08-04) — `ecc:`-prefixed names DO NOT resolve.** Do not call
-  `ecc:python-reviewer` / `ecc:typescript-reviewer` / `ecc:security-reviewer`; use the **unprefixed**
-  agents below instead. Rationale: ECC's 249 skills overflow the skill-listing budget
-  (`skillListingBudgetFraction`, default 1% of context), which silently truncates *every* skill's
-  description and degrades selection accuracy across `/s*`, bmad, ponytail and caveman — a global tax
-  to obtain a handful of agents. `/ecc:plan` and `/ecc:feature-dev` are now unreachable, which is
-  desirable: they were rival loops. **ECC's cache remains a file source** — individual agents can be
-  copied out of `~/.claude/plugins/cache/ecc/ecc/2.0.0-rc.1/agents/` without enabling the plugin.
+- **ECC is ENABLED (2026-08-07) — `ecc:`-prefixed names DO resolve again.** Re-enabled as part of
+  the global enable-everything pass, together with all other plugins. The original disable rationale
+  still holds and is now *mitigated rather than avoided*: ECC's 249 skills would overflow the
+  skill-listing budget at its 1% default and silently truncate *every* skill's description, so
+  `skillListingBudgetFraction` is pinned to **0.25** in settings. Measured 2026-08-07: 232 skills =
+  ~23.2k est. listing tokens, comfortably inside the raised budget.
+  ⚠️ **Rival-loop hazard is back:** `/ecc:plan` and `/ecc:feature-dev` are reachable again and
+  compete with `/s-auto` and GSD. Do not invoke them — the one-loop-owner rule above still governs.
   `npx ecc-agentshield` is a separate npm CLI and is unaffected.
 - **One TDD enforcer per task:** inside GSD use `gsd-verify-work` + **`gsd-nyquist-auditor`**
   (gsd-core ships all 34 of its agents `gsd-`prefixed — the bare `nyquist-auditor` does NOT resolve);
   standalone use `superpowers:test-driven-development`.
 
 ### Harvested agents (`~/.claude/agents/`) — neutral, use under any loop
-**INSTALLED (6, verified 2026-08-04)** — these resolve today:
-- Review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`
+**INSTALLED (89, verified 2026-08-07)** — the whole archive was restored into `~/.claude/agents/`.
+Frontmatter validated: 89/89 have `name` + `description`, zero name collisions.
+- Neutral review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`
 - Build: `build-error-resolver` · Plan: `planner` (opus-tier — pricier than the sonnet reviewers)
-- All six are `.planning/`-free, so pass `tasks/` paths normally; no path caveat applies.
+- These six are `.planning/`-free, so pass `tasks/` paths normally; no path caveat applies.
+- `/s*` pipeline: the ten `s-*` agents (not general-purpose — do not call directly).
+- Restored 2026-08-07: 49 `gsd-*` runtime agents, plus `verifier`, `debugger`,
+  `integration-checker`, `nyquist-auditor`, `performance-optimizer`, `refactor-cleaner`,
+  `codebase-mapper`, `security-auditor`, 6 `audit-*`, 6 `seo-*`, and 15 display-named
+  marketing/engineering/testing agents (`UI Designer`, `Backend Architect`, … — their frontmatter
+  `name` contains spaces and differs from the filename; that is legal and they load fine).
 
-**NOT installed — archived at `~/.claude/agents-archive/runtime-sources/`.** Named here for
-provenance only; calling them fails until restored (`cp` the file into `~/.claude/agents/`):
-- Verify/debug: `verifier`, `debugger`, `integration-checker`, `nyquist-auditor` — **under GSD do
-  not restore these**; gsd-core already supplies `gsd-verifier`, `gsd-debugger`,
-  `gsd-integration-checker`, `gsd-nyquist-auditor` at runtime.
-- Build/perf: `performance-optimizer`, `refactor-cleaner` · Map/security: `codebase-mapper`,
-  `security-auditor` — no runtime equivalent; restore from the archive if wanted.
+⚠️ **Prefer the `gsd-*` variants under GSD.** The bare `verifier`, `debugger`,
+`integration-checker`, `nyquist-auditor` are now installed alongside gsd-core's runtime
+`gsd-`-prefixed equivalents — under GSD use the `gsd-*` ones.
+⚠️ **The restored copies are GSD runtime variants** — their prose says `.planning/`. In particular
+the neutral `planner` above is NOT the archived GSD planner; pass `tasks/` paths explicitly to the
+restored agents.
 - ⚠️ The archived copies are the **GSD runtime** variants — their prose says `.planning/` and some
   are `gsd-*` orchestrator-internal (the archived `planner.md` is a GSD planner, *not* the neutral
   one installed above). Restore deliberately, and pass `tasks/` paths explicitly to those.
@@ -167,11 +173,9 @@ Details in `~/.claude/rules/common/worktree-and-vault.md` — load on demand. Ke
 <!-- code intelligence MCP routing -->
 ## MCP Tools: code intelligence (CodeGraph + code-review-graph)
 
-**Routing (canonical rule: ~/.claude/CLAUDE.md §Code intelligence):**
-Use **CodeGraph** (`codegraph_*`) for whole-repository exploration, dependency
-tracing, architecture questions, and refactor planning. Use **code-review-graph**
-only for commit, diff, or PR reviews — obtain minimal review context before
-reading files manually. Both beat Grep/Glob/Read when a built graph exists.
+**Routing rule lives in `~/.claude/CLAUDE.md` §Code intelligence** — not restated here.
+That file is always loaded, so duplicating it cost tokens in every session. The tables
+below are the detail the canonical rule does not carry.
 
 ### Exploration — CodeGraph FIRST
 

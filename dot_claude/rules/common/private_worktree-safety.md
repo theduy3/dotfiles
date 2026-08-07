@@ -34,11 +34,15 @@ Never remove a worktree from a subagent while the parent CWD is still inside it.
 - **`worktree-branch-guard.js`** (`Bash`) — blocks `git commit` when CWD is inside a linked
   worktree AND the branch is the repo default (main/master/…). Commit from the feature
   branch, or from the main checkout if intentional.
-- **`gsd-phase-worktree-guard.js`** (`Write|Edit|MultiEdit`) — blocks main-checkout source
-  writes while GSD STATE.md is `status: executing`. `GSD_ALLOW_INLINE=1` escape hatch;
-  self-disarms on status flip.
+- ~~`gsd-phase-worktree-guard.js`~~ — **DELETED 2026-08-07** with the rest of GSD.
 
 All fail-open (exit 0 on any error) — they never block valid work due to hook failure.
+
+⚠️ **Fail-open means a timing-out guard is not a guard.** The 2026-08-07 hook audit found
+`worktree-branch-guard.js` exceeded its 5s timeout on **2 of 2** observed runs — so it had never
+once completed, and was protecting nothing while still costing 5s per `git commit`. Timeout is now
+**15s**. Root cause is `spawnSync('git', …)` under parallel-session load. Re-measure before
+trusting this guard; do not assume it is protecting you.
 
 ## Token: minimize Enter/Exit cycles
 

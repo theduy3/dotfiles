@@ -75,13 +75,15 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - AskUserQuestion with options still blocks — commands use defaults instead
 - Patch script: `~/.local/bin/patch-claude-remote.sh` (auto-runs on `claude-remote` startup)
 
-## Workflow Orchestration — one loop owner per arena (updated 2026-07-17)
+## Workflow Orchestration — one loop owner, everywhere (updated 2026-08-07)
 
-> **One loop owner per task.** **GSD owns production** (Hermes/Wylios) plan→execute→verify→ship
-> and all enforcement hooks. **`/s*` owns local single-track work** (rebuilt 2026-07-17 by
-> distillation — spec `~/tasks/spec-s-star.md`, ADRs `~/tasks/s-star/docs/adr/`). **Superpowers
-> stays ENABLED** as an **explicit-call leaf library** — never its workflow loops. **ECC is
-> DISABLED** (2026-08-04) — see Leaf libraries below.
+> **`/s*` is the ONLY loop owner — for local AND production work.** **GSD was removed entirely
+> 2026-08-07** (34 agents, 71 skills, 15 hooks, `npm @opengsd` 561 MB, `~/.gsd`, all `gsd-*`
+> archives; backup at `~/.claude/.gsd-removal-backup-20260807`, restorable by moving the
+> `moved/` subdirs back). The old GSD-owns-prod / `/s*`-owns-local split no longer exists —
+> Hermes/Wylios and every other repo now use `/s0-spec` → `/s1-plan` → `/s-auto`.
+> **Superpowers stays ENABLED** as an **explicit-call leaf library** — never its workflow loops.
+> **ECC is ENABLED** (2026-08-07) — see Leaf libraries below.
 > (The old s0–s9 suite was deleted 2026-07-17 and replaced the same day by the distilled `/s*`.)
 
 ### The local loop → `/s*`
@@ -97,9 +99,11 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - Refresh distillates **weekly** via `/update-distill` (per-Source human approval). Cadence
   changed monthly→weekly 2026-07-31.
 
-### The prod loop → GSD
-- Plan/execute/verify/ship via `/gsd-*` (`gsd-new-project`, `gsd-plan-phase`, `gsd-execute-phase`,
-  `gsd-verify-work`, `gsd-progress`, `gsd-resume-work`, `gsd-workspace`). GSD's own hooks enforce it.
+### The prod loop → also `/s*` (GSD removed 2026-08-07)
+- Hermes/Wylios and other production repos use the SAME `/s0-spec` → `/s1-plan` → `/s-auto` loop
+  as local work. All `/gsd-*` commands are gone and will not resolve.
+- Nothing replaced GSD's phase/roadmap artifacts (`.planning/`, `STATE.md`, `ROADMAP.md`). Repos
+  that still contain a `.planning/` directory keep it as inert data — no hook reads it now.
 
 ### Leaf libraries — invoke explicitly, never as a loop
 - **Superpowers skills:** `brainstorming`, `systematic-debugging`, `test-driven-development`,
@@ -112,55 +116,56 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
   `skillListingBudgetFraction` is pinned to **0.25** in settings. Measured 2026-08-07: 232 skills =
   ~23.2k est. listing tokens, comfortably inside the raised budget.
   ⚠️ **Rival-loop hazard is back:** `/ecc:plan` and `/ecc:feature-dev` are reachable again and
-  compete with `/s-auto` and GSD. Do not invoke them — the one-loop-owner rule above still governs.
+  compete with `/s-auto`. Do not invoke them — the one-loop-owner rule above still governs.
   `npx ecc-agentshield` is a separate npm CLI and is unaffected.
-- **One TDD enforcer per task:** inside GSD use `gsd-verify-work` + **`gsd-nyquist-auditor`**
-  (gsd-core ships all 34 of its agents `gsd-`prefixed — the bare `nyquist-auditor` does NOT resolve);
-  standalone use `superpowers:test-driven-development`.
+- **One TDD enforcer per task:** `superpowers:test-driven-development`, or the `/s-auto` gate
+  ladder (S3). The former GSD enforcers (`gsd-verify-work`, `gsd-nyquist-auditor`) are gone;
+  the bare `nyquist-auditor` agent survives the removal and DOES resolve.
 
 ### Harvested agents (`~/.claude/agents/`) — neutral, use under any loop
-**INSTALLED (89, verified 2026-08-07)** — the whole archive was restored into `~/.claude/agents/`.
-Frontmatter validated: 89/89 have `name` + `description`, zero name collisions.
+**INSTALLED (55, verified 2026-08-07 after the GSD removal)** — the archive was restored
+2026-08-07, then all 34 `gsd-*` agents were deleted the same day. Frontmatter validated:
+zero missing `name`/`description`, zero name collisions.
 - Neutral review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`
 - Build: `build-error-resolver` · Plan: `planner` (opus-tier — pricier than the sonnet reviewers)
 - These six are `.planning/`-free, so pass `tasks/` paths normally; no path caveat applies.
 - `/s*` pipeline: the ten `s-*` agents (not general-purpose — do not call directly).
-- Restored 2026-08-07: 49 `gsd-*` runtime agents, plus `verifier`, `debugger`,
-  `integration-checker`, `nyquist-auditor`, `performance-optimizer`, `refactor-cleaner`,
-  `codebase-mapper`, `security-auditor`, 6 `audit-*`, 6 `seo-*`, and 15 display-named
-  marketing/engineering/testing agents (`UI Designer`, `Backend Architect`, … — their frontmatter
-  `name` contains spaces and differs from the filename; that is legal and they load fine).
+- Also live: `verifier`, `debugger`, `integration-checker`, `nyquist-auditor`,
+  `performance-optimizer`, `refactor-cleaner`, `codebase-mapper`, `security-auditor`,
+  6 `audit-*`, 6 `seo-*`, and 15 display-named marketing/engineering/testing agents
+  (`UI Designer`, `Backend Architect`, … — their frontmatter `name` contains spaces and differs
+  from the filename; that is legal and they load fine).
 
-⚠️ **Prefer the `gsd-*` variants under GSD.** The bare `verifier`, `debugger`,
-`integration-checker`, `nyquist-auditor` are now installed alongside gsd-core's runtime
-`gsd-`-prefixed equivalents — under GSD use the `gsd-*` ones.
-⚠️ **The restored copies are GSD runtime variants** — their prose says `.planning/`. In particular
-the neutral `planner` above is NOT the archived GSD planner; pass `tasks/` paths explicitly to the
-restored agents.
-- ⚠️ The archived copies are the **GSD runtime** variants — their prose says `.planning/` and some
-  are `gsd-*` orchestrator-internal (the archived `planner.md` is a GSD planner, *not* the neutral
-  one installed above). Restore deliberately, and pass `tasks/` paths explicitly to those.
+⚠️ **These 8 verify/build/security agents came from the GSD runtime**, so their prose still says
+`.planning/` even though no GSD tooling reads it any more. Pass `tasks/` paths explicitly.
+There is no longer a `gsd-*` variant to prefer — the bare names are the only ones that resolve.
 
-### Hook audit (2026-06-19, updated 2026-07-17) — `~/.claude/settings.json`
+### Hook audit (rewritten 2026-08-07 after the GSD removal) — `~/.claude/settings.json`
+**7 hooks total, down from 22.** All 15 `gsd-*` hooks deleted with GSD.
 - **KEEP (orchestrator-neutral safety):** `worktree-path-guard.js` (writes stay in active worktree),
   `worktree-branch-guard.js` (no commit to default branch in a worktree).
-- **REMOVED 2026-07-17:** `worktree-required-guard.js` (was armed by `/s*` task state; deleted with
-  the `/s*` suite — it was already unwired from settings.json).
-- **ADDED 2026-07-21:** `worktree-s-auto-enforcer.sh` (PostToolUse on `EnterWorktree`) — every
-  worktree entry injects the mandate to run the full `/s-auto` pipeline (S2→S5). Exempt: GSD repos
-  (`.planning/` present) and worktrees already claimed by an active run in `~/tasks/.s-run/*.md`.
-- **Redundant, not contradictory:** `gsd-validate-commit.sh` + `worktree-branch-guard.js` both gate
-  `git commit` (different checks, both fail-open) — fine to leave.
+- ⚠️ **`worktree-branch-guard.js` timeout raised 5s → 15s (2026-08-07).** Audit found it timed out
+  on **2/2** observed runs; guards fail-open, so it was providing ZERO protection while still
+  costing 5s per `git commit`. Re-measure before trusting it.
+- **`code-review-graph update`** matcher narrowed `Edit|Write|Bash` → `Edit|Write` — it fired on
+  11,406 Bash calls in 2.8 days re-indexing a 0-node graph. NOTE: salonx's own
+  `.claude/settings.json` still runs it on `Bash`; hooks MERGE across scopes, they don't override.
+- **`worktree-s-auto-enforcer.sh`** (PostToolUse on `EnterWorktree`) — injects the `/s-auto`
+  mandate (S2→S5). Its `.planning/`-present exemption is now dead code: no GSD repos remain.
+- **REMOVED 2026-07-17:** `worktree-required-guard.js` (armed by `/s*` task state; already unwired).
 
 ### Deploy gate / config protection (neutral)
 - `npx ecc-agentshield scan --min-severity high` before ship — scans `.claude` + MCP for exposed keys,
-  over-permissive hooks, injection surface. Run manually under GSD.
+  over-permissive hooks, injection surface. Run manually before ship.
 - Do NOT weaken linter/formatter configs (eslint, biome, prettier, tsconfig strictness) to pass errors.
 
 ### Worktree & Vault
 Details in `~/.claude/rules/common/worktree-and-vault.md` — load on demand. Key points:
-- Worktree entry via built-in `EnterWorktree` (or `gsd-workspace` under GSD).
-- Vault auto-inject is lazy (active task only); `CLAUDE_VAULT_FORCE=1` to force.
+- Worktree entry via built-in `EnterWorktree` (`gsd-workspace` is gone — GSD removed 2026-08-07).
+- ⚠️ **Vault auto-inject is NOT wired** (verified 2026-08-07). `inject-vault-context.sh` exists but
+  is registered in no settings file, so it never runs and `CLAUDE_VAULT_FORCE=1` does nothing.
+  Query the vault on demand via `qmd` MCP instead. To actually enable it, add the script as a
+  `SessionStart` hook — it self-gates on an active `plan-approved` task, so cost is near zero.
 - Specs → `tasks/spec-*.md`, plans → `tasks/todo-*.md`.
 
 ## Dedicated Tools

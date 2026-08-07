@@ -22,11 +22,18 @@ Located in `~/.claude/agents/`:
 | typescript-reviewer | Type safety, async correctness | TS/JS changes |
 | build-error-resolver | Fix build errors | When build fails |
 
-**Roster verified 2026-08-04** — every name above resolves. Provenance: harvested from the
-disabled `ecc` plugin's cache (`~/.claude/plugins/cache/ecc/ecc/2.0.0-rc.1/agents/`); a fuller set
-including the GSD runtime variants is archived at `~/.claude/agents-archive/runtime-sources/`.
-Removed as unavailable: `e2e-runner` (salonx runs Playwright via CI, not an agent),
-`refactor-cleaner`, `doc-updater` — restorable from either source if wanted.
+**Roster verified 2026-08-07.** `~/.claude/agents/` now holds **55** agents — the archive was
+restored 2026-08-07, then all 34 `gsd-*` agents were deleted with GSD the same day.
+Beyond the eight above, these also resolve: `verifier`, `debugger`, `integration-checker`,
+`nyquist-auditor`, `performance-optimizer`, `refactor-cleaner`, `codebase-mapper`,
+`security-auditor`, 6 `audit-*`, 6 `seo-*`, and 15 display-named marketing/engineering/testing
+agents whose frontmatter `name` contains spaces (`UI Designer`, `Backend Architect`, …) and so
+differs from the filename — legal, and they load fine.
+
+⚠️ Those 8 verify/build/security agents came from the GSD runtime, so their prose still references
+`.planning/` even though nothing reads it now — pass `tasks/` paths explicitly.
+⚠️ **No `gsd-*` agent resolves any more.** ECC is enabled again, so `ecc:`-prefixed agents
+(`ecc:code-reviewer`, `ecc:python-reviewer`, …) resolve too — prefer the unprefixed ones above.
 
 The ten `s-*` agents in the same directory belong to the `/s-auto` pipeline and are **not**
 general-purpose; do not call them directly.

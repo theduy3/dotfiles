@@ -29,9 +29,15 @@ paths:
 Obsidian vault at `~/theduyvault` is Claude's persistent memory. The `qmd` MCP server provides hybrid BM25+vector search across 340+ notes.
 
 ### On session start
-Vault auto-injection is lazy: `~/.claude/hooks/inject-vault-context.sh` only runs if an active `tasks/todo-*.md` with `status: plan-approved` exists in cwd. Otherwise vault is silent — query via `qmd` MCP on demand.
+⚠️ **NOT WIRED (verified 2026-08-07).** `~/.claude/hooks/inject-vault-context.sh` exists on disk
+but is registered in no settings file, so it never runs — and `CLAUDE_VAULT_FORCE=1` does nothing.
+Query the vault via `qmd` MCP on demand instead.
 
-Force-inject in any session: `CLAUDE_VAULT_FORCE=1 claude`.
+The script itself is sound and cheap: it self-gates on an active `tasks/todo-*.md` at
+`status: plan-approved` in cwd, spawns no network calls, and no-ops otherwise. To enable it,
+register it as a `SessionStart` hook in `~/.claude/settings.json` — but remember that file is a
+chezmoi **template**, so the edit must go in `dot_claude/settings.json.tmpl` or the hourly
+`claude-sync` will revert it.
 
 ### During work
 - Major architecture decisions → write ADR to `Notes/ADR/YYYY-MM-DD-title.md`

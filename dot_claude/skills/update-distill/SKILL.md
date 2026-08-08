@@ -41,6 +41,18 @@ directory still existing must never hide a newer installed plugin.
   `~/.claude/agents-archive/`; inactive Sources belong there and remain valid
   provenance. Truly gone → report as `missing`; the distillate keeps working (it
   is self-contained) but its provenance row goes stale — flag for a human decision.
+  Once that decision is taken, record it on the row as
+  `removed: <why> <date>` and the sweep reports it as **`REMOVED_ACK`** thereafter
+  instead of re-raising it. Do **not** remap a row to a dated backup directory
+  (`.gsd-removal-backup-*`) — that is a temp path, so it defers the same breakage and
+  lengthens the trail.
+- **`REMOVED_ACK` / `REJECTED_ACK`** → a decision already recorded on that row.
+  Reported so no row is ever hidden, but neither sets the exit code. Both are
+  deliberately narrow:
+  - `removed:` suppresses **only the absence**. If the Source ever comes back, the row
+    resumes normal hash checking — a Source returning is news.
+  - `rejected:` is **hash-scoped**. It silences the one version it names; drift to any
+    other hash fires again. A rejection settles a version, never a Source.
 - **Changed** → step 2.
 
 Rows pointing from the manual `s2`–`s5` wrappers to owned `/s*` artifacts are

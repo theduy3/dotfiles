@@ -29,7 +29,7 @@ sources:
       autonomous merge). This axis must classify and report identically or the
       orchestrator cannot aggregate it.
   - path: ~/.claude/agents/s-code-fixer.md
-    hash: e4c13369830ae06078cfefb8fa444562dfd3f1feb6d332308a8c7b2e2372c9d0
+    hash: f65f8ccd198260ea91fcfe478dbb25ef11b19f440296a80a02080ab1293707d8
     took: >-
       INTERNAL DEPENDENCY: the fixer-eligibility contract. The `Fixer: eligible |
       not-eligible` marker this agent emits on every blocking finding is honored by

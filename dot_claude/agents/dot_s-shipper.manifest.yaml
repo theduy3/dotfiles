@@ -11,6 +11,10 @@ sources:
       and recent-log style. Extended with conventional-commit typing.
   - path: ~/.claude/gsd-core/workflows/ship.md
     hash: 8163adccc03e4e693bae2646cdb9d1ee8642db1426d5574568f23d596644a16b
+    removed: gsd-uninstalled 2026-08-07 — file survives only in
+      ~/.claude/.gsd-removal-backup-20260807/ which is temporary; deliberately NOT remapped
+      there (a dated backup path is not durable provenance). Row is historical: the
+      distillate is self-contained and unaffected.
     took: >-
       Rich PR-body pattern (Summary w/ goal+status, Changes w/ key files,
       Verification checklist, Key decisions; --body-file flow), remapped from
@@ -26,7 +30,7 @@ sources:
       rerun --failed allowance. Dropped: issue triage, stale policy, release
       management, security monitoring (out of pipeline scope).
   - path: ~/.claude/rules/common/worktree-safety.md
-    hash: a285bf6080a9c9ea4325524228363216c7b6f23a2dfc264994146f445cf1f965
+    hash: 4068e264583e40379f456dfe0cffdaf873ad6ff1b3accc62b719ae56e0da69fa
     took: >-
       CWD-ENOENT restart trap, encoded as the subagent-side HARD PROHIBITION:
       s-shipper never removes the worktree/ExitWorktree; cleanup belongs to the

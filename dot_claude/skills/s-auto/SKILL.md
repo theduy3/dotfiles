@@ -162,8 +162,14 @@ The detector and the defect share an input.
    unreadable, empty result) write one `WARN` line to Evidence and continue. Recall
    must never become a sixth halt reason.
 3. **Claim the slug, from the main checkout, before entering any worktree.** This is the
-   only marker other sessions can see; it is also enforced — a PreToolUse guard blocks
-   `EnterWorktree` and `git worktree add` for an unclaimed slug.
+   only marker other sessions can see. A PreToolUse guard also blocks `EnterWorktree` and
+   `git worktree add` for an unclaimed slug — but treat that as a **backstop you never rely
+   on, not as enforcement.** Every guard here is fail-open, and the 2026-08-07 hook audit
+   found `worktree-branch-guard.js` had exceeded its timeout on **2 of 2** observed runs: it
+   had never once completed, so it protected nothing while still costing 5s per `git commit`.
+   **A fail-open guard that times out is indistinguishable from a guard that passed** — the
+   same shape as every other defect this pipeline exists to catch. Claim because it is
+   correct, not because something will stop you.
 
    ```bash
    node scripts/claim.mjs acquire <slug> --agent claude --scope "<what done means>"

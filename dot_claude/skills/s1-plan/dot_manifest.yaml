@@ -29,6 +29,10 @@ sources:
       to ship is the user's call and is waited on.
   - path: ~/.claude/agents-archive/runtime-sources/gsd-plan-checker.md
     hash: dd3b5ca53779fb6c5718570f0912663cc58c36e7eec054fa784d1f82ecf7f846
+    removed: gsd-uninstalled 2026-08-07 — file survives only in
+      ~/.claude/.gsd-removal-backup-20260807/ which is temporary; deliberately NOT remapped
+      there (a dated backup path is not durable provenance). Row is historical: the
+      distillate is self-contained and unaffected.
     took: >-
       The transferable adversarial method, self-run (Step 4): assume-flawed stance;
       goal-backward verification chain; mandatory BLOCKER/WARNING classification;

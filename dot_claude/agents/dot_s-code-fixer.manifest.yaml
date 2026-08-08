@@ -6,6 +6,10 @@ spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/agents-archive/runtime-sources/gsd-code-fixer.md
     hash: b45eaceb383c0b2a9a62ad1520ae17fcd01ce9d774d403747d2f311de684606e
+    removed: gsd-uninstalled 2026-08-07 — file survives only in
+      ~/.claude/.gsd-removal-backup-20260807/ which is temporary; deliberately NOT remapped
+      there (a dated backup path is not durable provenance). Row is historical: the
+      distillate is self-contained and unaffected.
     took: >-
       Fix doctrine: findings-are-guidance-not-patches; read-actual-source ±10
       lines; adapt-or-skip (never force); Edit-preferred; narrow scope;

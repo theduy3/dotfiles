@@ -5,7 +5,7 @@ distilled: 2026-07-18
 spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/skills/s-auto/SKILL.md
-    hash: 2bade915acf379d9db8401dbeaa31d8efcdc2e4e08f80e917bbb89ed76bf52ba
+    hash: 45437b8d171157462be6d27c4badee9fbb8832d525a64b41577858c8b4e1b61d
     took: >-
       INTERNAL DEPENDENCY: shared S2 stage contract, halt taxonomy, run-state
       ownership, lesson recall handoff, and no-auto-chaining boundary.

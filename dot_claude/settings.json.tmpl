@@ -162,6 +162,11 @@
             "type": "command",
             "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/worktree-path-guard.js\"",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/salonx-worktree-guard.js\"",
+            "timeout": 10
           }
         ]
       },
@@ -172,6 +177,17 @@
             "type": "command",
             "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/worktree-branch-guard.js\"",
             "timeout": 15
+          }
+        ]
+      },
+      {
+        "_comment": "Wired 2026-08-08. Was documented as active in salonx/CLAUDE.md but registered in NO settings file. Self-gates on scripts/claim.mjs existing in the repo root, so inert elsewhere. Fail-open; bypass SALONX_NO_CLAIM=1.",
+        "matcher": "EnterWorktree|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/salonx-claim-guard.js\"",
+            "timeout": 20
           }
         ]
       }

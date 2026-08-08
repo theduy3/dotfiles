@@ -7,7 +7,24 @@ metadata:
   originSessionId: 756d6320-eaf6-4015-bc43-cbf678fd9d7f
 ---
 
-`~/.claude/hooks/salonx-worktree-guard.js` (PreToolUse, matcher `Write|Edit|MultiEdit`, wired in `~/.claude/settings.json` right after `worktree-path-guard.js`). Added 2026-07-03.
+`~/.claude/hooks/salonx-worktree-guard.js` (PreToolUse, matcher `Write|Edit|MultiEdit`). Added 2026-07-03.
+
+**⚠️ It was SILENTLY UNWIRED for ~5 weeks (2026-07-03 → 2026-08-08).** It was added to the LIVE
+`~/.claude/settings.json` but never to the chezmoi **template**, so the next hourly
+`claude-sync` (`chezmoi apply --force`, template wins) erased it — see
+[[claude-config-chezmoi-sync]]. `git log -S salonx-worktree-guard` on the template returns
+NOTHING, confirming it never landed there. Meanwhile salonx/CLAUDE.md kept asserting the guard
+"hard-blocks all Write/Edit/MultiEdit into the main checkout", and salonx sets
+`"bgIsolation": "none"` — disabling the BUILT-IN background guard on the strength of a custom
+guard that wasn't running. Net protection during that window: **zero**.
+
+**Rewired 2026-08-08 into BOTH live and template**, alongside [[salonx-claim-guard]]
+(`PreToolUse` matcher `EnterWorktree|Bash`). Verified empirically 11/11 cases (blocks main-checkout
+writes + unclaimed worktree creation; allows tasks/, other repos, outside-repo, Read, existing
+worktree paths). Timing: 43ms hot path vs 20s timeout, 53ms vs 10s — both fail-open, so a timeout
+would mean silent zero protection; headroom is ~200-465x.
+
+**Any hook change must go in the chezmoi template, or it is temporary.**
 
 **Why:** Two Claude sessions sharing `/Users/theduy/Repo/salonx` fought over its single HEAD — one `git checkout` silently stomped the other's uncommitted tree (phantom `en.ts +138`, repurposed `feat/fetch-seam-cluster-1` branch, vanishing files). A worktree = (working dir + index + HEAD); the main checkout has ONE HEAD, so concurrent writers collide. User chose the hard-hook fix (vs doc-only).
 

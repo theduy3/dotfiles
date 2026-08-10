@@ -61,6 +61,7 @@ implements, which is how specs become fiction.
 **Created:** YYYY-MM-DD
 **Status:** draft — awaiting user review
 **Scope:** small | medium | large
+**Artifact:** not yet published
 
 ## Problem
 What is broken or missing, stated as consequence, not as absent feature.
@@ -139,10 +140,23 @@ Fix inline, then move on — no re-review loop.
 
 ## Step 5 — Stop, and state what is unverified
 
-Present the spec. **Separate what you verified from what you assumed** — read a file, ran a
-command, checked a schema = verified. Everything else is an assumption, and you say so, by
-name. Close with the unknowns ledger: what the interview resolved, what was consciously
-deferred.
+**Publish the spec as the review surface.** Terminal scrollback is not a review surface —
+call `Artifact` on `tasks/spec-<topic>.md` itself. The markdown file is published directly;
+there is no companion HTML page, so nothing can drift from the contract.
+
+- `favicon: "📋"`, and a one-line `description` naming the spec.
+- **`url:`** — set it from the `**Artifact:**` header field whenever that field holds a URL.
+  Omitting it mints a *new* URL in any session that did not itself publish the file, and S0
+  routinely runs in a different session from `/s1-plan`. Passing the stored URL is what makes
+  the link stable for the whole life of the task.
+- On the first publish, write the returned URL back into the `**Artifact:**` header field.
+- **Re-publish after every grill round that edits the spec.** A page one round behind is
+  worse than no page — the user approves what they read, and they read the page.
+
+Then present the spec. **Separate what you verified from what you assumed** — read a file, ran
+a command, checked a schema = verified. Everything else is an assumption, and you say so, by
+name. Close with the unknowns ledger — what the interview resolved, what was consciously
+deferred — and the Artifact URL.
 
 Then stop. The user approves, or sends you back to Step 3.
 

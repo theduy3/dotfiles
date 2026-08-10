@@ -1,5 +1,9 @@
 # Distillation provenance — consumed by /update-distill (re-hash, scoped diff, per-Source approval)
 artifact: s1-plan
+# local-addition 2026-08-10: Step 6 publishes tasks/todo-<topic>.md via the Artifact tool,
+# and the metadata block gained an `artifact:` key holding the URL for cross-session reuse
+# (the "invent no new keys" sentence was amended in the same pass to sanction it).
+# No upstream Source — do not attribute it to one on drift.
 type: skill
 distilled: 2026-07-31
 spec: ~/tasks/spec-s-star.md
@@ -29,7 +33,8 @@ sources:
       to ship is the user's call and is waited on.
   - path: ~/.claude/agents-archive/runtime-sources/gsd-plan-checker.md
     hash: dd3b5ca53779fb6c5718570f0912663cc58c36e7eec054fa784d1f82ecf7f846
-    removed: gsd-uninstalled 2026-08-07 — file survives only in
+    removed: >-
+      gsd-uninstalled 2026-08-07 — file survives only in
       ~/.claude/.gsd-removal-backup-20260807/ which is temporary; deliberately NOT remapped
       there (a dated backup path is not durable provenance). Row is historical: the
       distillate is self-contained and unaffected.

@@ -1,5 +1,10 @@
 # Distillation provenance — consumed by /update-distill
 artifact: s4-review
+# local-addition 2026-08-10: step 6 publishes the findings via the Artifact tool — the
+# Run-State File when one exists, else ~/tasks/.s-run/<slug>-s4.md — redacted first.
+# No upstream Source. The s-auto Source hash below is ALSO stale as of this date: s-auto's
+# own local Artifact addition touched its Halt Protocol, which this wrapper deliberately
+# does not mirror (no PushNotification here, by design). Re-hash that row without porting.
 type: skill
 distilled: 2026-07-31
 spec: ~/tasks/spec-s-star.md

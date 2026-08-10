@@ -1,5 +1,8 @@
 # Distillation provenance — consumed by /update-distill (re-hash, scoped diff, per-Source approval)
 artifact: s0-spec
+# local-addition 2026-08-10: Step 5 publishes tasks/spec-<topic>.md via the Artifact tool,
+# and the spec header gained an **Artifact:** field holding the URL for cross-session reuse.
+# No upstream Source — do not attribute it to one on drift.
 type: skill
 distilled: 2026-07-31
 spec: ~/tasks/spec-s-star.md

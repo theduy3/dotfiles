@@ -62,7 +62,8 @@ responsibility, not technical layer.
 
 The metadata block is a **contract with the consumers**, not decoration. `/s-auto` and
 `~/.claude/hooks/inject-vault-context.sh` read these exact keys to pick up and resume a
-`plan-approved` task after a context clear. Invent no new keys; omit none.
+`plan-approved` task after a context clear. Use exactly the keys documented below and omit
+none; invent no others.
 
 ```markdown
 ---
@@ -71,6 +72,7 @@ worktree: <kebab-task-name>
 scope: small | medium | large
 created-at: YYYY-MM-DD
 spec: tasks/spec-<topic>.md
+artifact: <url>           # omit until the first publish in Step 6
 ---
 
 # Plan: <title>
@@ -98,6 +100,7 @@ Worktree name, base branch, baseline command to prove green before starting.
 | `scope` | `/s-auto` | selects S2 implementation *style only*, never the model |
 | `created-at` | informational timestamp | no live reader |
 | `spec` | `/s-auto` | back-reference to requirements |
+| `artifact` | `/s1-plan`, `/s-auto` | stable Artifact URL for this plan — reused across sessions so the link never changes |
 
 `scope` style map (read by `s-implementer`): `small`/`medium` → single-context;
 `large` → dispatch workers for independent tasks, synthesis stays with the implementer.
@@ -201,11 +204,27 @@ Reorder. Split. Merge. Then re-grill the parts you changed.
 
 ## Step 6 — Stop, and hand off
 
-Present the plan. On approval, flip the metadata:
+**Publish the plan as the review surface** — call `Artifact` on `tasks/todo-<topic>.md`
+itself. The markdown is published directly; no companion HTML page exists to drift from it.
+
+- `favicon: "🗂️"`, and a one-line `description` naming the plan.
+- **`url:`** — set it from the `artifact:` metadata key whenever that key holds a URL.
+  Omitting it mints a *new* URL in any session that did not itself publish the file, and S1
+  routinely runs in a different session from `/s0-spec` and `/s-auto`. Passing the stored URL
+  is what keeps one link valid for the whole life of the task.
+- On the first publish, write the returned URL back into the `artifact:` key.
+- Re-publish after every grill round that edits the plan. A page one round behind is worse
+  than no page — the user approves what they read, and they read the page.
+
+Publish **before** presenting, so the user approves what they actually read.
+
+Then present the plan, with its URL. On approval, flip the metadata:
 
 ```
 status: plan-approved
 ```
+
+Re-publish once after the flip, so the page shows the approved state rather than `draft`.
 
 Then **stop**, and tell the user: `/s-auto` picks it up from here (autonomous S2→S5,
 auto-merge on green; halts ping via notification).

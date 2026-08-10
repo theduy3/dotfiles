@@ -51,6 +51,22 @@ never edit code; only `s-code-fixer` does, and only with the `fix` argument.
      Report that the blockers need a test-first S2 pass and stop; a fix pass there
      writes untested production code. A mixed set still runs the pass for the
      eligible findings.
+6. **Publish the findings as a review page** — on BLOCK *and* on APPROVE. An
+   approve-with-notable-findings page is worth keeping; only a page nobody wrote is
+   cheaper than one nobody reads.
+   - Run-State File exists → `Artifact` on `~/tasks/.s-run/<slug>.md` directly,
+     `favicon: "🔍"`, reusing its `artifact:` key as `url:` and writing the URL back
+     there on first publish.
+   - No Run-State File (standalone manual S4) → write the findings to
+     `~/tasks/.s-run/<slug>-s4.md` and publish that. `~/tasks/` is outside every repo
+     and worktree, so no write-guard hook applies and no repo gets polluted.
+   - ⚠️ **Redact before publishing.** These files carry `DATA_START`/`DATA_END` blocks
+     holding reviewer output, diffs and CI logs — machine-generated content going to a
+     hosted page. Scan the bounded blocks for
+     `SECRET|TOKEN|PASSWORD|API_KEY|Bearer |eyJ` and redact every hit in the file you
+     publish. If a prior session wrote the file, read it in full first: you cannot
+     vouch for content you have not seen.
+   - Report the URL alongside the verdict.
 
 ## Never
 

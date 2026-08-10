@@ -1,12 +1,18 @@
 # Distillation provenance — consumed by /update-distill
 artifact: s-auto
+# local-addition 2026-08-10: Halt Protocol §5 gained a publish step (Artifact on
+# ~/tasks/.s-run/<slug>.md, redacted, before the PushNotification so the ping carries a URL),
+# and the Run-State frontmatter gained an `artifact:` key. No upstream Source — do not
+# attribute it to one on drift. NOTE: this edit invalidates the s-auto hash pinned by
+# s4-review/.manifest.yaml; that drift is expected and carries nothing to mirror.
 type: skill
 distilled: 2026-08-08
 spec: ~/tasks/spec-s-star.md
 sources:
   - path: ~/.claude/gsd-core/workflows/debug.md
     hash: 68acb5badf94a13008eb28e6b05b9ec2ed0422c2a52befdb7efa6ca9e27f1b18
-    removed: gsd-uninstalled 2026-08-07 — file survives only in
+    removed: >-
+      gsd-uninstalled 2026-08-07 — file survives only in
       ~/.claude/.gsd-removal-backup-20260807/ which is temporary; deliberately NOT remapped
       there (a dated backup path is not durable provenance). Row is historical: the
       distillate is self-contained and unaffected.

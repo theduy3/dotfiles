@@ -69,6 +69,7 @@ areas: [salonx/gates]                     # from AREAS.yaml; drives TOUCHES + re
 panel: [s-code-reviewer, ...]             # members actually spawned at S4
 pr: <url>                                 # from S5
 merged-sha: <40-hex>                      # from S5
+artifact: <url>                           # stable Artifact URL for the halt report
 created: <ISO>
 updated: <ISO>
 ---
@@ -366,10 +367,25 @@ as well. This memory is for run-shaped context; the lesson store is for laws.
 `gate red` · `review stuck` (CRITICAL/HIGH after cap-2) · `CI red` · `CI timeout
 (30m)` · `merge conflict`.
 
-On any: (1) run-state `status: halted` + reason + evidence excerpt; (2) **ping via
-`PushNotification`** — slug, reason, one-line next action; (3) stop. Everything else
-— including a clean merge — completes silently. Never ping success; never halt
-silently. After the human intervenes, `/s-auto <slug>` resumes from the Run-State File.
+On any:
+
+1. Run-state `status: halted` + reason + evidence excerpt.
+2. **Publish the halt report** — `Artifact` on `~/tasks/.s-run/<slug>.md` directly,
+   `favicon: "🛑"`, reusing the `artifact:` key as `url:` and writing the URL back there on
+   first publish. Publishing before the ping is the whole point: it is what lets step 3
+   carry a link the human can open from the notification.
+   ⚠️ **Redact first.** The `DATA_START`/`DATA_END` blocks hold CI logs, diffs and reviewer
+   output — machine-generated content going to a hosted page. Scan them for
+   `SECRET|TOKEN|PASSWORD|API_KEY|Bearer |eyJ` and redact every hit in the file you publish.
+   On a resumed run the file was written by a prior session: read it in full before
+   publishing, because you cannot vouch for content you have not seen.
+3. **Ping via `PushNotification`** — slug, reason, one-line next action, and the URL.
+4. Stop.
+
+Everything else — including a clean merge — completes silently. Never ping success; never
+halt silently. Publishing is not a ping: it happens only on a halt, and a clean merge still
+publishes nothing. After the human intervenes, `/s-auto <slug>` resumes from the
+Run-State File.
 
 ## Never
 

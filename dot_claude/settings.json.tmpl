@@ -154,6 +154,32 @@
         "_comment": "DOCTOR 2026-08-07: gated on git-repo. Ran unconditionally incl. ~ (not a git repo, graph 0 nodes) costing 5.4s median at every SessionStart. rev-parse costs ~5ms to skip it."
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "_comment": "Added 2026-08-11. Records turn-start epoch to $TMPDIR for the Stop hook's duration clause. MUST stay silent on stdout — UserPromptSubmit stdout is injected into Claude's context.",
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/theduy/.claude/hooks/turn-start-stamp.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "_comment": "Added 2026-08-11. Prints '✓ done <date time> · took <dur>' via JSON systemMessage (Stop discards plain stdout), landing above the recap/away-summary line. Fail-open; drops the duration clause if no marker.",
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/theduy/.claude/hooks/turn-done-timestamp.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",

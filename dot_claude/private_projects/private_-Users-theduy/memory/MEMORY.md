@@ -58,6 +58,7 @@
 - [Salonx Worktree Guard](salonx-worktree-guard.md) — hard PreToolUse hook blocks ALL Write/Edit into salonx MAIN checkout (no /s*-state gate); forces parallel sessions into worktrees; HEAD-collision incident RECOVERED 2026-07-03 (PRs #1049–#1052, zero loss) + salonx merge/CI ops notes; 73-spec audit 2026-07-03: ZERO wipe victims, only unmerged work = i18n Phase M (fr/vi/km) on translate-km branch (obsolete keyring, needs remap)
 
 ## Reference
+- [Scifi Panel Wall](scifi-panel-wall.md) — 10 animated panels at ~/bin/scifi, launch `scifi-grid` (herdr tab, 4 cols); herdr gotchas: no `--skill`, `pane read` is plain text not JSON, `--ratio` = original pane's share
 - [Agent Layer Decision Guide](agent-layer-decision-guide.md) — which layer an agent belongs on (LangGraph=topology / LangChain=loop / Deep Agents=harness); 4 ordered questions, artifact URL + `~/tasks/which-layer-your-agent-belongs-on.html`; maps /s-auto + salonx-engineer = deterministic spine w/ agentic nodes, Hermes fleet = Deep Agents
 
 ## User Preferences

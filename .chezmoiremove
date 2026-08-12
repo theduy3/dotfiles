@@ -1,0 +1,11 @@
+# Codex removed 2026-08-12 (CLI uninstalled). These paths must be DELETED on every
+# device, not merely unmanaged — `chezmoi forget` unmanages but never removes the
+# target, so the stale dirs would otherwise persist on Mac + Hostinger + Bluehost.
+#
+# Mac sessions (234M) were archived to ~/codex-sessions-archive-20260812 BEFORE
+# this file landed. Do not re-add paths here without an archive step first.
+.codex
+
+# oh-my-codex (bin `omx`) — an orchestration layer for the Codex CLI, orphaned by
+# the same removal.
+.omx

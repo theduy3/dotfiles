@@ -15,8 +15,16 @@ Library/LaunchAgents
 .claude/skills/**/node_modules
 .claude/skills/**/__pycache__
 .claude/skills/**/*.pyc
+.agents/skills/**/.venv
+.agents/skills/**/node_modules
+.agents/skills/**/__pycache__
+.agents/skills/**/*.pyc
 
 # externally-managed symlinked skills (would dangle on other machines)
+# NOTE: ~/.agents/skills is the SHARED layer read natively by claude, pi, and omp
+# (@oh-my-pi). Only one entry in it is a symlink — cua-driver → /Applications —
+# so it is the only one that must stay machine-local.
+.agents/skills/cua-driver
 .claude/skills/cua-driver
 .claude/skills/defuddle
 .claude/skills/json-canvas
@@ -33,10 +41,3 @@ Library/LaunchAgents
 {{ if eq .chezmoi.os "linux" -}}
 .claude/settings.json
 {{ end -}}
-
-# GSD (@opengsd/gsd-core) agents — externally-managed, regenerable via
-# `npx @opengsd/gsd-core --claude --global` and `gsd update`. Like the GSD
-# skills/hooks/runtime (already unmanaged), GSD owns these; chezmoi must not
-# revert them on apply. settings.json GSD hooks stay managed (templated) because
-# that file is chezmoi-owned as a whole.
-.claude/agents/gsd-*.md

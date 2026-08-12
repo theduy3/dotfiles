@@ -3,7 +3,10 @@
 # Role-driven: push (Mac, authoritative) or pull (VPS replica). Default: pull.
 # Deployed to both machines via chezmoi. Failures alert via Telegram (optional).
 set -uo pipefail
-export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:/usr/bin:/bin"
+# $HOME/bin added 2026-08-12: Bluehost installs chezmoi to /root/bin, which was
+# absent here — the `command -v chezmoi` guard below aborted every run with
+# "chezmoi missing", so that box had never synced once.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin:/usr/bin:/bin"
 
 LOG="$HOME/.claude-sync.log"
 CFG="$HOME/.config/claude-sync"

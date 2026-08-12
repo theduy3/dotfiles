@@ -3,6 +3,16 @@
 # dir is definitively orphaned.
 .omx
 
+# ⚠️ `.claude/agents/gsd-*.md` deliberately NOT listed here — it does not work.
+# Tested 2026-08-12: a path matched by .chezmoiignore is excluded from the target
+# state entirely, so .chezmoiremove never fires on it. Ignore wins over remove.
+# (Proof: `.omx` above — not ignored — was removed correctly by the same apply
+# that left all 31 gsd agents untouched.)
+# The gsd agents were therefore removed by hand on each box, and the
+# .chezmoiignore rule is what keeps `chezmoi apply` from recreating them.
+# Permanent fix, when convenient: git rm dot_claude/agents/gsd-*.md from the
+# source, then both that ignore rule and this note can go.
+
 # ⚠️ `.codex` is deliberately NOT listed here.
 #
 # It looked dead (Codex CLI uninstalled, bin not on PATH) but inspection on

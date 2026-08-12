@@ -36,6 +36,17 @@ Library/LaunchAgents
 .claude/skills/supabase-postgres-best-practices
 .claude/skills/tdd
 
+# 🔥 LOAD-BEARING — do not delete this rule thinking it is stale GSD residue.
+# The chezmoi SOURCE still contains 31 dot_claude/agents/gsd-*.md files from the
+# initial snapshot (7dc4c83). This rule is the ONLY thing stopping `chezmoi apply`
+# from RE-CREATING them on every device. It was removed on 2026-08-12 as "stale"
+# and within the hour all 31 agents were restored on the Mac and pulled onto
+# Hostinger and Bluehost — silently undoing the GSD removal.
+# GSD is dead everywhere (Mac 2026-08-07, Hostinger 2026-08-12); the correct
+# permanent fix is to git rm these files from the source, after which this rule
+# and the matching .chezmoiremove entry can both go.
+.claude/agents/gsd-*.md
+
 # VPS (Linux) keeps its own settings.json; statusline.sh is now cross-platform
 # and shared (Mac authoritative). context-mode 3rd line no-ops where unavailable.
 {{ if eq .chezmoi.os "linux" -}}

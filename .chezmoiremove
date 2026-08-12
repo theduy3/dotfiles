@@ -1,11 +1,18 @@
-# Codex removed 2026-08-12 (CLI uninstalled). These paths must be DELETED on every
-# device, not merely unmanaged — `chezmoi forget` unmanages but never removes the
-# target, so the stale dirs would otherwise persist on Mac + Hostinger + Bluehost.
-#
-# Mac sessions (234M) were archived to ~/codex-sessions-archive-20260812 BEFORE
-# this file landed. Do not re-add paths here without an archive step first.
-.codex
-
-# oh-my-codex (bin `omx`) — an orchestration layer for the Codex CLI, orphaned by
-# the same removal.
+# oh-my-codex (bin `omx`) was an orchestration layer for the Codex CLI. The npm
+# package was uninstalled 2026-08-12 and `omx` no longer resolves, so this state
+# dir is definitively orphaned.
 .omx
+
+# ⚠️ `.codex` is deliberately NOT listed here.
+#
+# It looked dead (Codex CLI uninstalled, bin not on PATH) but inspection on
+# 2026-08-12 found LIVE sqlite state written the same morning — goals_1.sqlite,
+# memories_1.sqlite, queue_1.sqlite, state_5.sqlite (2.6M + 4.1M WAL),
+# thread-writer-locks, .sandbox_migration — plus a real trust entry in
+# config.toml for ~/Repo/salonx. Something still writes there.
+#
+# `.chezmoiremove` deletes on EVERY device at apply time, so listing `.codex`
+# would have destroyed that state on the next hourly claude-sync run.
+# Sessions (234M) are archived at ~/codex-sessions-archive-20260812, but the
+# sqlite databases are NOT. Do not add `.codex` here until the writer is
+# identified and its state is either dead or archived.

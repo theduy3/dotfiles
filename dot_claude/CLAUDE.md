@@ -1,9 +1,22 @@
 ## Code intelligence — graph-tool routing
 
-Use **CodeGraph** (`codegraph_*`) for whole-repository exploration, dependency tracing,
-architecture questions, and refactor planning.
-Use **code-review-graph** only for commit, diff, or PR reviews; obtain minimal review
-context (`detect_changes`, `get_review_context`) before reading files manually.
+Three layers. Climb only as far as the question needs.
+
+**L0 orientation — Graft (plain files, NOT MCP).** If a `graft/` directory exists at the repo
+root, start there for "what is this system / where do I begin" questions — via Read/Grep, or
+`graft map` (ranked hubs + hotspots, whole repo, ~1.5k tokens) and `graft ask "<task>"` in Bash.
+No `graft/` → skip straight to L1. Never run `graft init`: it registers 6 MCP tools that
+duplicate `codegraph_*`.
+**L1 navigation — CodeGraph (`codegraph_*`).** Whole-repository exploration, dependency
+tracing, architecture questions, refactor planning. `codegraph_explore` first — one call,
+verbatim source, usually the only call needed.
+**L2 review — code-review-graph.** Commit, diff, or PR review only; obtain minimal review
+context (`detect_changes_tool`, then `get_review_context_tool`) before reading files manually.
+Before declaring any code-changing task complete, call `get_impact_radius_tool` on the changed
+files — the PostToolUse hook keeps that index warm but reports nothing on its own.
+⚠️ **Every code-review-graph tool ends in `_tool`** — the bare name does not resolve, and the
+"no matching tools found" it returns is indistinguishable from the server being down.
+
 If the chosen server reports an unbuilt graph for the current repo
-(`codegraph_status` / `list_graph_stats` → 0 nodes —
+(`codegraph_status` / `list_graph_stats_tool` → 0 nodes —
 as at the `~` home-dir level), fall back to Grep/Glob rather than silently switching tools.

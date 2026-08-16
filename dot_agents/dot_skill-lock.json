@@ -1338,6 +1338,24 @@
       "skillFolderHash": "ff5d481dea0e60cea3738f81ca737ad54328b267",
       "installedAt": "2026-08-08T16:49:46.311Z",
       "updatedAt": "2026-08-08T16:49:46.311Z"
+    },
+    "install-anti-slop": {
+      "source": "dmmulroy/anti-slop",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dmmulroy/anti-slop.git",
+      "skillPath": "skills/install-anti-slop/SKILL.md",
+      "skillFolderHash": "b1512e24318785e3f9028e19a8f7cbec11343088",
+      "installedAt": "2026-08-16T20:25:44.255Z",
+      "updatedAt": "2026-08-16T20:25:44.255Z"
+    },
+    "unlazy": {
+      "source": "Leonxlnx/unlazy",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Leonxlnx/unlazy.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "ed9e8d2b5919698cf2c54bda270d507e10b69617",
+      "installedAt": "2026-08-16T20:34:44.138Z",
+      "updatedAt": "2026-08-16T20:34:44.138Z"
     }
   },
   "lastSelectedAgents": [

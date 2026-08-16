@@ -39,11 +39,36 @@ if [ "$ROLE" = "push" ]; then
   # that glob matches 8 dirs / ~400 notes (298 from salonx alone), which is per-repo
   # working state, not portable config.
   # NB: an unmatched glob expands to the literal pattern under bash, hence the -e guard.
+  # Credential gate. Calibrated against the 57-note corpus audited 2026-08-15, where
+  # it produced zero hits: prose ABOUT secrets (the filename `internal-secret`, a
+  # warning that Syncthing's /rest/config leaks gui.apiKey) must not trip it, and
+  # neither may frontmatter originSessionId UUIDs or Syncthing device IDs, which are
+  # public pairing identifiers. It matches a VALUE, not a mention.
+  CRED_RE="ghp_[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{32,}|-----BEGIN [A-Z ]*PRIVATE KEY|[0-9]{9,10}:[A-Za-z0-9_-]{30,}|(api[_-]?key|password|token)[\"']?[[:space:]]*[:=][[:space:]]*[\"']?[A-Za-z0-9/+_-]{20,}"
   memdir="$HOME/.claude/projects/$(printf '%s' "$HOME" | tr '/' '-')/memory"
   if [ -d "$memdir" ]; then
     memfiles=("$memdir"/*.md)
     if [ -e "${memfiles[0]}" ]; then
-      chezmoi add "${memfiles[@]}" >>"$LOG" 2>&1 || log "memory add warn ($memdir)"
+      memsafe=()
+      for memf in "${memfiles[@]}"; do
+        if grep -qiE "$CRED_RE" "$memf" 2>/dev/null; then
+          # Detection covers every note; prevention only covers NEW ones. A note
+          # chezmoi already manages gets re-added by `chezmoi re-add` below no matter
+          # what we do here, so that case alerts loudly instead of pretending to block.
+          if chezmoi source-path "$memf" >/dev/null 2>&1; then
+            log "CREDENTIAL PATTERN in TRACKED note $(basename "$memf") — re-add WILL still sync it"
+            notify "⚠️ credential pattern in tracked memory note $(basename "$memf") — already in git, rotate + scrub"
+          else
+            log "CREDENTIAL PATTERN in new note $(basename "$memf") — skipped, left untracked"
+            notify "⚠️ credential pattern in new memory note $(basename "$memf") — NOT synced"
+          fi
+          continue
+        fi
+        memsafe+=("$memf")
+      done
+      if [ ${#memsafe[@]} -gt 0 ]; then
+        chezmoi add "${memsafe[@]}" >>"$LOG" 2>&1 || log "memory add warn ($memdir)"
+      fi
     fi
   fi
   # Mac: capture live ~/.claude edits into source (templates are preserved by re-add)

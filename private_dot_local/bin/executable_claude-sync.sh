@@ -27,6 +27,25 @@ SRC="$(chezmoi source-path)" || { log "no source-path"; exit 1; }
 cd "$SRC" || { log "cannot cd $SRC"; exit 1; }
 
 if [ "$ROLE" = "push" ]; then
+  # Discover NEW memory notes before re-add. `chezmoi re-add` only re-adds files
+  # chezmoi ALREADY manages — it never picks up new ones — and `chezmoi status`
+  # reports drift in managed files only, so an unmanaged note is invisible to both
+  # the sync and the command you'd check with. 23 notes accumulated that way while
+  # the MEMORY.md index linking them synced normally, leaving every replica a broken
+  # index (audited and fixed in 97191e3). Memory recall is cross-machine by design,
+  # so a note that never leaves the Mac cannot do its job.
+  # Scoped to the HOME project's memory only — that is the always-loaded index and
+  # the only memory dir chezmoi has ever tracked. Deliberately NOT projects/*/memory:
+  # that glob matches 8 dirs / ~400 notes (298 from salonx alone), which is per-repo
+  # working state, not portable config.
+  # NB: an unmatched glob expands to the literal pattern under bash, hence the -e guard.
+  memdir="$HOME/.claude/projects/$(printf '%s' "$HOME" | tr '/' '-')/memory"
+  if [ -d "$memdir" ]; then
+    memfiles=("$memdir"/*.md)
+    if [ -e "${memfiles[0]}" ]; then
+      chezmoi add "${memfiles[@]}" >>"$LOG" 2>&1 || log "memory add warn ($memdir)"
+    fi
+  fi
   # Mac: capture live ~/.claude edits into source (templates are preserved by re-add)
   chezmoi re-add >>"$LOG" 2>&1 || log "re-add warn"
   if [ -n "$(git status --porcelain)" ]; then

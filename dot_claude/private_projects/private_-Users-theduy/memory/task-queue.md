@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7d54dfe6-570a-43ae-be33-689eccef4954
-  modified: 2026-08-17T07:36:31.683Z
+  modified: 2026-08-19T04:31:18.000Z
 ---
 
 # Task Queue
@@ -15,6 +15,23 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
 **Protocol:** on session start, scan Active for items matching current work context. Mark in-progress items with `(WIP: <date>)`. Move finished items to Completed with date.
 
 ## Active Tasks
+
+- [ ] **salonx loyalty hardening — PAUSED 2026-08-18 "complete later".** Handoff:
+      `~/tasks/loyalty-backlog-handoff.md`. **Production is CLEAN — none of this is a live defect.**
+      Shipped and verified: #1613 (reopen releases the redeem, the root cause), #1646 (never debit
+      without the discount), #1651 (detection RPC); detector returns **0 rows on both tenants**
+      (proven non-vacuous), client remediation closed.
+      **Order — do #1663 FIRST:** the settle invariant asserts money-out ⇒ debit twice
+      (`schema.sql:13707`, `:13822`) and **debit ⇒ money-out nowhere** — the direction the original
+      defect took. ⚠ **Sequencing trap: doing #1645 first kills #1663** — consolidation is a
+      snapshot, the assertion is durable; once the cheap fix lands the pressure drops and the gap
+      stays. ⚠ #1663 modifies `fn_loyalty_accrue` (highest blast radius, ~5 rewrites, stale-base
+      defect history) — copy VERBATIM from `20261225040000`.
+      Then #1645 (five copies of the discount-leg mapping — judgment per site, three answer `""`
+      differently on purpose), then #1662 (surplus detector — only needed before the NEXT
+      compensation-RPC run; population is 2, both hand-verified). #1463's *decision* (does the
+      assertion count the dead legacy tender?) is on #1663's critical path; its deletion is not.
+      **Do-nothing is defensible** — the cost is that prevention stays client-side.
 
 - [ ] **Storage audit — PAUSED 2026-08-17 "save for later".** Full report (5 audits, live):
       https://claude.ai/code/artifact/bf3a6e2f-1d65-4608-97d0-d2ca6ad3d9a9 · local

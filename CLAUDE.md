@@ -20,8 +20,6 @@ Prefer `bun run` over `npm run` for speed. For `install`, follow the project's l
 - Reach for a written plan/spec when work is genuinely ambiguous or architectural, or when the
   artifact itself is wanted as a record of intent. Otherwise delegate and run.
 - If something goes sideways, STOP and re-plan — don't keep pushing.
-- Remote/Android note: plan mode's ExitPlanMode blocks there (interactive UI can't be
-  auto-approved), so defaulting to direct execution avoids a known stall.
 
 ### Subagent Strategy
 Spawn subagents to isolate context, parallelize independent work, or offload bulk mechanical tasks. Don't spawn when the parent needs the reasoning, when synthesis requires holding things together, or when spawn overhead dominates.
@@ -56,7 +54,7 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 
 **Known file path**: `Read` directly; never use Explore for known paths.
 
-**Recurring patterns**: Notice recurring fetch/parse patterns and propose wrapping them as dedicated tools. When the same fetch/parse logic comes up more than once, suggest wrapping it as a named tool (skill file or `.py` script with extraction baked in for that source). Add the entry to the `## Dedicated Tools` registry below and reference it by name on future calls. For 3+ repetitions in a single session, wrap immediately via Bash one-liner or `everything-claude-code:learn-eval`.
+**Recurring patterns**: Notice recurring fetch/parse patterns and propose wrapping them as dedicated tools. When the same fetch/parse logic comes up more than once, suggest wrapping it as a named tool (skill file or `.py` script with extraction baked in for that source). Add the entry to the `## Dedicated Tools` registry below and reference it by name on future calls. For 3+ repetitions in a single session, wrap it immediately as a Bash one-liner or a small script.
 
 ### Demand Elegance
 - For non-trivial changes: pause and ask "is there a more elegant way?"
@@ -68,105 +66,31 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - Write rules that prevent the same mistake recurring
 - Format: category header, one-line rule, commit hash. Keep it scannable.
 
-## Remote Mode (`CLAUDE_REMOTE=1`)
+## Workflow — Claude plans, OMP executes
 
-- Shipping workflows auto-merge after CI passes (no interactive confirmation)
-- ExitPlanMode patched to auto-approve via hook — prefer direct implementation over plan mode
-- AskUserQuestion with options still blocks — commands use defaults instead
-- Patch script: `~/.local/bin/patch-claude-remote.sh` (auto-runs on `claude-remote` startup)
+> **Claude thinks, OMP builds.** Both run in herdr panes.
 
-## Workflow Orchestration — one loop owner, everywhere (updated 2026-08-07)
-
-> **`/s*` is the ONLY loop owner — for local AND production work.** **GSD was removed entirely
-> 2026-08-07** (34 agents, 71 skills, 15 hooks, `npm @opengsd` 561 MB, `~/.gsd`, all `gsd-*`
-> archives; backup at `~/.claude/.gsd-removal-backup-20260807`, restorable by moving the
-> `moved/` subdirs back). The old GSD-owns-prod / `/s*`-owns-local split no longer exists —
-> Hermes/Wylios and every other repo now use `/s0-spec` → `/s1-plan` → `/s-auto`.
-> **Superpowers stays ENABLED** as an **explicit-call leaf library** — never its workflow loops.
-> **ECC is ENABLED** (2026-08-07) — see Leaf libraries below.
-> (The old s0–s9 suite was deleted 2026-07-17 and replaced the same day by the distilled `/s*`.)
-
-### The local loop → `/s*`
-- `/s0-spec` (interview→spec→grill, Fable) → `/s1-plan` (todo + adversarial check, Fable) →
-  **`/s-auto`** (autonomous S2→S5: implement→gates→review-panel→squash-auto-merge, unattended).
-- **Seam precedence (ADR 0007):** a `tasks/todo-*.md` at `status: plan-approved` belongs to
-  **`/s-auto`**. `tdd-gates` is **explicit-call-only** — never auto-select it for that Seam.
-- `/s-auto` halts+pings only on: gate red, review stuck (cap-2), CI red, CI timeout 30m, merge
-  conflict. Resume: `/s-auto <slug>` reads `~/tasks/.s-run/<slug>.md`.
-- **Per-stage manual commands** (operator rerun/debug, added 2026-07-18): `/s2-implement`,
-  `/s3-gates`, `/s4-review`, `/s5-ship`. Single stage each, no Seam ownership, never
-  auto-chain — the `plan-approved` Seam still belongs to `/s-auto` alone.
-- Refresh distillates **weekly** via `/update-distill` (per-Source human approval). Cadence
-  changed monthly→weekly 2026-07-31.
-
-### The prod loop → also `/s*` (GSD removed 2026-08-07)
-- Hermes/Wylios and other production repos use the SAME `/s0-spec` → `/s1-plan` → `/s-auto` loop
-  as local work. All `/gsd-*` commands are gone and will not resolve.
-- Nothing replaced GSD's phase/roadmap artifacts (`.planning/`, `STATE.md`, `ROADMAP.md`). Repos
-  that still contain a `.planning/` directory keep it as inert data — no hook reads it now.
-
-### Leaf libraries — invoke explicitly, never as a loop
-- **Superpowers skills:** `brainstorming`, `systematic-debugging`, `test-driven-development`,
-  `verification-before-completion`, `receiving-code-review`, `dispatching-parallel-agents`.
-  Call at the trigger point; they no longer auto-fire (SessionStart injector gone).
-- **ECC is ENABLED (2026-08-07) — `ecc:`-prefixed names DO resolve again.** Re-enabled as part of
-  the global enable-everything pass, together with all other plugins. The original disable rationale
-  still holds and is now *mitigated rather than avoided*: ECC's 249 skills would overflow the
-  skill-listing budget at its 1% default and silently truncate *every* skill's description, so
-  `skillListingBudgetFraction` is pinned to **0.25** in settings. Measured 2026-08-07: 232 skills =
-  ~23.2k est. listing tokens, comfortably inside the raised budget.
-  ⚠️ **Rival-loop hazard is back:** `/ecc:plan` and `/ecc:feature-dev` are reachable again and
-  compete with `/s-auto`. Do not invoke them — the one-loop-owner rule above still governs.
-  `npx ecc-agentshield` is a separate npm CLI and is unaffected.
-- **One TDD enforcer per task:** `superpowers:test-driven-development`, or the `/s-auto` gate
-  ladder (S3). The former GSD enforcers (`gsd-verify-work`, `gsd-nyquist-auditor`) are gone;
-  the bare `nyquist-auditor` agent survives the removal and DOES resolve.
-
-### Harvested agents (`~/.claude/agents/`) — neutral, use under any loop
-**INSTALLED (55, verified 2026-08-07 after the GSD removal)** — the archive was restored
-2026-08-07, then all 34 `gsd-*` agents were deleted the same day. Frontmatter validated:
-zero missing `name`/`description`, zero name collisions.
-- Neutral review: `code-reviewer`, `security-reviewer`, `silent-failure-hunter`, `typescript-reviewer`
-- Build: `build-error-resolver` · Plan: `planner` (opus-tier — pricier than the sonnet reviewers)
-- These six are `.planning/`-free, so pass `tasks/` paths normally; no path caveat applies.
-- `/s*` pipeline: the ten `s-*` agents (not general-purpose — do not call directly).
-- Also live: `verifier`, `debugger`, `integration-checker`, `nyquist-auditor`,
-  `performance-optimizer`, `refactor-cleaner`, `codebase-mapper`, `security-auditor`,
-  6 `audit-*`, 6 `seo-*`, and 15 display-named marketing/engineering/testing agents
-  (`UI Designer`, `Backend Architect`, … — their frontmatter `name` contains spaces and differs
-  from the filename; that is legal and they load fine).
-
-⚠️ **These 8 verify/build/security agents came from the GSD runtime**, so their prose still says
-`.planning/` even though no GSD tooling reads it any more. Pass `tasks/` paths explicitly.
-There is no longer a `gsd-*` variant to prefer — the bare names are the only ones that resolve.
-
-### Hook audit (rewritten 2026-08-07 after the GSD removal) — `~/.claude/settings.json`
-**7 hooks total, down from 22.** All 15 `gsd-*` hooks deleted with GSD.
-- **KEEP (orchestrator-neutral safety):** `worktree-path-guard.js` (writes stay in active worktree),
-  `worktree-branch-guard.js` (no commit to default branch in a worktree).
-- ⚠️ **`worktree-branch-guard.js` timeout raised 5s → 15s (2026-08-07).** Audit found it timed out
-  on **2/2** observed runs; guards fail-open, so it was providing ZERO protection while still
-  costing 5s per `git commit`. Re-measure before trusting it.
-- **`code-review-graph update`** matcher narrowed `Edit|Write|Bash` → `Edit|Write` — it fired on
-  11,406 Bash calls in 2.8 days re-indexing a 0-node graph. NOTE: salonx's own
-  `.claude/settings.json` still runs it on `Bash`; hooks MERGE across scopes, they don't override.
-- **`worktree-s-auto-enforcer.sh`** (PostToolUse on `EnterWorktree`) — injects the `/s-auto`
-  mandate (S2→S5). Its `.planning/`-present exemption is now dead code: no GSD repos remain.
-- **REMOVED 2026-07-17:** `worktree-required-guard.js` (armed by `/s*` task state; already unwired).
-
-### Deploy gate / config protection (neutral)
-- `npx ecc-agentshield scan --min-severity high` before ship — scans `.claude` + MCP for exposed keys,
-  over-permissive hooks, injection surface. Run manually before ship.
-- Do NOT weaken linter/formatter configs (eslint, biome, prettier, tsconfig strictness) to pass errors.
+- **Claude owns the front half**: brainstorm → interview → spec (`tasks/spec-<topic>.md`) → plan
+  (`tasks/todo-<topic>.md`) → adversarial review of both. Stop at an approved plan.
+- **OMP owns the back half** (`omp`, @oh-my-pi): implement, test, commit, PR. Hand off by pointing it
+  at the approved `tasks/todo-<topic>.md`.
+- Claude implements only when told to directly ("do it here"). Default is hand-off, not execution.
+- No autonomous ship loop on the Claude side. Claude does not merge.
+- ⚠️ `~/.codex` is OMP's live state (Codex protocol client) — never delete it.
 
 ### Worktree & Vault
-Details in `~/.claude/rules/common/worktree-and-vault.md` — load on demand. Key points:
-- Worktree entry via built-in `EnterWorktree` (`gsd-workspace` is gone — GSD removed 2026-08-07).
-- ⚠️ **Vault auto-inject is NOT wired** (verified 2026-08-07). `inject-vault-context.sh` exists but
-  is registered in no settings file, so it never runs and `CLAUDE_VAULT_FORCE=1` does nothing.
-  Query the vault on demand via `qmd` MCP instead. To actually enable it, add the script as a
-  `SessionStart` hook — it self-gates on an active `plan-approved` task, so cost is near zero.
+- Isolate with the built-in `EnterWorktree` before editing a shared checkout.
 - Specs → `tasks/spec-*.md`, plans → `tasks/todo-*.md`.
+- Vault auto-inject is NOT wired (`inject-vault-context.sh` is registered in no settings file, so
+  `CLAUDE_VAULT_FORCE=1` does nothing). Query the vault on demand via `qmd` MCP.
+- Details: `~/.claude/rules/common/worktree-and-vault.md` — load on demand.
+
+### Guardrails
+- Live hooks in `~/.claude/settings.json`: `worktree-path-guard.js` (writes stay in the active
+  worktree), `worktree-branch-guard.js` (no commit to the default branch).
+- ⚠️ `worktree-branch-guard.js` timed out on 2/2 observed runs and hooks fail open — verify the
+  branch yourself before any git write. Do not trust the guard.
+- Do NOT weaken linter/formatter configs (eslint, biome, prettier, tsconfig strictness) to pass errors.
 
 ## Dedicated Tools
 

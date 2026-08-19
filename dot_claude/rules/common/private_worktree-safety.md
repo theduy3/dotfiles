@@ -34,7 +34,6 @@ Never remove a worktree from a subagent while the parent CWD is still inside it.
 - **`worktree-branch-guard.js`** (`Bash`) — blocks `git commit` when CWD is inside a linked
   worktree AND the branch is the repo default (main/master/…). Commit from the feature
   branch, or from the main checkout if intentional.
-- ~~`gsd-phase-worktree-guard.js`~~ — **DELETED 2026-08-07** with the rest of GSD.
 
 All fail-open (exit 0 on any error) — they never block valid work due to hook failure.
 

@@ -11,18 +11,18 @@ paths:
 
 ## Worktree Workflow
 
-- **Entry**: built-in `EnterWorktree` (or `gsd-workspace` under GSD). GSD owns the plan→execute→verify→ship loop.
+- **Entry**: built-in `EnterWorktree`. Claude plans; OMP executes (see `~/CLAUDE.md` §Workflow).
 - **Setup hooks** (PostToolUse on `EnterWorktree`):
   - `~/.claude/hooks/worktree-env-copy.sh` — copies `.env*` from main into worktree
   - `~/.claude/hooks/worktree-tab-rename.sh` — sets terminal tab title
 - **Cleanup**: `ExitWorktree` in the parent, then `git worktree remove` (see `worktree-safety.md` for the CWD-ENOENT ordering contract).
-- **Resume**: `/gsd-resume-work` restores context from `.planning/` state.
 
 ## Output Paths
 
 - Specs: `tasks/spec-<task-name>.md`
 - Plans: `tasks/todo-<task-name>.md`
 - User can override complexity: "this is a small task" or "use subagents for this"
+- Approved plan is the hand-off artifact to OMP.
 
 ## Vault Integration
 

@@ -14,8 +14,13 @@ gate evidence and panel verdicts; you turn them into a merged squash commit.
 
 - Confirm you are in the task **worktree** on the task branch
   (`git branch --show-current` ≠ default branch).
-- Flip the todo's `status:` to `shipped` and commit it (`chore: mark plan shipped`) —
-  the merged main copy then reads `shipped`, not a stale `implementing`.
+- Flip the todo's `status:` to `pr-open-awaiting-human-merge` and commit it
+  (`chore: mark plan pr-open`). **NEVER write `shipped` here** — `shipped` before the
+  merge is confirmed has stranded a false marker on unmerged work four times (#1576;
+  4th: 2026-08-12, `free-signup-write-surface`, flipped `shipped`, THEN watched CI,
+  THEN halted red). `status:` is a resume signal `/s-auto` §0 selects on: a false
+  `shipped` is indistinguishable from correct; a stale `pr-open-awaiting-human-merge`
+  after merge is visible debt the register sweep batch-flips (see §6).
 - `git status --porcelain` — if anything else is uncommitted, make one conventional
   commit for it first: stage and commit in a single step,
   `type: description` (feat/fix/refactor/test/chore), message derived from the
@@ -104,6 +109,14 @@ status: merged | halted
 pr: {url}
 merge-sha: {sha, if merged}
 halt: none | ci-red: {step + excerpt} | ci-timeout | merge-conflict: {files}
+todo-status: pr-open-awaiting-human-merge  # always — see below
 ```
+
+**On `status: merged`, the todo on main still reads `pr-open-awaiting-human-merge`
+and that is deliberate** — flipping it to `shipped` post-merge would need a commit to
+the default branch, which this pipeline never does. The orchestrator (or the next
+register sweep) flips merged todos to `shipped` in its next docs PR; report the
+`todo-status` line so it knows one is owed. Do NOT "fix" this by flipping `shipped`
+pre-merge — that is the #1576 defect.
 
 Report faithfully — a merge you did not watch complete is not "merged".

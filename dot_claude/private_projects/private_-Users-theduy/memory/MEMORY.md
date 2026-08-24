@@ -22,6 +22,8 @@
 
 - [Weekly Prune Agent](weekly-prune-agent.md) — `com.theduy.weekly-prune` Sun 11:00 (script `~/.local/bin/weekly-prune.sh`, log `~/.local/state/`); 🔑 **`.cache/uv` hit 36G because LIVE `uvx ... serve` MCP servers hold `.cache/uv/.lock` for their whole session lifetime** so the polite prune can basically never run → the 5GB cap + `clean --force` is the real protection. 🛑 Those uvx procs are **NOT orphans, do not kill** (checked ppid: 2 live claude + 2 live OMP sessions — age ≠ abandonment). Also: macOS has NO `flock(1)`; `uv cache prune` only drops *unreachable* objects
 
+- [reMarkable Paper Pro SSH](remarkable-paper-pro-ssh.md) — one `rmpp` alias over Wi-Fi/hotspot/USB via `~/bin/rmpp-connect`; NO mDNS (`remarkable.local` never resolves), dropbear banner is the fingerprint, `HostKeyAlias` load-bearing; ⚠️ `~/.ssh` denied to Claude tools so key+Include are user-run
+
 ## Active Projects
 - [agentmemory Install](agentmemory-install.md) — v0.9.28 live 2026-08-04: plugin (15 skills/12 hooks/53 MCP tools) + launchd `com.theduy.agentmemory` on :3111/:3113; deliberately **zero-LLM** (Codex OAuth can't substitute; never write a non-working key — GEMINI_API_KEY breaks embeddings too)
 - [claude-mem Archive](claude-mem-archive.md) — claude-mem disabled 2026-08-07; its 42,390 obs + 3,490 summaries exported to greppable JSONL at ~/theduyvault/Notes/Claude-Context/claude-mem-archive/ (111M, 147 shards). **ripgrep is the working recall path** — agentmemory BM25 is degenerate. Trap: observations.text is NULL for every row.

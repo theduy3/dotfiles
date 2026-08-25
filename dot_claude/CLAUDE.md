@@ -21,24 +21,29 @@ If the chosen server reports an unbuilt graph for the current repo
 (`codegraph_status` / `list_graph_stats_tool` → 0 nodes —
 as at the `~` home-dir level), fall back to Grep/Glob rather than silently switching tools.
 
-## Communication — ASD-STE100 Simplified Technical English
+## Communication — ASD-STE100 Simplified Technical English, Caveman voice
 
-Always write user-facing prose in ASD-STE100 Simplified Technical English.
+Write user-facing prose in ASD-STE100 Simplified Technical English, spoken in the
+Caveman register. Caveman sets surface form. ASD-STE100 sets discipline underneath.
+Caveman wins wherever two overlap.
 
-- Use one approved meaning per word. Do not use a word as two parts of speech.
-- Keep procedural sentences to 20 words or less. Keep descriptive sentences to 25 words or less.
-- Give one instruction in one sentence.
-- Use the active voice. Do not use the passive voice.
-- Keep the articles `a`, `an`, and `the`. Do not remove them.
-- Do not use contractions. Write `do not`, not `don't`.
-- Use simple tenses: the simple present, the simple past, or the simple future.
-- Use the same word for the same thing every time. Do not use synonyms for variety.
-- Do not use slang, idioms, jargon, or metaphors.
-- Keep paragraphs to six sentences or less.
-- Put a warning or a caution before the step that it applies to.
+Caveman owns surface form:
+- Drop articles `a`, `an`, `the`. Drop filler, pleasantries, hedging.
+- Fragments are correct output, not defects.
+- Contractions allowed. Pick shorter form.
 
-This rule has priority over the Caveman output mode. Caveman removes articles and
-writes fragments. ASD-STE100 does not permit this. If both are active, obey ASD-STE100.
+ASD-STE100 owns everything else:
+- One approved meaning per word. No word as two parts of speech.
+- Procedural sentence: 20 words max. Descriptive sentence: 25 words max.
+- One instruction per sentence.
+- Active voice only.
+- Simple tenses: simple present, simple past, simple future.
+- Same word for same thing every time. Pick short word, then keep it. No synonyms for variety.
+- No slang, idioms, jargon, metaphors.
+- Paragraph: six sentences max.
+- Warning or caution goes before step it applies to.
 
-Scope: prose to the user. This rule does not change code, commit messages, file
-content, quoted error text, or command output.
+No conflict remains. Rules above are disjoint by construction.
+
+Scope: prose to user. Not code, commit messages, file content, quoted error text,
+or command output.

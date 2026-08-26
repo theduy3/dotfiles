@@ -33,26 +33,33 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       assertion count the dead legacy tender?) is on #1663's critical path; its deletion is not.
       **Do-nothing is defensible** — the cost is that prevention stays client-side.
 
-- [ ] **Storage audit — PAUSED 2026-08-17 "save for later".** Full report (5 audits, live):
+- [ ] **Storage audit — audit 6 CLOSED 2026-08-26, 24 GiB reclaimed.** Report (live, same URL):
       https://claude.ai/code/artifact/bf3a6e2f-1d65-4608-97d0-d2ca6ad3d9a9 · local
-      `~/tasks/mac-inventory-audit.html`. Background + design decisions: [[weekly-prune-agent]].
-      **State on pause: 179 GiB used / 15 GiB free / 93%** — regressed 20 GiB in 2 days, back near
-      the 95% that started this. Trend: 95→92→80→81→83→**93%**.
-      **Dominant cause is Docker, not uv:** `Library/Containers` 2.1G → **13G**, VM 711M → **11G**,
-      1 → **13 images (10.14GB, 9.34GB reclaimable / 92%)**, 12 volumes (1.3GB reclaimable). A
-      Supabase-style local stack came back.
-      ⚠️ **Gap in the prune agent I built:** it runs `docker image prune -f`, which removes only
-      *dangling* images — 9.34GB here is tagged-but-unused, so `-f` cannot touch it. Deliberate
-      (`-a` forces multi-GB re-pulls) but it means Docker is now the top consumer and the agent
-      does nothing about it. **Decide: add `docker image prune -a --filter until=168h`, or leave
-      Docker manual.**
-      Next actions, in order: (1) reclaim Docker ~9GB; (2) uv cache is **4.0G vs the 5.12G cap** —
-      cap never fired, consider lowering to ~3G; (3) `clean --force` against a live lock is still
-      **unproven** (8 uvx holders now, up from 6).
-      Working and verified — don't re-litigate: weekly-prune agent (`com.theduy.weekly-prune`,
-      Sun 11:00) **fired correctly 2026-08-16, runs=2, exit 0**; salonx `.mcp.json` still on the
-      persistent binary (the uvx→pipx root-cause fix held); **0 failed services**; codex-router
-      fully removed; `Bash(rm -rf *)` deny restored.
+      `~/tasks/mac-inventory-audit.html`. Agent design: [[weekly-prune-agent]].
+      **98% / 4.8 GiB free → 86% / 29 GiB free** (168 GiB used). Trend: 95→92→80→81→83→93→98→**86%**.
+      `~/Library` **57G → 33G** (App Support 24→13, Caches 7.1→2.3, Containers 19→11).
+      ✅ **DOCKER DISCARD REACHES THE HOST — proven, stop assuming otherwise.** `Docker.raw` is
+      sparse (60G apparent / 18G allocated); pruning 8.1 GB *inside* the VM dropped the host file
+      **18G → 10G immediately, no restart**. ⇒ the weekly agent's dangling-only
+      `docker image prune -f` leaks **~8 GB/week**.
+      **→ STILL OPEN: add `docker image prune -a --filter until=168h` to
+      `~/.local/bin/weekly-prune.sh`.** `until=168h` protects freshly-pulled images — the safety
+      valve the original `-a` objection lacked. User approved a ONE-TIME `-a` on 2026-08-26; that is
+      **not** standing authorization to change the unattended cron. Ask first.
+      **Reclaimed, user ran the deletes** (all rm-blocked for Claude by `Bash(rm -rf *)` deny — do
+      NOT route around it): `Claude/vm_bundles` 9.1G, `com.docker.install/in_progress` 2.1G,
+      `Caches/Google` 3.3G, 4 updater caches 1.5G. `Application Support/Claude` is now 1.3G.
+      ⚠️ **`~/theduylifeos` 12G is still unaudited** — appeared between audits 5 and 6, never
+      investigated. Biggest remaining unknown in home.
+      ⚠️ **~61G is protected system data needing `sudo`** (denied) — 168 used vs ~107 measurable.
+      Never invent a breakdown for it.
+      Working, don't re-litigate: weekly-prune agent ran **2026-08-23, exit 0**, freed 2 GiB
+      (`runs=` resets on reboot — trust `~/.local/state/weekly-prune.log`, not launchctl); uv cache
+      **3.5G vs 5.12G cap**, uvx→pipx fix held; 0 APFS snapshots; 11 `supabase_*_salon365`
+      containers verified live after the prune; `rm -rf` deny enforcing.
+      ❌ **Retracted mid-session:** a `-9` in the `launchctl list` Status column is routine (launchd
+      kills idle on-demand agents that way); baseline here is **~200**. A `head -10` read made it
+      look like 9 anomalous crashes and got misreported as jetsam. **Count the whole list first.**
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

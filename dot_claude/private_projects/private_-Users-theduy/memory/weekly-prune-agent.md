@@ -92,3 +92,36 @@ already used. **The correct pattern was already in the repo set; salonx was the 
   is a bonus that only lands when no agent session is open.
 - Test the over-cap path without waiting: `UV_CACHE_CAP_MB=1 bash ~/.local/bin/weekly-prune.sh`
   — ⚠️ this really does force-clean the cache.
+
+## ✅ Docker discard PROVEN to reach the host (2026-08-26, audit 6)
+
+The `-a`-vs-`-f` tradeoff was argued for weeks on an assumption that was never tested: that
+reclaiming inside the Docker VM might not shrink `Docker.raw` on macOS. **It does.**
+
+- `Docker.raw` is **sparse**: `ls -lh` showed 60G apparent, `du` showed 18G allocated. That gap is
+  itself the evidence discard had already run.
+- Confirmed by doing it: pruning **8.1 GB inside the VM** dropped the host file
+  **18G → 10G immediately, no Docker restart**. Host free space went 4.8 → 13 GiB in the same pass.
+- ⇒ The agent's `docker image prune -f` (dangling only) leaves **~8 GB/week** unclaimed, because
+  real-world waste here is *tagged-but-unused*, not dangling.
+
+**Recommended change, NOT yet applied:** `docker image prune -a --filter until=168h`. The
+`until=168h` filter is the safety valve the original `-a` objection lacked — it protects
+freshly-pulled images, so a `supabase start` right after an upgrade is never punished. The owner
+approved a one-time `-a` on 2026-08-26; that is **not** standing authorization for the unattended
+cron. Ask before editing the script.
+
+**Why the waste accumulates (observed):** a Supabase CLI version bump leaves *both* tag sets
+resident — the running stack stayed on `edge-runtime:v1.69.25` / `logflare:1.26.13` /
+`realtime:v2.65.3` while `v1.73.13` / `1.39.1` / `v2.86.3` sat pulled-and-unused. Neither set is
+dangling, so `-f` sees nothing.
+
+**Second sink the agent cannot see: stray containers.** Audit 6 found **19 running containers**,
+8 of them one-off `postgres:15` scaffolding (`derive-chain`, `derive-boot`, `derive-pre`,
+`derive-pre-boot`, `verify-fix`, `pre-chain-clean`) 35–37 h old from the paused loyalty work.
+Because they were *running*, `docker system df` reported **0 B reclaimable on containers** and
+their volumes were not dangling — the waste was invisible to every prune. Removing the 6 first,
+*then* pruning volumes, took volumes 41 → 4 (3.68 GB). **Order matters: containers before volumes.**
+
+⚠️ `launchctl print ... | grep runs` resets to 1 on reboot. It is **not** evidence the agent stopped
+running — check `~/.local/state/weekly-prune.log` instead. It ran 2026-08-23, exit 0, freed 2 GiB.

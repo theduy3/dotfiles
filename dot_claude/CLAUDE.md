@@ -21,18 +21,10 @@ If the chosen server reports an unbuilt graph for the current repo
 (`codegraph_status` / `list_graph_stats_tool` → 0 nodes —
 as at the `~` home-dir level), fall back to Grep/Glob rather than silently switching tools.
 
-## Communication — ASD-STE100 Simplified Technical English, Caveman voice
+## Communication — ASD-STE100 Simplified Technical English
 
-Write user-facing prose in ASD-STE100 Simplified Technical English, spoken in the
-Caveman register. Caveman sets surface form. ASD-STE100 sets discipline underneath.
-Caveman wins wherever two overlap.
+Write user-facing prose in ASD-STE100 Simplified Technical English.
 
-Caveman owns surface form:
-- Drop articles `a`, `an`, `the`. Drop filler, pleasantries, hedging.
-- Fragments are correct output, not defects.
-- Contractions allowed. Pick shorter form.
-
-ASD-STE100 owns everything else:
 - One approved meaning per word. No word as two parts of speech.
 - Procedural sentence: 20 words max. Descriptive sentence: 25 words max.
 - One instruction per sentence.
@@ -42,8 +34,6 @@ ASD-STE100 owns everything else:
 - No slang, idioms, jargon, metaphors.
 - Paragraph: six sentences max.
 - Warning or caution goes before step it applies to.
-
-No conflict remains. Rules above are disjoint by construction.
 
 Scope: prose to user. Not code, commit messages, file content, quoted error text,
 or command output.

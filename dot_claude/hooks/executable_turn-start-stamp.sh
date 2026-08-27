@@ -12,12 +12,11 @@ JQ=/opt/homebrew/bin/jq
 {
   input=$(cat)
   sid=$(printf '%s' "$input" | "$JQ" -r '.session_id // empty')
-  dir=${TMPDIR:-/tmp}
 
-  [ -n "$sid" ] && date +%s > "$dir/claude-turn-start-$sid"
+  [ -n "$sid" ] && date +%s > "/tmp/claude-turn-start-$sid"
 
   # Opportunistic prune so abandoned sessions don't accumulate markers.
-  find "$dir" -maxdepth 1 -name 'claude-turn-start-*' -mtime +1 -delete
+  find /tmp -maxdepth 1 -name 'claude-turn-start-*' -mtime +1 -delete
 } >/dev/null 2>&1
 
 exit 0

@@ -19,8 +19,7 @@ sid=$(printf '%s' "$input" | "$JQ" -r '.session_id // empty' 2>/dev/null)
 # %-d / %-I drop zero-padding; verified supported by this macOS BSD date.
 stamp="✓ done $(date '+%a %b %-d, %-I:%M %p')"
 
-dir=${TMPDIR:-/tmp}
-marker="$dir/claude-turn-start-$sid"
+marker="/tmp/claude-turn-start-$sid"
 
 if [ -n "$sid" ] && [ -f "$marker" ]; then
   start=$(cat "$marker" 2>/dev/null)

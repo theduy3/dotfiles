@@ -1,8 +1,6 @@
 {
   "env": {
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80",
-    "ECC_GATEGUARD": "off",
-    "ECC_CONTEXT_MONITOR_COST_WARNINGS": "off"
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80"
   },
   "attribution": {},
   "permissions": {
@@ -52,7 +50,6 @@
       "Bash(npm ci*)",
       "Bash(npx tsc*)",
       "Bash(shasum*)",
-      "Edit(/Users/theduy/tasks/.s-run/**)",
       "EnterPlanMode",
       "EnterWorktree",
       "ExitWorktree",
@@ -151,7 +148,7 @@
     ],
     "UserPromptSubmit": [
       {
-        "_comment": "Added 2026-08-11. Records turn-start epoch to $TMPDIR for the Stop hook's duration clause. MUST stay silent on stdout — UserPromptSubmit stdout is injected into Claude's context.",
+        "_comment": "Added 2026-08-11. Records turn-start epoch to $TMPDIR for the Stop hook's duration clause. MUST stay silent on stdout \u2014 UserPromptSubmit stdout is injected into Claude's context.",
         "matcher": "",
         "hooks": [
           {
@@ -164,7 +161,7 @@
     ],
     "Stop": [
       {
-        "_comment": "Added 2026-08-11. Prints '✓ done <date time> · took <dur>' via JSON systemMessage (Stop discards plain stdout), landing above the recap/away-summary line. Fail-open; drops the duration clause if no marker.",
+        "_comment": "Added 2026-08-11. Prints '\u2713 done <date time> \u00b7 took <dur>' via JSON systemMessage (Stop discards plain stdout), landing above the recap/away-summary line. Fail-open; drops the duration clause if no marker.",
         "matcher": "",
         "hooks": [
           {
@@ -221,21 +218,21 @@
   "skillListingBudgetFraction": 0.25,
   "enabledPlugins": {
     "commit-commands@claude-plugins-official": false,
-    "explanatory-output-style@claude-plugins-official": true,
+    "explanatory-output-style@claude-plugins-official": false,
     "feature-dev@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
-    "learning-output-style@claude-plugins-official": true,
+    "learning-output-style@claude-plugins-official": false,
     "pr-review-toolkit@claude-plugins-official": false,
     "claude-mem@thedotmack": false,
-    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": false,
     "typescript-lsp@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "last30days@last30days-skill": true,
-    "caveman@caveman": true,
-    "chrome-devtools-mcp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": false,
+    "last30days@last30days-skill": false,
+    "caveman@caveman": false,
+    "chrome-devtools-mcp@claude-plugins-official": false,
     "playwright@claude-plugins-official": true,
     "obsidian@obsidian-skills": false,
-    "ecc@ecc": true,
+    "ecc@ecc": false,
     "agentmemory@agentmemory": true,
     "ponytail@ponytail": true
   },
@@ -245,43 +242,6 @@
       "source": {
         "source": "github",
         "repo": "DietrichGebert/ponytail"
-      }
-    },
-    "superpowers-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "obra/superpowers-marketplace"
-      }
-    },
-    "last30days-skill": {
-      "source": {
-        "source": "github",
-        "repo": "mvanhorn/last30days-skill"
-      },
-      "autoUpdate": true
-    },
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      }
-    },
-    "everything-claude-code": {
-      "source": {
-        "source": "github",
-        "repo": "affaan-m/everything-claude-code"
-      }
-    },
-    "obsidian-skills": {
-      "source": {
-        "source": "github",
-        "repo": "kepano/obsidian-skills"
-      }
-    },
-    "thedotmack": {
-      "source": {
-        "source": "github",
-        "repo": "thedotmack/claude-mem"
       }
     },
     "agentmemory": {

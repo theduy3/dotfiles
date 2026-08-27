@@ -1,7 +1,7 @@
 # Memory Index
 
 ## Environment & Configuration
-- [Claude Config chezmoi Sync](claude-config-chezmoi-sync.md) — ~/.claude synced via chezmoi to private theduy3/dotfiles; edit→`chezmoi add`→push (settings.json is a .tmpl — edit source or hourly apply reverts it, incl. gsd-core AND `claude plugin install` writes)
+- [Claude Config chezmoi Sync](claude-config-chezmoi-sync.md) — ~/.claude **AND ~/.agents/skills** (941 files, the skill STORE that ~/.claude/skills symlinks into + OMP reads) synced via chezmoi to private theduy3/dotfiles; edit→`chezmoi add`→push (settings.json is a .tmpl — edit source or hourly apply reverts it, incl. gsd-core AND `claude plugin install` writes); **store writes auto-push to 3 boxes hourly**; delete with `chezmoi destroy`, never `rm`
 - [Claude Plugins Not chezmoi-Synced](claude-plugins-not-chezmoi-synced.md) — ~/.claude/plugins has 0 chezmoi-managed files; marketplace/npx plugins reinstall (not sync) on VPS via `~/vps-bootstrap-claude-plugins.sh` (snapshot script, tracked, commit 8c6113f); chezmoi is not a live mirror (untracked skills stay untracked until `chezmoi add`)
 - [Permission Rules: Edit() not Write()](claude-permission-edit-not-write.md) — `Write(path)` rules silently ignored by the matcher; the .env/secrets/.ssh denies were inert until 2026-07-16. **`Bash(rm -rf *)` deny briefly removed then RESTORED 2026-08-15 — it is IN PLACE, nothing weakened**; deny beats allow so no allow rule can ever override one; removal was never committed/pushed (verified HEAD==origin) so the servers never saw it — but chezmoi-source edits DO auto-push fleet-wide within the hour
 - [Status Line & Hooks](statusline-and-hooks.md) - Status line setup, write hook whitelist

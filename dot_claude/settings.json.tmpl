@@ -111,12 +111,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/theduy/.claude/hooks/worktree-env-copy.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/worktree-env-copy.sh",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "/Users/theduy/.claude/hooks/worktree-tab-rename.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/worktree-tab-rename.sh",
             "timeout": 5
           }
         ]
@@ -153,7 +153,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/theduy/.claude/hooks/turn-start-stamp.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/turn-start-stamp.sh",
             "timeout": 5
           }
         ]
@@ -166,7 +166,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/theduy/.claude/hooks/turn-done-timestamp.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/turn-done-timestamp.sh",
             "timeout": 5
           }
         ]
@@ -178,12 +178,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/worktree-path-guard.js\"",
+            "command": "\"{{ if eq .chezmoi.os `darwin` }}/opt/homebrew/bin/node{{ else }}/usr/bin/node{{ end }}\" \"{{ .chezmoi.homeDir }}/.claude/hooks/worktree-path-guard.js\"",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/salonx-worktree-guard.js\"",
+            "command": "\"{{ if eq .chezmoi.os `darwin` }}/opt/homebrew/bin/node{{ else }}/usr/bin/node{{ end }}\" \"{{ .chezmoi.homeDir }}/.claude/hooks/salonx-worktree-guard.js\"",
             "timeout": 10
           }
         ]
@@ -193,7 +193,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/worktree-branch-guard.js\"",
+            "command": "\"{{ if eq .chezmoi.os `darwin` }}/opt/homebrew/bin/node{{ else }}/usr/bin/node{{ end }}\" \"{{ .chezmoi.homeDir }}/.claude/hooks/worktree-branch-guard.js\"",
             "timeout": 15
           }
         ]
@@ -204,7 +204,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/opt/homebrew/bin/node\" \"/Users/theduy/.claude/hooks/salonx-claim-guard.js\"",
+            "command": "\"{{ if eq .chezmoi.os `darwin` }}/opt/homebrew/bin/node{{ else }}/usr/bin/node{{ end }}\" \"{{ .chezmoi.homeDir }}/.claude/hooks/salonx-claim-guard.js\"",
             "timeout": 20
           }
         ]
@@ -246,7 +246,7 @@
   },
   "effortLevel": "xhigh",
   "theme": "dark-ansi",
-  "remoteControlAtStartup": true,
+  "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "mcpServers": {
@@ -257,5 +257,5 @@
       ]
     }
   },
-  "model": "claude-opus-5[1m]"
+  "model": "{{ if eq .chezmoi.os `darwin` }}claude-opus-5[1m]{{ else }}sonnet{{ end }}"
 }

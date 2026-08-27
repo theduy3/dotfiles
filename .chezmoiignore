@@ -36,8 +36,8 @@ Library/LaunchAgents
 .claude/skills/supabase-postgres-best-practices
 .claude/skills/tdd
 
-# VPS (Linux) keeps its own settings.json; statusline.sh is now cross-platform
-# and shared (Mac authoritative). context-mode 3rd line no-ops where unavailable.
-{{ if eq .chezmoi.os "linux" -}}
-.claude/settings.json
-{{ end -}}
+# settings.json IS now shared, Mac-authoritative (2026-08-27). It was Linux-ignored
+# because it hardcoded 8 /Users/theduy hook paths and /opt/homebrew/bin/node, which
+# would dangle on the VPS; both are templated now ({{ .chezmoi.homeDir }} and an
+# os-conditional node path), so it renders correctly on both. `model` stays
+# machine-local by the same mechanism: opus-1m on the Mac, sonnet on the always-on VPS.

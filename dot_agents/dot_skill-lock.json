@@ -1356,6 +1356,15 @@
       "skillFolderHash": "ed9e8d2b5919698cf2c54bda270d507e10b69617",
       "installedAt": "2026-08-16T20:34:44.138Z",
       "updatedAt": "2026-08-16T20:34:44.138Z"
+    },
+    "book-to-skill": {
+      "source": "virgiliojr94/book-to-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/virgiliojr94/book-to-skill.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "a2a05f1cef63f4aadfa8f76f68e4ce102b3b911a",
+      "installedAt": "2026-08-28T16:11:49.954Z",
+      "updatedAt": "2026-08-28T16:11:49.954Z"
     }
   },
   "lastSelectedAgents": [

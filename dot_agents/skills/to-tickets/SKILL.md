@@ -64,7 +64,7 @@ Publish the approved tickets. **How** depends on the tracker `/setup-matt-pocock
 
 Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
 
-Do NOT close or modify any parent issue.
+Do NOT close or modify any parent issue. Closing a parent, even once every ticket blocking on it is later merged, is always the operator's call — the calling workflow's job is to flag the parent as fully delivered (see `f-o.md` step 9), not to close it.
 
 <local-ticket-template>
 

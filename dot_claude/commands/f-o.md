@@ -76,6 +76,8 @@ During `/to-spec`, `/grill-with-docs`, and ticket classification, look up facts 
 8. When an OMP tab reports a PR open (or a real halt — build/gate failure, ambiguous requirement, merge conflict), tell the operator and stop for that ticket. Only pings for ticket completion or a halt — nothing else.
 9. Once the operator confirms a ticket's PR is merged: verify yourself first (`gh pr view <n> --json state,mergedAt` — must be `MERGED`, don't trust claims). Then, in order: `gh issue close <issue-n> --comment "Merged: <PR url>"` (PR bodies use neutral refs, no `Closes #`, so the issue never auto-closes — do it explicitly here, not before merge is real), `node scripts/claim.mjs release <slug>`, and if a number was reserved, `node scripts/reserve-number.mjs release <kind> <number>` too — it's real on `main` now. PR closed without merging (superseded/abandoned/rejected) → release claim + reservation the same way, but leave the issue open, don't close it. Then remove the worktree (confirm `pwd` is the main checkout root first — never remove one your own cwd is inside), delete the merged local branch, `herdr tab close <tab id>` last, only after verified-merged. Herdr has no auto-close; a stale open tab's worktree can vanish under it.
 
+   **Then check the parent spec — every time, as part of this same step, not a separate thing to remember later.** Read the closed ticket's `## Parent` reference. If it has one, find every sibling ticket naming the same parent (the tracker's native sub-issue list if it exposes one, otherwise `gh issue list --search` for the same Parent reference in the body) and check each is closed. If any sibling is still open, leave the spec alone and say so — nothing to flag yet. If every sibling ticket is closed, the spec is fully delivered, but **never close it and never touch its `ready-for-agent` label** — closing a parent is always the operator's call, this pipeline doesn't make it for them. Instead mark it so it's visually distinct from specs still in progress: comment on it listing every merged ticket/PR, and apply a `parent:done` label (`gh label create parent:done --color 5319E7 --force` once if missing, then `gh issue edit <spec-n> --add-label parent:done`). Tell the operator directly that the spec is ready to close — don't rely on them noticing the label on their own.
+
 ## Do not
 
 - Write product code, enter a worktree, or commit yourself.
@@ -86,5 +88,6 @@ During `/to-spec`, `/grill-with-docs`, and ticket classification, look up facts 
 - Run more than 3 concurrent OMP tabs without the operator saying so.
 - Send a HITL ticket to OMP.
 - Close a ticket's OMP tab before independently verifying its PR state is `MERGED`, or leave it open indefinitely after merge — Herdr never closes it for you.
+- Report a ticket, or the pipeline, "done" after closing a ticket without checking whether that was its parent spec's last open sibling. A fully-delivered spec left unmarked is the trap now — closing it yourself is not the fix, marking it `parent:done` and telling the operator is.
 
 If `$ARGUMENTS` is empty, ask one question: what is broken or missing, in one or two sentences. Then start at step 2.

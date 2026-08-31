@@ -225,9 +225,18 @@
     "pr-review-toolkit@claude-plugins-official": false,
     "ui-ux-pro-max@ui-ux-pro-max-skill": false,
     "typescript-lsp@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true,
+    "playwright@claude-plugins-official": false,
     "agentmemory@agentmemory": true,
-    "ponytail@ponytail": true
+    "ponytail@ponytail": true,
+    "codex@openai-codex": false,
+    "agent-skills@addy-agent-skills": false,
+    "minimalist-entrepreneur@minimalist-entrepreneur": false,
+    "social-media-skills@social-media-skills": false,
+    "postiz@skills-dir": false,
+    "cli-anything@cli-anything": false,
+    "fable-advisor@fable-advisor": false,
+    "cowork-plugin-management@inline": false,
+    "document-skills@anthropic-agent-skills": false
   },
   "deniedMcpServers": [],
   "extraKnownMarketplaces": {
@@ -257,5 +266,40 @@
       ]
     }
   },
-  "model": "{{ if eq .chezmoi.os `darwin` }}claude-opus-5[1m]{{ else }}sonnet{{ end }}"
+  "model": "{{ if eq .chezmoi.os `darwin` }}claude-opus-5[1m]{{ else }}sonnet{{ end }}",
+  "skillOverrides": {
+    "book-to-skill": "off",
+    "claude-handoff": "off",
+    "code-review": "off",
+    "diagnosing-bugs": "off",
+    "git-guardrails-claude-code": "off",
+    "grill-me": "off",
+    "handoff": "off",
+    "implement": "off",
+    "loop-me": "off",
+    "migrate-to-shoehorn": "off",
+    "prototype": "off",
+    "research": "off",
+    "scaffold-exercises": "off",
+    "setup-pre-commit": "off",
+    "setup-ts-deep-modules": "off",
+    "teach": "off",
+    "to-questionnaire": "off",
+    "triage": "off",
+    "wayfinder": "off",
+    "wizard": "off",
+    "writing-beats": "off",
+    "writing-fragments": "off",
+    "writing-shape": "off",
+    "debug-issue": "off",
+    "explore-codebase": "off",
+    "refactor-safely": "off",
+    "review-changes": "off",
+    "improve-codebase-architecture": "off",
+    "codebase-design": "off",
+    "resolving-merge-conflicts": "off",
+    "setup-matt-pocock-skills": "off",
+    "ask-matt": "off",
+    "tdd": "off"
+  }
 }

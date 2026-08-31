@@ -52,22 +52,6 @@ No further prompting needed when subagents are permitted:
 3. Bug fix or new feature - Use **tdd-guide** agent
 4. Architectural decision - Use **architect** agent
 
-## Parallel Task Execution
-
-When you are already spawning agents, run independent ones in parallel rather than
-in sequence. This governs HOW to spawn, never WHETHER to — see the warning above:
-
-```markdown
-# GOOD: Parallel execution
-Launch 3 agents in parallel:
-1. Agent 1: Security analysis of auth module
-2. Agent 2: Performance review of cache system
-3. Agent 3: Type checking of utilities
-
-# BAD: Sequential when unnecessary
-First agent 1, then agent 2, then agent 3
-```
-
 ## Multi-Perspective Analysis
 
 For complex problems, use split role sub-agents:

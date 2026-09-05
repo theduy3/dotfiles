@@ -28,9 +28,24 @@ hourly. Caught before any apply ran. Sessions (234M/141 files) archived at
 
 - **`claude`** — `~/.claude/skills` (111 symlinks → `.agents` + real dirs)
 - **`pi`** `@earendil-works/pi-coding-agent` 0.84.1 — loads `~/.agents/skills` natively
-- **`omp`** `@oh-my-pi/pi-coding-agent` 17.2.15 — loader registered as *"Load skills from
-  .agent/skills and .agents/skills (project walk-up + user home)"*. Runs via **bunx**, not the
-  npm-global copy. Config `~/.omp/agent/config.yml`, default role `openai-codex/gpt-5.6-sol`.
+- **`omp`** `@oh-my-pi/pi-coding-agent` 18.1.10 — loader registered as *"Load skills from
+  .agent/skills and .agents/skills (project walk-up + user home)"*. Config
+  `~/.omp/agent/config.yml`, default role `openai-codex/gpt-5.6-sol`.
+  🔥 **No longer bunx — the bunx alias was DELETED 2026-09-05.** `omp` is now a plain npm global at
+  `/opt/homebrew/bin/omp`. Two `alias omp=` lines were removed from `~/.zshrc` (backup
+  `~/.zshrc.bak-omp-20260905`); the dead one, `alias omp="node $(which omp)"`, called `which omp`
+  one line *before* the PATH export that made it resolvable.
+  ⚠️ **Why bunx had to go: the macOS TMPDIR reaper hollows a bunx cache and bun never repairs it.**
+  `bunx pkg@latest` unpacks to `$TMPDIR/bunx-501-<pkg>/`, and macOS reaps files there after ~3 days
+  but **leaves the directory skeletons standing**. Bun's cache-validity check sees the dirs and
+  skips re-download, so the tool is permanently broken until the cache dir is removed. Symptom was
+  `Cannot find module '@babel/parser'` — the dir existed with `bin/ lib/ typings/` all empty, 0B.
+  **113 of 141 cached packages were hollow.** This trap applies to ANY `bunx <pkg>` shell alias, not
+  just omp — prefer a global install for anything invoked daily.
+  ⚠️ **npm prefix is `/opt/homebrew`, NOT `~/.npm-global`.** `~/.npm-global/bin` is still on PATH
+  from an older config and held a stale 17.2.15 that PATH order could have silently served;
+  uninstalled 2026-09-05. Check `npm config get prefix` before assuming where a global landed.
+  Engine floor is `bun >=1.3.14` and the box is at exactly 1.3.14 — a bun downgrade breaks omp.
 - **`codex-router`** — 🛑 **DISABLED 2026-08-15 by owner decision ("i don't need the router").**
   Disabled with its own `./bin/disable` → `config-manager disable` + `service.mjs uninstall`: plist
   removed from `~/Library/LaunchAgents`, launchd unregistered, :4100–4103 free, no stray processes.

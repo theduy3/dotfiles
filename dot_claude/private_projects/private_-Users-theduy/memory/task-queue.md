@@ -33,33 +33,47 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       assertion count the dead legacy tender?) is on #1663's critical path; its deletion is not.
       **Do-nothing is defensible** — the cost is that prevention stays client-side.
 
-- [ ] **Storage audit — audit 6 CLOSED 2026-08-26, 24 GiB reclaimed.** Report (live, same URL):
-      https://claude.ai/code/artifact/bf3a6e2f-1d65-4608-97d0-d2ca6ad3d9a9 · local
-      `~/tasks/mac-inventory-audit.html`. Agent design: [[weekly-prune-agent]].
-      **98% / 4.8 GiB free → 86% / 29 GiB free** (168 GiB used). Trend: 95→92→80→81→83→93→98→**86%**.
-      `~/Library` **57G → 33G** (App Support 24→13, Caches 7.1→2.3, Containers 19→11).
-      ✅ **DOCKER DISCARD REACHES THE HOST — proven, stop assuming otherwise.** `Docker.raw` is
-      sparse (60G apparent / 18G allocated); pruning 8.1 GB *inside* the VM dropped the host file
-      **18G → 10G immediately, no restart**. ⇒ the weekly agent's dangling-only
-      `docker image prune -f` leaks **~8 GB/week**.
-      **→ STILL OPEN: add `docker image prune -a --filter until=168h` to
-      `~/.local/bin/weekly-prune.sh`.** `until=168h` protects freshly-pulled images — the safety
-      valve the original `-a` objection lacked. User approved a ONE-TIME `-a` on 2026-08-26; that is
-      **not** standing authorization to change the unattended cron. Ask first.
-      **Reclaimed, user ran the deletes** (all rm-blocked for Claude by `Bash(rm -rf *)` deny — do
-      NOT route around it): `Claude/vm_bundles` 9.1G, `com.docker.install/in_progress` 2.1G,
-      `Caches/Google` 3.3G, 4 updater caches 1.5G. `Application Support/Claude` is now 1.3G.
-      ⚠️ **`~/theduylifeos` 12G is still unaudited** — appeared between audits 5 and 6, never
-      investigated. Biggest remaining unknown in home.
-      ⚠️ **~61G is protected system data needing `sudo`** (denied) — 168 used vs ~107 measurable.
-      Never invent a breakdown for it.
-      Working, don't re-litigate: weekly-prune agent ran **2026-08-23, exit 0**, freed 2 GiB
-      (`runs=` resets on reboot — trust `~/.local/state/weekly-prune.log`, not launchctl); uv cache
-      **3.5G vs 5.12G cap**, uvx→pipx fix held; 0 APFS snapshots; 11 `supabase_*_salon365`
-      containers verified live after the prune; `rm -rf` deny enforcing.
-      ❌ **Retracted mid-session:** a `-9` in the `launchctl list` Status column is routine (launchd
-      kills idle on-demand agents that way); baseline here is **~200**. A `head -10` read made it
-      look like 9 anomalous crashes and got misreported as jetsam. **Count the whole list first.**
+- [ ] **Storage audit — audit 7, 2026-09-08. REGRESSED, nothing reclaimed yet.** Report (live,
+      same URL): https://claude.ai/code/artifact/bf3a6e2f-1d65-4608-97d0-d2ca6ad3d9a9 · local
+      `~/tasks/mac-inventory-audit.html`. Agent: [[weekly-prune-agent]].
+      **183 GiB used / 13 GiB free / 94%** — gave back 16 GiB in 13 days after audit 6's 86%.
+      Touched **100% / 1.9 GiB free mid-audit**, then recovered to 13 GiB **on its own** (macOS
+      purged under pressure — not my doing, do not credit any action for it).
+      Trend: 95→92→80→81→83→93→98→86→**94%**.
+      🔴 **THE WEEKLY AGENT IS NOW A NO-OP.** 2026-09-06 run logged `delta 0GiB`. Both branches fail
+      structurally: uv cache under the 5.12G cap → polite `prune` branch → 2 live `uv` procs held
+      the lock → skipped; then `docker image prune -f` found no dangling. Healthy, on schedule,
+      reclaims zero.
+      🆕 **11.4 GB ORPHANED SIMULATOR RUNTIMES — invisible to all 6 prior audits.**
+      `/Library/Developer/CoreSimulator` = 30G. **Xcode is NOT installed** (`xcode-select` →
+      CommandLineTools, no `Xcode.app` anywhere, `xcrun simctl` does not exist).
+      ⚠️ **TWO MEASUREMENT TRAPS — do not repeat:** (1) `du` on
+      `CoreSimulator/Volumes/{iOS_23C54,watchOS_23S303}` reports 24G, but those are **mounted sealed
+      read-only APFS volumes** (`/dev/disk5s1`, `/dev/disk7s1`) — `du` measured decompressed
+      content, and `rm -rf` cannot touch them. (2) They are **disk images**, not partitions
+      (`diskutil info` → `Virtual: Yes, Protocol: Disk Image`); only one physical disk exists
+      (251GB, container disk3 = 245.1GB). Real bytes = two `.dmg` under `/System/Library/AssetsV2/`
+      (`com_apple_MobileAsset_iOSSimulatorRuntime` **7.8G** +
+      `com_apple_MobileAsset_watchOSSimulatorRuntime` **3.6G**) = **11.4G, the honest figure**.
+      Removal needs `sudo` (denied) and must **detach the images first**
+      (`hdiutil detach /dev/disk5`, `/dev/disk7`) before deleting the assets.
+      🆕 **salonx `.worktrees` 5.6G — but do NOT delete worktrees.** 17 exist; **every one except
+      `slack-merge-deploy` is ahead of origin/main**, and `google-oauth-verify-jwt` has 6
+      uncommitted files. Only `slack-merge-deploy` (62M, detached HEAD, ahead=0, dirty=0) is safe to
+      remove. **The space is the `node_modules`:** 10 worktrees × ~526M = **4.6G**, regenerable with
+      `bun install`, zero risk to unmerged commits. Take those, keep every branch.
+      **Regenerated since audit 6** (deleting them is recurring, not permanent):
+      `com.docker.install/in_progress` **2.1G** back, `Caches/Google` **2.2G** back,
+      `App Support/Google` 7.1 → **10G**. Docker back to **14G with the daemon DOWN** — unprunable
+      without starting it, which the agent deliberately never does.
+      ✅ **RESOLVED — `~/theduylifeos` 12G is NOT waste.** Flagged unaudited in audits 5 and 6. It is
+      a business document vault (OptCo 3.5G, Education 3.4G, Projects 1.9G, HoldCo 1.8G, Personal
+      1.2G), one file >200M. Real user data. **Stop flagging it.**
+      **→ STILL OPEN from audit 6:** add `docker image prune -a --filter until=168h` to
+      `~/.local/bin/weekly-prune.sh`. Docker discard IS proven to reach the host (audit 6:
+      `Docker.raw` 18G→10G, no restart). One-time `-a` approval ≠ cron authorization; ask first.
+      ⚠️ Reclaim available ≈ **20G**, and **Claude can action almost none of it** —
+      `Bash(rm -rf *)` and `Bash(sudo *)` are both denied. Do NOT route around either.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

@@ -125,3 +125,30 @@ their volumes were not dangling — the waste was invisible to every prune. Remo
 
 ⚠️ `launchctl print ... | grep runs` resets to 1 on reboot. It is **not** evidence the agent stopped
 running — check `~/.local/state/weekly-prune.log` instead. It ran 2026-08-23, exit 0, freed 2 GiB.
+
+## 🔴 The agent became a no-op (audit 7, 2026-09-08)
+
+Run 2026-09-06 logged `=== done — 14GiB free (was 14GiB, delta 0GiB) ===`. **Both branches fail
+structurally, and the agent still reports healthy with exit 0:**
+
+- uv cache was **3087MB, under the 5120MB cap** → took the polite `prune` branch → **2 live `uv`
+  processes held the lock** → logged "skipping prune" → reclaimed 0.
+- `docker image prune -f` then found **no dangling images**, because the real waste is
+  tagged-but-unused.
+
+The cap never fires (the cache never reaches 5.12G) and the prune never succeeds (the lock is held
+during any agent session). **The two branches were meant to cover each other's blind spot; in
+practice neither fires.** Lower the cap, or accept that the agent reclaims only `brew cleanup`.
+
+At audit 7 the Docker daemon was also **down**, holding 14G. The agent deliberately never starts
+Docker, so it could not have reclaimed that either.
+
+## What the agent structurally cannot reach
+
+Audit 7 found ~20G reclaimable. The agent can address **none** of it:
+
+- **11.4G orphaned iOS/watchOS simulator runtimes** — under `/System/Library/AssetsV2/`, needs
+  `sudo`, and the mounted images must be detached with `hdiutil detach` first.
+- **4.6G of `node_modules` inside 10 salonx worktrees** — regenerable, but outside any cache path.
+- **2.1G `com.docker.install/in_progress` + 2.2G `Caches/Google`** — both *regenerated* after being
+  deleted in audit 6. Deleting them is recurring maintenance, not a one-time fix.

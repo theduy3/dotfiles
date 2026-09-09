@@ -27,6 +27,8 @@
 
 - [Memory Store Vanished + Restored](memory-store-restore.md) — 2026-09-08: `~/.claude/projects/-Users-theduy/memory/` was **entirely absent from disk** (all 59 files) after the 2026-08-27 config reorg; **chezmoi held every file, current**, at `dot_claude/private_projects/private_-Users-theduy/memory/`. Restore = `chezmoi apply --force <path>` (plain `apply` dies with "could not open a new TTY" when the target changed since chezmoi last wrote). ⚠️ **`~/.claude` shrank 3.8G→1.3G in that reorg — check chezmoi before assuming any config loss is real.**
 
+- [SIP Restricted + simctl Location](sip-restricted-and-simctl.md) — 🔑 **`Operation not permitted` under `sudo` = SIP owns the path** (`ls -ldO` shows `restricted`, `csrutil status` enabled) — **no sudo variant can ever work**, use the system's own manager. ⚠️ **`xcrun: not a developer tool` means UNRESOLVABLE, not missing** — `simctl` lives at `/Library/Developer/PrivateFrameworks/CoreSimulator.framework/Resources/bin/simctl` and runs with **no Xcode, no sudo**; `runtime delete <UUID>` is async (~15s) and reclaimed 30G where `sudo rm -rf` was refused
+
 ## Active Projects
 - [agentmemory Install](agentmemory-install.md) — v0.9.28 live 2026-08-04: plugin (15 skills/12 hooks/53 MCP tools) + launchd `com.theduy.agentmemory` on :3111/:3113; deliberately **zero-LLM** (Codex OAuth can't substitute; never write a non-working key — GEMINI_API_KEY breaks embeddings too)
 - [claude-mem Archive](claude-mem-archive.md) — claude-mem disabled 2026-08-07; its 42,390 obs + 3,490 summaries exported to greppable JSONL at ~/theduyvault/Notes/Claude-Context/claude-mem-archive/ (111M, 147 shards). **ripgrep is the working recall path** — agentmemory BM25 is degenerate. Trap: observations.text is NULL for every row.

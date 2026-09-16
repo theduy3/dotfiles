@@ -70,6 +70,21 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       ✅ **RESOLVED — `~/theduylifeos` 12G is NOT waste.** Business document vault (OptCo 3.5G,
       Education 3.4G, Projects 1.9G, HoldCo 1.8G, Personal 1.2G). Real user data. **Stop flagging.**
       ⚠️ ~54G remains protected system data needing `sudo` (denied). Never invent a breakdown.
+      **AUDIT 8 CLOSED 2026-09-15. ~26 GiB reclaimed, 81%.** 183 GiB used / 12 GiB free / 94%
+      → **157 GiB / 39 GiB / 81%**. Trend: 95→92→80→81→83→93→98→86→79→**81%** — the 6-day
+      regression (79→94%) was Docker.raw regrowth + uv cache + worktree node_modules.
+      Per-category: docker `system prune -a --volumes` after stopping 19 stale postgres
+      containers → 11.6G in-VM, `Docker.raw` 25G→14G on host (no restart needed, discard
+      reached host again); uv cache 5.7G→130M (killed 2 `uvx code-review-graph` lock-holders —
+      they respawn instantly under the MCP supervisor, so kill + `uv cache clean` must run in
+      ONE command to win the lock race); `.worktrees/*/node_modules` 5.3G deleted, all 26
+      worktrees kept (count grew 25→26); Chrome OptGuideOnDeviceModel 4.0G, Caches/Google 2.3G,
+      com.docker.install/in_progress 2.1G, claude versions ~800M (kept 2.1.268 only).
+      ✅ **weekly-prune.sh PATCHED:** `UV_CACHE_CAP_MB` 5120→3072 and `docker image prune -a
+      --filter until=168h` added before the dangling-only prune (audit-7-approved change).
+      `bash -n` clean. Volume prune still deliberately absent — volumes hold local DB state.
+      **Recurring, not one-time:** `com.docker.install/in_progress` and `Caches/Google` —
+      re-delete every audit.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

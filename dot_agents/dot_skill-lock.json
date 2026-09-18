@@ -1365,25 +1365,34 @@
       "skillFolderHash": "a2a05f1cef63f4aadfa8f76f68e4ce102b3b911a",
       "installedAt": "2026-08-28T16:11:49.954Z",
       "updatedAt": "2026-08-28T16:11:49.954Z"
+    },
+    "typesafe-ai": {
+      "source": "typesafe-ai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/typesafe-ai/skills.git",
+      "skillPath": "skills/typesafe-ai/SKILL.md",
+      "skillFolderHash": "678c375b883794bf4292715a43acbba5c84681aa",
+      "installedAt": "2026-09-18T05:37:59.221Z",
+      "updatedAt": "2026-09-18T05:37:59.221Z"
     }
   },
   "lastSelectedAgents": [
     "amp",
-    "antigravity",
-    "antigravity-cli",
     "cline",
     "codex",
     "cursor",
-    "deepagents",
+    "droid",
     "gemini-cli",
     "github-copilot",
+    "kilo",
     "kimi-code-cli",
     "opencode",
     "warp",
     "zed",
     "claude-code",
     "hermes-agent",
-    "pi"
+    "pi",
+    "devin"
   ],
   "dismissed": {
     "findSkillsPrompt": true

@@ -85,6 +85,21 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       `bash -n` clean. Volume prune still deliberately absent — volumes hold local DB state.
       **Recurring, not one-time:** `com.docker.install/in_progress` and `Caches/Google` —
       re-delete every audit.
+      **AUDIT 9 CLOSED 2026-09-18. ~17 GiB reclaimed, 86%.** 182 GiB used / 11 GiB free / 95%
+      → **165 GiB / 28 GiB / 86%**. Trend: 95→92→80→81→83→93→98→86→79→81→**86%**.
+      Per-category: docker `system prune -a --volumes` after stopping 11 unlabeled postgres
+      repro containers → 9.6G in-VM, `Docker.raw` 19G→10G on host (no restart); uv cache
+      3.1G→0B — ⚠️ **lock race is now UNWINNABLE by timing**: MCP supervisor respawns uvx in
+      <0.3s, faster than `uv cache clean` acquires the lock; clean parked on "in-use" twice.
+      Fix: `uv cache clean --force` (removed 73,416 files / 4.2GiB). Update playbook: kill +
+      `--force` in one command. `.worktrees/*/node_modules` 2.1G (4 dirs), 29 worktrees kept;
+      OptGuideOnDeviceModel 4.0G, Caches/Google 1.1G (one "not empty" retry — Chrome writing).
+      com.docker.install/in_progress absent this cycle; com.openai.codex shrank itself (2.2M).
+      🔴 **ROOT CAUSE OF RECURRING REGROWTH FOUND: weekly-prune.sh was never scheduled.**
+      `crontab -l` empty, no LaunchAgent — Sep 6 log was a manual run. Registered
+      `~/Library/LaunchAgents/com.theduy.weekly-prune.plist` (Sunday 08:00, matches log
+      timestamp); `launchctl list` confirms loaded. Next audit: check
+      `~/.local/state/weekly-prune.log` for a Sep 20+ entry to confirm it fires.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

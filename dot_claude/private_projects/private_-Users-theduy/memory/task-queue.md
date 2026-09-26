@@ -100,6 +100,17 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       `~/Library/LaunchAgents/com.theduy.weekly-prune.plist` (Sunday 08:00, matches log
       timestamp); `launchctl list` confirms loaded. Next audit: check
       `~/.local/state/weekly-prune.log` for a Sep 20+ entry to confirm it fires.
+      **AUDIT 10 CLOSED 2026-09-25. ~20 GiB reclaimed, 82%.** 180 GiB used / 13 GiB free /
+      94% → **160 GiB / 35 GiB / 82%**. Trend: 95→92→80→81→83→93→98→86→79→81→86→**82%**.
+      Per-category: docker `system prune -a --volumes` after stopping 4 unlabeled repro
+      containers (review2306-chain, rls2227-boot/chain, salon365-replay) → 10.2G in-VM,
+      `Docker.raw` 20G→9.9G host (no restart); uv 2.6G→876M via `clean --force` (35,279 files);
+      `.worktrees/*/node_modules` 1.6G (11 worktrees kept); OptGuideOnDeviceModel 4.0G,
+      Caches/Google 2.5G (one "not empty" retry), com.docker.install/in_progress 2.2G.
+      ✅ **LaunchAgent CONFIRMED FIRING:** Sep 20 08:00 log entry — audit 9 open item closed.
+      ⚠️ **Docker.raw is the dominant growth source** (10G→20G in ~3 days between audits):
+      daily repro-container churn outpaces the weekly 168h image prune. If 94% recurs before
+      next audit, consider tightening the filter or running audits more often.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

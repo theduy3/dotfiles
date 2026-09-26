@@ -124,6 +124,7 @@ export async function createPost(args: any) {
     // Build the proper post structure
     postData = {
       type: args.type || 'schedule', // 'schedule' or 'draft'
+      creationMethod: 'CLI',
       date: args.date, // Required date field
       shortLink: args.shortLink !== false,
       tags: [],
@@ -200,6 +201,39 @@ export async function changePostStatus(args: any) {
     return result;
   } catch (error: any) {
     console.error('❌ Failed to change post status:', error.message);
+    process.exit(1);
+  }
+}
+
+export async function updatePostSettings(args: any) {
+  const config = getConfig();
+  const api = new PostizAPI(config);
+
+  if (!args.id) {
+    console.error('❌ Post ID is required');
+    process.exit(1);
+  }
+
+  if (!args.settings) {
+    console.error('❌ --settings is required');
+    process.exit(1);
+  }
+
+  let settings: any;
+  try {
+    settings = JSON.parse(args.settings);
+  } catch (error: any) {
+    console.error('❌ Failed to parse settings JSON:', error.message);
+    process.exit(1);
+  }
+
+  try {
+    const result = await api.updatePostSettings(args.id, settings);
+    console.log(`✅ Post ${args.id} settings updated`);
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  } catch (error: any) {
+    console.error('❌ Failed to update post settings:', error.message);
     process.exit(1);
   }
 }

@@ -157,6 +157,13 @@ export class PostizAPI {
     });
   }
 
+  async updatePostSettings(postId: string, settings: Record<string, any>) {
+    return this.request(`/public/v1/posts/${postId}/settings`, {
+      method: 'PUT',
+      body: JSON.stringify({ settings }),
+    });
+  }
+
   async getAnalytics(integrationId: string, date: string) {
     return this.request(`/public/v1/analytics/${integrationId}?date=${encodeURIComponent(date)}`, {
       method: 'GET',
@@ -169,8 +176,15 @@ export class PostizAPI {
     });
   }
 
-  async listIntegrations() {
-    return this.request('/public/v1/integrations', {
+  async listIntegrations(group?: string) {
+    const query = group ? `?group=${encodeURIComponent(group)}` : '';
+    return this.request(`/public/v1/integrations${query}`, {
+      method: 'GET',
+    });
+  }
+
+  async listGroups() {
+    return this.request('/public/v1/groups', {
       method: 'GET',
     });
   }
@@ -189,6 +203,31 @@ export class PostizAPI {
     return this.request(`/public/v1/integration-trigger/${integrationId}`, {
       method: 'POST',
       body: JSON.stringify({ methodName, data }),
+    });
+  }
+
+  async createClipping(data: {
+    url: string;
+    integrations?: string[];
+    clips?: number;
+    fit?: 'crop' | 'blur';
+  }) {
+    return this.request('/public/v1/clipping', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async listClippings(page?: number) {
+    const query = page ? `?page=${encodeURIComponent(String(page))}` : '';
+    return this.request(`/public/v1/clipping${query}`, {
+      method: 'GET',
+    });
+  }
+
+  async getClipping(id: string) {
+    return this.request(`/public/v1/clipping/${id}`, {
+      method: 'GET',
     });
   }
 }

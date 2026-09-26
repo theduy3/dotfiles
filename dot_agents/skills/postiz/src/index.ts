@@ -1,9 +1,10 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { createPost, listPosts, deletePost, getMissingContent, connectPost, changePostStatus } from './commands/posts';
-import { listIntegrations, getIntegrationSettings, triggerIntegrationTool } from './commands/integrations';
+import { createPost, listPosts, deletePost, getMissingContent, connectPost, changePostStatus, updatePostSettings } from './commands/posts';
+import { listIntegrations, listGroups, getIntegrationSettings, triggerIntegrationTool } from './commands/integrations';
 import { getAnalytics, getPostAnalytics } from './commands/analytics';
 import { uploadFile } from './commands/upload';
+import { createClipping, listClippings, getClipping } from './commands/clipping';
 import { authLogin, authLogout, authStatus } from './commands/auth';
 import type { Argv } from 'yargs';
 
@@ -203,6 +204,31 @@ yargs(hideBin(process.argv))
     changePostStatus as any
   )
   .command(
+    'posts:settings <id>',
+    'Update a post\'s provider-specific settings (merged; only unpublished draft/scheduled posts)',
+    (yargs: Argv) => {
+      return yargs
+        .positional('id', {
+          describe: 'Post ID',
+          type: 'string',
+        })
+        .option('settings', {
+          describe: 'Partial settings as a JSON string — only the keys you pass change; do not include __type',
+          type: 'string',
+          demandOption: true,
+        })
+        .example(
+          '$0 posts:settings post-123 --settings \'{"content_posting_method":"DIRECT_POST"}\'',
+          'Switch a TikTok draft to direct publishing'
+        )
+        .example(
+          '$0 posts:settings post-123 --settings \'{"subreddit":[{"value":{"subreddit":"/r/selfhosted","title":"My title","type":"self","is_flair_required":true}}]}\'',
+          'Set a Reddit post\'s subreddit'
+        );
+    },
+    updatePostSettings as any
+  )
+  .command(
     'posts:connect <id>',
     'Connect a post to its published content by updating the release ID',
     (yargs: Argv) => {
@@ -226,8 +252,25 @@ yargs(hideBin(process.argv))
   .command(
     'integrations:list',
     'List all connected integrations',
-    {},
+    (yargs: Argv) => {
+      return yargs
+        .option('group', {
+          describe: 'Filter integrations by group (customer) ID',
+          type: 'string',
+        })
+        .example('$0 integrations:list', 'List all connected integrations')
+        .example(
+          '$0 integrations:list --group "customer-id"',
+          'List integrations for a specific group'
+        );
+    },
     listIntegrations as any
+  )
+  .command(
+    'integrations:groups',
+    'List all groups (customers)',
+    {},
+    listGroups as any
   )
   .command(
     'integrations:settings <id>',
@@ -346,6 +389,73 @@ yargs(hideBin(process.argv))
         .example('$0 upload ./image.png', 'Upload an image');
     },
     uploadFile as any
+  )
+  .command(
+    'clipping:create <url>',
+    'Turn a long YouTube video into short vertical clips with captions',
+    (yargs: Argv) => {
+      return yargs
+        .positional('url', {
+          describe: 'URL of the YouTube video',
+          type: 'string',
+        })
+        .option('integrations', {
+          alias: 'i',
+          describe: 'Comma-separated list of integration IDs to create a draft post for every clip (without it the clips only land in the media library)',
+          type: 'string',
+        })
+        .option('clips', {
+          alias: 'n',
+          describe: 'Maximum number of clips, 1-10 (default: 5)',
+          type: 'number',
+        })
+        .option('fit', {
+          alias: 'f',
+          describe: 'How the horizontal video fills the vertical clip: "blur" keeps the whole picture over a blurred copy of itself, "crop" fills the clip and cuts the sides (default: blur)',
+          type: 'string',
+          choices: ['blur', 'crop'],
+        })
+        .example(
+          '$0 clipping:create "https://www.youtube.com/watch?v=VIDEO_ID"',
+          'Clip a video into the media library'
+        )
+        .example(
+          '$0 clipping:create "https://www.youtube.com/watch?v=VIDEO_ID" -n 3 -f crop -i "tiktok-123,instagram-456"',
+          'Make up to 3 cropped clips and draft them on two channels'
+        );
+    },
+    createClipping as any
+  )
+  .command(
+    'clipping:list',
+    'List all clippings',
+    (yargs: Argv) => {
+      return yargs
+        .option('page', {
+          alias: 'p',
+          describe: 'Page number, 20 clippings per page (default: 1)',
+          type: 'number',
+        })
+        .example('$0 clipping:list', 'List the latest clippings')
+        .example('$0 clipping:list --page 2', 'List the second page');
+    },
+    listClippings as any
+  )
+  .command(
+    'clipping:status <id>',
+    'Get the status of a clipping and its clips',
+    (yargs: Argv) => {
+      return yargs
+        .positional('id', {
+          describe: 'Clipping ID returned by clipping:create',
+          type: 'string',
+        })
+        .example(
+          '$0 clipping:status clipping-123',
+          'Check the progress and get the clip URLs'
+        );
+    },
+    getClipping as any
   )
   .command(
     'auth:login',

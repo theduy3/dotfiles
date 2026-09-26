@@ -106,6 +106,8 @@ re-derive: check `bun src/extract.ts --report` first.
 **How to apply manually:** `--run <slug>` appends CONSTRAINED_BY edges to
 `~/tasks/.s-run/edges.jsonl` (append-only). Read the payoff with
 `jq -r '.edge' ~/tasks/.s-run/edges.jsonl | sort | uniq -c`. No pipeline writes to it any
-more, so don't cite a ratio. ⚠️ `extract.ts` and `recall.ts --run` read/write
-`~/tasks/.s-run/` — deleting that dir breaks both.
+more, so don't cite a ratio. ⚠️ **`~/tasks/.s-run/` was deleted 2026-09-25** (operator OK),
+so `extract.ts` and `recall.ts --run` have no input/output dir until repointed. All 89 files
+are recoverable from `~/tasks` git: archived in `04b596b`, removed in `18a7ef9`
+(`git -C ~/tasks checkout 04b596b -- .s-run`).
 Related: [[bg-isolation-guard-scope]], [[task-queue]].

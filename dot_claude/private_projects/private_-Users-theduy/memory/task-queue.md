@@ -114,7 +114,8 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       still shipped two HIGHs, because both grills asked reference-axis questions and never a
       dimensional-axis one.
 - [ ] **Lesson candidates to author** (staged, not written to the store) — full text and S4.5's
-      keep/sharpen/drop dispositions are in `~/tasks/.s-run/run-provenance-1b.md`. Headline new
+      keep/sharpen/drop dispositions were in `~/tasks/.s-run/run-provenance-1b.md` (dir deleted
+      2026-09-25; recover with `git -C ~/tasks show 04b596b:.s-run/run-provenance-1b.md`). Headline new
       one: *when a plan writes a comparison or an "N of M", name where each operand is counted and
       prove both count the same thing.* Three instances in one plan, each survived two grills and
       a green suite.

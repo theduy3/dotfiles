@@ -1,6 +1,6 @@
 ---
 name: gsd-offbox-pipeline
-description: "Off-box GSD coder replacing the /s* SOP for salonx-engineer — GitHub Actions + headless Claude Code, triggered from Paperclip"
+description: "Off-box GSD coder replacing the in-container CODING-SOP for salonx-engineer — GitHub Actions + headless Claude Code, triggered from Paperclip"
 metadata: 
   node_type: memory
   type: project
@@ -178,7 +178,7 @@ ask Product Lead OR Engineer (Discord, Opus) → creates WYL issue (engineer, to
 ---
 ## History (debugging journey — how we got here)
 
-Decision (2026-06-20): replace the salonx-engineer in-container `/s*` CODING-SOP build with **real GSD run off-box on GitHub Actions**, driven by **headless Claude Code** (`claude -p`), **gsd-quick per WYL issue**, auth via **Claude Code OAuth token** (`claude setup-token` → `CLAUDE_CODE_OAUTH_TOKEN` secret, NOT API key — user's choice). Why off-box: GSD's engine = parallel fresh-context subagents; the Bluehost box has only ~800 MiB free + OOM history, and has NO host CLI (claude/codex/opencode/gemini all MISSING; only `@opengsd/gsd-core@1.5.0` installed, which is inert markdown without a host). See [[hermes-wylios-coding-pipeline]].
+Decision (2026-06-20): replace the salonx-engineer in-container CODING-SOP build with **real GSD run off-box on GitHub Actions**, driven by **headless Claude Code** (`claude -p`), **gsd-quick per WYL issue**, auth via **Claude Code OAuth token** (`claude setup-token` → `CLAUDE_CODE_OAUTH_TOKEN` secret, NOT API key — user's choice). Why off-box: GSD's engine = parallel fresh-context subagents; the Bluehost box has only ~800 MiB free + OOM history, and has NO host CLI (claude/codex/opencode/gemini all MISSING; only `@opengsd/gsd-core@1.5.0` installed, which is inert markdown without a host). See [[hermes-wylios-coding-pipeline]].
 
 **Architecture (additive-then-subtractive cutover):** Paperclip WYL issue (assigned to engineer, `todo`) → featherweight bridge on Bluehost fires `repository_dispatch` type `gsd-task` (spec rides in client_payload, so the runner never needs Paperclip's localhost API) → GH Actions `gsd-runner.yml` (ephemeral, ~7GB, isolated) installs claude-code+gsd, drives gsd-quick headless, opens PR `WYL-N`, posts `#product-dev` forum thread → **existing `approval-poller.py` + `deploy.yml` handle approve→CI-gated squash-merge→prod, UNCHANGED.** GSD only replaces the BUILD (s1→s6b); the approve/merge/deploy chassis is reused. Contract GSD must satisfy: open a PR + post #product-dev referencing WYL-N.
 

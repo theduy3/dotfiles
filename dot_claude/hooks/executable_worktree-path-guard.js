@@ -11,7 +11,7 @@
 // Triggers on: Edit, Write, and MultiEdit tool calls
 // Action: BLOCK (exit 2) if file_path is absolute and outside the worktree root
 // No-op: relative paths, non-worktree CWDs, hook errors (silent fail)
-// Harvested from gsd-worktree-path-guard.js (logic unchanged) during /s* consolidation 2026-06-11.
+// Harvested from gsd-worktree-path-guard.js (logic unchanged) 2026-06-11.
 
 const fs = require('fs');
 const path = require('path');

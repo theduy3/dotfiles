@@ -74,8 +74,8 @@ hourly. Caught before any apply ran. Sessions (234M/141 files) archived at
   `cd ~/.local/share/codex-router && ./bin/install --prepare-only` → regenerates secrets,
   `litellm.yaml`, catalogs; then `launchctl bootout` + `bootstrap`.
   **Use `--prepare-only`, NOT `./bin/doctor --fix`** — the latter is `bin/install --force-deps`,
-  which forces `npm ci` *and* a fresh `uv pip install litellm`, repopulating the uv cache
-  (see [[claude-minimal-s-runtime]]). Plain `bin/install` also refuses to run while
+  which forces `npm ci` *and* a fresh `uv pip install litellm`, repopulating the uv cache.
+  Plain `bin/install` also refuses to run while
   **no provider credential is configured**, which is the state this box is in — the router serves
   loopback health but has zero upstream routes until `./bin/setup --guided` + `./bin/enable`.
 

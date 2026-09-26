@@ -30,8 +30,6 @@ wish — the model re-decides it each run. Put it in a graph edge or middleware 
 Inverse: a graph node with a dozen tools and a self-edge is a hand-rolled agent loop.
 
 **Mapping onto this user's systems (from CLAUDE.md + memory, 2026-08-06):**
-- `/s-auto` = LangGraph-shaped spine (fixed S2→S5 order, 5 halt conditions, `.s-run`
-  resume file) with Deep-Agent nodes. See [[plugin-routing-priorities]], [[s-star-pipeline-guide]].
 - Lesson-store recall (`bun recall.ts`, ranks + caps at 7) is correctly a **fixed step**,
   not an LLM decision. See [[graph-engineering-lesson-store]].
 - Hermes/Wylios persona fleet = pure Deep Agents (per-persona memory, ambient triggers).

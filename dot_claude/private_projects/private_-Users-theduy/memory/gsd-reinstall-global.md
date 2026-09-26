@@ -8,7 +8,7 @@ metadata:
 ---
 
 GSD ("Get Shit Done") was reinstalled **globally** for Claude Code on 2026-06-10 (user wants
-it as main workflow; only the global install step done — Superpowers/`/s*`/ECC overlap
+it as main workflow; only the global install step done — Superpowers/ECC overlap
 reconciliation deferred). Supersedes the "GSD removed 2026-06-08" claim in
 [[plugin-routing-priorities]] and worktree-and-vault.md — those docs are now stale pending the
 user's final orchestrator decision.

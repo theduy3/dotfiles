@@ -2,17 +2,10 @@
 
 ## Custom Slash Commands (21 total)
 
-### Workflow Commands (s-series + shipping pipelines)
+### Workflow Commands (shipping pipelines)
 | Command | Purpose |
 |---------|---------|
-| /s0-brainstorm | Brainstorm + design feature, output `tasks/spec-<task-name>.md`, hand off to /s1-plan |
-| /s1-plan | Plan in main repo then create worktree after approval (task-specific plan file bridges context clears via metadata block) |
-| /s2-preview | Preview app locally |
-| /s3-verify-app | Verify app on current branch |
-| /s4-techdebt-simplify | Tech debt scan + code simplification |
-| /s5-update-claude-md | Review session, update CLAUDE.md |
-| /s6-commit-push-pr | Commit, push, create PR |
-| /s9-cleanup | Clean up after PR merge |
+| /planmp | Planning loop (Matt Pocock package): spec → grill → tickets → delegate |
 | /full-ship | End-to-end worktree pipeline — brainstorm, plan, implement, ship, deploy |
 | /auto-ship | Full pipeline after implementation: ship then deploy, agent-driven |
 | /ship-agents | Agent-orchestrated shipping; each step an isolated subagent with model routing |

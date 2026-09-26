@@ -8,8 +8,7 @@
 #      project-scoped MCP servers are registered AND opted into. Missing
 #      .mcp.json means the server is not registered at all; missing
 #      settings.local.json means it is registered but not enabled. Both
-#      are required for the server to load (e.g. code-review-graph in salonx,
-#      which /s4-review depends on).
+#      are required for the server to load (e.g. code-review-graph in salonx).
 # Never blocks Claude: every error path exits 0.
 
 # Require jq for JSON parsing

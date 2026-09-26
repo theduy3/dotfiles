@@ -45,8 +45,8 @@ template and live in sync.
   allow rules, cannot work. And never route around it with `rm -r` / `find -delete` — that evades
   a control the owner set.
 
-**Confirmed live 2026-07-18** (/s* verify, user-observed): `Edit(/Users/theduy/tasks/.s-run/**)`
-**allow** rule suppressed every prompt for Write-tool calls to that path during the whole
+**Confirmed live 2026-07-18** (user-observed): an absolute-path `Edit(/Users/theduy/tasks/...)`
+**allow** rule suppressed every prompt for Write-tool calls to that path during a whole
 autonomous run — absolute-path glob form works, and Edit() covering the Write tool is exactly
 why. A redundant `Write(...)` twin rule added alongside it was removed same day (inert +
-startup-warning noise). The /s* promptless tail depends on this rule; see [[plugin-routing-priorities]].
+startup-warning noise).

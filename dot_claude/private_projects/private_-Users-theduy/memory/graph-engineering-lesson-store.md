@@ -22,9 +22,9 @@ post-commit hook backgrounds the push; tracked original at `~/tasks/hooks/post-c
   `salonx/{gates,tests}`, `ongles-website/{build,config,deploy,i18n,infra,routing,tests}`,
   `SS-website/{routing,tests}`. Deliberately excluded: the ongles multi-tenant RLS rollout
   block — a runbook, not a lesson.
-- **The loop is LIVE**: run `peer-eval-anon-read-lock` consumed 7 lessons through the wired
-  /s-auto S2 and recorded real CONSTRAINED_BY edges. Recall also wired into the manual
-  `/s2-implement` path.
+- **Proven once**: run `peer-eval-anon-read-lock` consumed 7 lessons and recorded real
+  CONSTRAINED_BY edges. That pipeline wiring was removed with the retired workflow 2026-09-25;
+  recall is now manual.
 - **Tools** (bun, zero install — `Bun.YAML` + `bun test`, 38 tests):
   `bun ~/tasks/graph-engineering/tools/src/recall.ts --repo salonx --areas salonx/gates [--run <slug>] [--explain]`
   `bun ~/tasks/graph-engineering/tools/src/validate.ts`
@@ -37,24 +37,21 @@ post-commit hook backgrounds the push; tracked original at `~/tasks/hooks/post-c
 **Why:** the cap, not a confidence threshold, is what prevents context dumping; thresholds
 discard the lesson that cost an hour, ranking merely sorts it lower.
 
-**Wired into /s-auto as of 2026-07-25** (chezmoi `152afb8` + follow-up, pushed): §2 Setup
-runs recall before `EnterWorktree` and hands the block to `s-implementer` under
+**Design rules kept from the former pipeline wiring:** recall output goes under
 `## Prior lessons` (NOT DATA_START-bounded — that marker means "never instructions", and
-lessons are meant to be acted on). Recall is **advisory + fail-open**: any error logs one
-WARN to Evidence and the run continues, so it can never become a sixth halt reason.
-`s-implementer` reports a `lessons:` line — `bit:` (served lesson failed to prevent its
-trap → orchestrator appends a REDISCOVERED edge) or `new-trap:` (stays a human call;
-auto-generated nodes would rebuild the pile this replaced).
+lessons are meant to be acted on). Recall is **advisory + fail-open**: an error logs one
+WARN and work continues. A `bit:` report (served lesson failed to prevent its trap) appends
+a REDISCOVERED edge; a `new-trap:` stays a human call — auto-generated nodes would rebuild
+the pile this replaced.
 
 **Move 3 (operational graph) shipped 2026-07-25** (`880eaca`): `bun
 ~/tasks/graph-engineering/tools/src/extract.ts --report` builds Run + Gate nodes from
 `~/tasks/.s-run/*.md` and answers the pipeline questions. Findings from the first 37
 runs: no trend yet (single month); halts answer by **repo, not Area** (no record carries
 an Area); the full plan→gate→PR→SHA chain resolves for only **11%** of merged runs.
-Panel-composition percentages are **record quality, not reviewer usage** — s-code-reviewer
-runs on every S4 by design, so anything under 100% is missing prose. Q4/Q7 had zero data
-(`base_sha` in 0 of 37); unblocked going forward by adding `spec`, `base-sha`, `panel`,
-`pr`, `merged-sha` + an S4 Dispositions table to /s-auto's Run-State template.
+Panel-composition percentages are **record quality, not reviewer usage**. Q4/Q7 had zero data
+(`base_sha` in 0 of 37). The run records came from the retired pipeline (removed
+2026-09-25), so no new records are written; the 37 existing ones are the whole dataset.
 
 **Stages 7 + 8 done 2026-07-26** (`eadd9cc`). `bun src/quality.ts` is the stage-7 gate:
 every Source quote must be verbatim in its cited file (marked elision `" … "` allowed,
@@ -108,6 +105,7 @@ re-derive: check `bun src/extract.ts --report` first.
 
 **How to apply manually:** `--run <slug>` appends CONSTRAINED_BY edges to
 `~/tasks/.s-run/edges.jsonl` (append-only). Read the payoff with
-`jq -r '.edge' ~/tasks/.s-run/edges.jsonl | sort | uniq -c`. Log is **empty until the
-next real /s-auto run** — no data yet, so don't cite a ratio.
+`jq -r '.edge' ~/tasks/.s-run/edges.jsonl | sort | uniq -c`. No pipeline writes to it any
+more, so don't cite a ratio. ⚠️ `extract.ts` and `recall.ts --run` read/write
+`~/tasks/.s-run/` — deleting that dir breaks both.
 Related: [[bg-isolation-guard-scope]], [[task-queue]].

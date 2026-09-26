@@ -2,7 +2,7 @@
 # format-on-edit — PostToolUse hook (Edit|Write|MultiEdit)
 # Auto-formats the edited file IF a formatter already resolves locally/globally.
 # Fail-open by design: never blocks, never auto-installs, silent on miss.
-# Harvested idea from ECC post:quality-gate during /s* consolidation 2026-06-11.
+# Harvested idea from ECC post:quality-gate 2026-06-11.
 
 # Read hook JSON from stdin; extract file_path. Exit 0 on any parse trouble.
 input="$(cat 2>/dev/null)" || exit 0

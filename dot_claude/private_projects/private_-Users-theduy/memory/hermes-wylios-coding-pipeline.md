@@ -7,7 +7,7 @@ metadata:
   originSessionId: 35b95f60-5b5d-46eb-9d7e-9be41c0e4681
 ---
 
-Audited 2026-06-20. The salonx-engineer Hermes profile runs a real autonomous s1→s9 coding pipeline — a port of theduy's local `/s0`–`/s9` Claude Code worktree workflow.
+Audited 2026-06-20. The salonx-engineer Hermes profile runs a real autonomous coding pipeline — a port of theduy's former local Claude Code worktree workflow.
 
 **Flow:** Discord #s0 brainstorm → **Paperclip** WYL issue (the approved spec; Paperclip = issue tracker, embedded-PG :54329, NOT the executor) → **kanban** task (board `default`, assignee `salonx-engineer`) → gateway dispatcher (`dispatch_in_gateway: true`, 60s) claims → engineer follows **`~/.hermes/work/CODING-SOP.md`** → worktree under `~/.hermes/work/wt/<slug>` off `origin/main` on repo `~/.hermes/work/salonx` (github.com/Wylios-Dev/salonx) → TDD build → verify → PR via GitHub REST API (gh NOT installed) → announces PR as Discord forum post in #product-dev → `approval_mode: ask` (HERMES_APPROVAL_MODE=ask) → human replies "approve" on Discord → gateway merges (worker never merges/waits/cleans). Proven: PR #653 opened; real task `wyl-15-ticket-delete-error` worktree exists.
 

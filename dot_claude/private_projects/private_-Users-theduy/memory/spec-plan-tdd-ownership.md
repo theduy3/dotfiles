@@ -7,8 +7,7 @@ metadata:
   originSessionId: 9a1a5747-86a7-402b-8c12-22ef2aab485d
 ---
 
-The `/spec` → `/plan` → implement → merge workflow (see [[consolidation-into-s-star]],
-spec at `~/tasks/spec-spec-tdd-workflow.md`) splits ownership at the `plan-approved` seam:
+The `/spec` → `/plan` → implement → merge workflow (spec at `~/tasks/spec-spec-tdd-workflow.md`) splits ownership at the `plan-approved` seam:
 
 - **Human owns (interactive, grilled, approval gates):** `/spec` and `/plan` only.
   User grills requirements + sequencing, approves, flips `status: plan-approved`.

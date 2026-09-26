@@ -18,4 +18,4 @@ Global PreToolUse hook `~/.claude/hooks/gsd-phase-worktree-guard.js` (matcher `W
 
 **Wiring is template-owned:** lives in `settings.json.tmpl` (after `worktree-path-guard`), NOT a manual edit to live `settings.json` — `chezmoi apply` reverts live edits (see [[claude-config-chezmoi-sync]]). Hook file is chezmoi-managed as `executable_gsd-phase-worktree-guard.js`. Pushed to theduy3/dotfiles `5ee8c63`.
 
-Related: [[claude-config-chezmoi-sync]] (edit .tmpl not live), [[gsd-orphan-project-hooks-crash]] (fail-open is load-bearing), [[feedback_worktree_branch_safety]]. Distinct from `/s*`'s `worktree-required-guard.js` (armed by `tasks/todo-*.md` status); this one is GSD-armed by STATE.md.
+Related: [[claude-config-chezmoi-sync]] (edit .tmpl not live), [[gsd-orphan-project-hooks-crash]] (fail-open is load-bearing), [[feedback_worktree_branch_safety]]. Distinct from the deleted `worktree-required-guard.js` (armed by `tasks/todo-*.md` status); this one is GSD-armed by STATE.md.

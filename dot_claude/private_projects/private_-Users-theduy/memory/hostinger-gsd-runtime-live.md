@@ -23,7 +23,7 @@ harness change is hand-wired and persists independently.
 The 2026-08-07 GSD removal was **Mac-only**. Five days later Hostinger still ran the complete
 pre-removal generation: **71 `gsd-*` skills, 34 `gsd-*` agents, 15 wired hook entries across 12
 distinct scripts (25 `gsd-*` scripts on disk), a 7.3M `~/.claude/gsd-core/`, and a
-`Bash(npx gsd-core *)` permission rule** — while `/s*` was also installed. Both loop owners
+`Bash(npx gsd-core *)` permission rule** — while another loop owner was also installed. Both loop owners
 resolved simultaneously on the always-on unattended box, violating the one-loop-owner rule in
 `~/CLAUDE.md` (whose "all `/gsd-*` commands are gone" was true of the Mac only).
 The engine was already gone (`~/.gsd` and `@opengsd` npm both absent) but the wiring was live, so
@@ -33,7 +33,7 @@ the hooks cost latency per tool call while protecting nothing — fail-open, sam
 ✅ **RESOLVED 2026-08-12.** Mirrored the Mac removal. Backup **`/root/.claude/.gsd-removal-backup-20260812`**
 (8.8M: skills/ agents/ hooks/ gsd-core/ settings.json) — restore by copying back.
 Verified after: settings.json parses, 16 hook entries, **0** gsd refs, **0 dangling hook targets**,
-`/s*` intact (8 skills + 10 `s-*` agents), claude 2.1.227 runs, herdr active.
+claude 2.1.227 runs, herdr active.
 Counts went 134→63 skills, 88→54 agents, 60→35 hooks.
 
 ⚠️ **`~/.claude.json` was deliberately NOT touched** — the Mac still has 24 `gsd-` hits there, so it
@@ -51,8 +51,8 @@ GSD one at `[4]`. **Anchor every match on `/gsd-`** or a loose filter deletes th
 
 **Incident 2026-08-12:** that rule was deleted as "stale GSD residue" (its comment said GSD was
 regenerable, which read as obsolete). Within the hour the Mac restored 31 agents at 11:22 and both
-VPSes pulled them at 19:00Z — silently undoing the same-day Hostinger cleanup and putting `/s*` and
-`/gsd-*` back in competition everywhere. Rule restored in `618ad55` with a load-bearing warning;
+VPSes pulled them at 19:00Z — silently undoing the same-day Hostinger cleanup and putting
+`/gsd-*` back in competition with the local loop everywhere. Rule restored in `618ad55` with a load-bearing warning;
 deployed copies removed by hand on all three boxes (Mac→55 agents, Hostinger→54, Bluehost→53).
 
 ⚠️ **`.chezmoiignore` BEATS `.chezmoiremove`.** An ignored path is excluded from the target state
@@ -68,14 +68,14 @@ both the ignore rule and the explanatory note in `.chezmoiremove` can be dropped
 
 Because it had never synced (see the PATH bug in [[codex-claude-inventory-mirror]]), Bluehost kept
 its own GSD generation: 69 gsd skills, 19 gsd hook scripts, 16 hook entries + 1 permission rule in
-settings.json, 6.2M `gsd-core/`, 34 gsd agents — engine gone, wiring live, `/s*` also present.
+settings.json, 6.2M `gsd-core/`, 34 gsd agents — engine gone, wiring live.
 It is a production box (hermes-wylios, hermes-dashboard, hermes-autoheal, agentmemory-main).
 It still carried `gsd-phase-worktree-guard.js`, which the Mac deleted 2026-08-07 — confirming an
 older generation than Hostinger's.
 
 Removed, backup at **`/root/.claude/.gsd-removal-backup-20260812`** (7.2M: skills/ hooks/ agents/
 gsd-core/ settings.json). Verified after: settings parses, 16 entries, 0 gsd refs, 0 dangling hook
-targets, neutral `worktree-*-guard` hooks intact, `/s*` 8 skills, claude 2.1.220 runs.
+targets, neutral `worktree-*-guard` hooks intact, claude 2.1.220 runs.
 
 **All three boxes now read 0 gsd agents / 0 gsd skills / 0 gsd settings refs** —
 Mac 55 agents, Hostinger 54, Bluehost 53.

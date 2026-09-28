@@ -62,7 +62,7 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 - Skip for simple, obvious fixes — don't over-engineer
 
 ### Self-Improvement
-- After ANY correction: update `tasks/lessons.md` in the **active project**
+- After ANY correction: update `docs/lessons/agent-corrections.md` in the **active project**
 - Write rules that prevent the same mistake recurring
 - Format: category header, one-line rule, commit hash. Keep it scannable.
 
@@ -70,17 +70,17 @@ Pick the cheapest tool that can do the job; escalate only when blocked.
 
 > **Claude thinks, OMP builds.** Both run in herdr panes.
 
-- **Claude owns the front half**: brainstorm → interview → spec (`tasks/spec-<topic>.md`) → plan
-  (`tasks/todo-<topic>.md`) → adversarial review of both. Stop at an approved plan.
+- **Claude owns the front half**: brainstorm → interview → spec (the epic bean's body) → plan
+  (the epic's child beans) → adversarial review of both. Stop at an approved plan.
 - **OMP owns the back half** (`omp`, @oh-my-pi): implement, test, commit, PR. Hand off by pointing it
-  at the approved `tasks/todo-<topic>.md`.
+  at the approved epic bean (`beans show <epic-id>`).
 - Claude implements only when told to directly ("do it here"). Default is hand-off, not execution.
 - No autonomous ship loop on the Claude side. Claude does not merge.
 - ⚠️ `~/.codex` is OMP's live state (Codex protocol client) — never delete it.
 
 ### Worktree & Vault
 - Isolate with the built-in `EnterWorktree` before editing a shared checkout.
-- Specs → `tasks/spec-*.md`, plans → `tasks/todo-*.md`.
+- Specs and plans live in **beans** (`.beans/`): the spec is the epic bean's body, the plan is its child beans. No `spec-*.md` / `todo-*.md` files.
 - Details, including vault auto-inject status: `~/.claude/rules/common/worktree-and-vault.md` — load on demand.
 
 ### Guardrails

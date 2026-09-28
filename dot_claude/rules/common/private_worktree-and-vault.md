@@ -19,10 +19,10 @@ paths:
 
 ## Output Paths
 
-- Specs: `tasks/spec-<task-name>.md`
-- Plans: `tasks/todo-<task-name>.md`
+- Specs: the epic bean's body (`beans create "<title>" -t epic -s draft --body-file <spec.md>`)
+- Plans: the epic's child beans (`.beans/`); a work item is a Bean, a parent an Epic — never "ticket"
 - User can override complexity: "this is a small task" or "use subagents for this"
-- Approved plan is the hand-off artifact to OMP.
+- Approved epic bean is the hand-off artifact to OMP.
 
 ## Vault Integration
 
@@ -34,7 +34,8 @@ but is registered in no settings file, so it never runs — and `CLAUDE_VAULT_FO
 Query the vault via `qmd` MCP on demand instead.
 
 The script itself is sound and cheap: it self-gates on an active `tasks/todo-*.md` at
-`status: plan-approved` in cwd, spawns no network calls, and no-ops otherwise. To enable it,
+`status: plan-approved` or an in-progress bean in `./.beans/` in cwd, spawns no network
+calls, and no-ops otherwise. To enable it,
 register it as a `SessionStart` hook in `~/.claude/settings.json` — but remember that file is a
 chezmoi **template**, so the edit must go in `dot_claude/settings.json.tmpl` or the hourly
 `claude-sync` will revert it.

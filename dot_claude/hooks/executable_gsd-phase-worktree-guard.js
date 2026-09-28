@@ -7,7 +7,7 @@
 //   - tool is Write/Edit/MultiEdit
 //   - cwd is a git repo MAIN checkout (NOT a linked worktree)
 //   - <repoRoot>/.planning/STATE.md frontmatter has `status: executing`
-//   - target is inside the repo, NOT under .planning/ and NOT under tasks/
+//   - target is inside the repo, NOT under .planning/, .beans/, .claims/ or docs/agent-handoffs/
 //   - GSD_ALLOW_INLINE is unset (escape hatch for Pattern-C / gap-closure plans)
 // No-op (exit 0) otherwise and on ANY error (fail-open).
 
@@ -74,9 +74,12 @@ process.stdin.on('end', () => {
     const insideRepo = norm(absTarget) === norm(repoRoot) || isUnder(absTarget, repoRoot);
     if (!insideRepo) process.exit(0);
 
-    // Exempt orchestrator bookkeeping + plan/spec files.
+    // Exempt orchestrator bookkeeping + coordination files (mirrors the salonx
+    // main-checkout commit allowlist: .beans/ + .claims/ + docs/agent-handoffs/).
     if (isUnder(absTarget, path.join(repoRoot, '.planning'))) process.exit(0);
-    if (isUnder(absTarget, path.join(repoRoot, 'tasks'))) process.exit(0);
+    if (isUnder(absTarget, path.join(repoRoot, '.beans'))) process.exit(0);
+    if (isUnder(absTarget, path.join(repoRoot, '.claims'))) process.exit(0);
+    if (isUnder(absTarget, path.join(repoRoot, 'docs', 'agent-handoffs'))) process.exit(0);
 
     // BLOCK: source write into MAIN checkout during phase execution.
     process.stdout.write(JSON.stringify({
@@ -88,7 +91,7 @@ process.stdin.on('end', () => {
         `isolation="worktree"), or EnterWorktree before editing. ` +
         `If this is an INTENDED inline plan (Decision-checkpoint Pattern C, or a gap-closure with ` +
         `no PLAN), set GSD_ALLOW_INLINE=1 for this session to authorize main-checkout writes. ` +
-        `Writes under .planning/ and tasks/ are always allowed.`,
+        `Writes under .planning/, .beans/, .claims/ and docs/agent-handoffs/ are always allowed.`,
     }));
     process.exit(2);
   } catch {

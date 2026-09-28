@@ -1,8 +1,8 @@
 #!/bin/bash
 # Inject Obsidian vault context at session start.
 # Shows recent ADRs and project-specific notes based on cwd.
-# Lazy-loads: only fires if an active plan-approved task exists in ./tasks/
-# or the user opted in via CLAUDE_VAULT_FORCE=1.
+# Lazy-loads: only fires if an active plan-approved task exists in ./tasks/, an
+# in-progress bean exists in ./.beans/, or the user opted in via CLAUDE_VAULT_FORCE=1.
 VAULT="$HOME/theduyvault"
 ADR_DIR="$VAULT/Notes/ADR"
 REGISTRY="$VAULT/Notes/Claude-Context/project-registry.md"
@@ -21,6 +21,11 @@ if [ "${CLAUDE_VAULT_FORCE:-0}" != "1" ]; then
   # skipped ~/tasks, which had 3 plan-approved todos at the time.)
   if [ -z "$ACTIVE_TASK" ]; then
     ACTIVE_TASK=$(grep -l "status: plan-approved" ./todo-*.md 2>/dev/null | head -1)
+  fi
+  # Beans repos: an in-progress bean means a session resumed mid-task. Additive —
+  # the tasks/ probes above still serve repos on the old convention.
+  if [ -z "$ACTIVE_TASK" ] && [ -d "./.beans" ]; then
+    ACTIVE_TASK=$(grep -l "^status: in-progress" ./.beans/*.md 2>/dev/null | head -1)
   fi
   if [ -z "$ACTIVE_TASK" ]; then
     exit 0

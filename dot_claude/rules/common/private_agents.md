@@ -36,7 +36,7 @@ if a task needs one; do not re-add the set.
 
 ⚠️ Five agents still reference `.planning/` in their prose (`debugger`, `debug-session-manager`,
 `integration-checker`, `codebase-mapper`, `verifier`) — dead convention, nothing reads it.
-Pass `tasks/` paths explicitly.
+Pass bean ids (or `beans show <id>` output) explicitly.
 
 ## Immediate Agent Usage
 

@@ -111,6 +111,21 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       ⚠️ **Docker.raw is the dominant growth source** (10G→20G in ~3 days between audits):
       daily repro-container churn outpaces the weekly 168h image prune. If 94% recurs before
       next audit, consider tightening the filter or running audits more often.
+      **AUDIT 11 CLOSED 2026-09-28. ~21 GiB reclaimed, 88%.** 192 GiB used / 5 GiB free /
+      **98%** (matched audit 7's peak — one day from macOS self-purge territory) →
+      **171 GiB / 24 GiB / 88%**. Trend: 95→92→80→81→83→93→98→86→79→81→86→82→**88%**.
+      Per-category: docker `system prune -a --volumes` after stopping 4 unlabeled repro
+      containers (ci-db, sbp-payroll, sbp-techperf, tri-xmwe) → 12.4G in-VM,
+      `Docker.raw` 26G→14G host (no restart); uv 2.2G→431M via `clean --force` (28,360
+      files); OptGuide 4.0G, com.docker.install/in_progress 2.2G, Caches/Google 1.2G,
+      worktree node_modules 1.1G (10 worktrees kept).
+      ⚠️ **NEW: second supabase stack `salonxverify` (8 containers) running alongside
+      salon365** — compose-labeled, volumes protected, but it holds ~4G and explains
+      volumes jumping to 7.7G. ASK user if verification is done; `docker compose -p
+      salonxverify down -v` frees it (policy: report-only, never deleted).
+      ⚠️ Weekly prune Sep 27 delta 0GiB again — churn is <7-day repro stacks, the 168h
+      filter structurally can't catch them. Reclaim ceiling dropping each audit
+      (20→15–18G est) as labeled stacks accumulate. Tighten filter or audit cadence.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

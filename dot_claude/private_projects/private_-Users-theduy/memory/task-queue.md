@@ -126,6 +126,20 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       ⚠️ Weekly prune Sep 27 delta 0GiB again — churn is <7-day repro stacks, the 168h
       filter structurally can't catch them. Reclaim ceiling dropping each audit
       (20→15–18G est) as labeled stacks accumulate. Tighten filter or audit cadence.
+      **AUDIT 12 CLOSED 2026-09-30. ~7 GiB net reclaimed, 91%.** 183 GiB used / 11 GiB free /
+      95% → **176 GiB / 18 GiB / 91%**. Trend: 95→92→80→81→83→93→98→86→79→81→86→82→88→**91%**.
+      Per-category: docker `system prune -a --volumes` after stopping 5 unlabeled date-stamped
+      repro containers (salonx-dp49/e9sd/tsj7/vls2-audit+full-db) → 4.7G in-VM, `Docker.raw`
+      19G→14G host (no restart); Caches/Google 1.1G; worktree node_modules 549M (10 kept);
+      uv 876M→0B — ⚠️ **uv regrew to 7.7G in ~30s** after first clean (respawned uvx rebuilt
+      env); second `clean --force` removed 73,718 files/7.5GiB, now 0B. Expect regrowth.
+      OptGuide and in_progress absent this cycle.
+      ⚠️ **salonxverify STILL RUNNING (2nd audit unanswered)** — user never answered; the ~4G
+      stays. 🔴 **STRUCTURAL: reclaim ceiling is collapsing.** Audits now run ~daily and disk
+      still hits 95–98% between them. The churn is unlabeled `salonx-*-audit-*` containers left
+      RUNNING for days — `image prune -a` (any `until` filter) can't touch in-use images, so
+      **filter tightening won't help**. Real lever = container lifetime: the pipeline spawning
+      them needs a TTL/self-stop, or these audits stay daily triage forever.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

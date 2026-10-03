@@ -140,6 +140,23 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       RUNNING for days — `image prune -a` (any `until` filter) can't touch in-use images, so
       **filter tightening won't help**. Real lever = container lifetime: the pipeline spawning
       them needs a TTL/self-stop, or these audits stay daily triage forever.
+      **AUDIT 13 CLOSED 2026-10-02. ~15 GiB reclaimed, 92%.** 192 GiB used / **2 GiB free /
+      99%** (worst reading yet — one notch above audit 7's peak) → **177 GiB / 15 GiB / 92%**.
+      Trend: 95→92→80→81→83→93→98→86→79→81→86→82→88→91→**92%**.
+      Per-category: Caches/Google 766M (one retry), worktree node_modules 1.1G (one retry —
+      salonx-ho25; 21 worktrees now, grew 10→21), docker `system prune -a --volumes` 1.05G
+      in-VM, `Docker.raw` 15G→14G. uv already 0B; OptGuide/in_progress absent. No stale
+      containers — all 17 labeled (salon365 + salonxverify); playbook Docker lever was nearly
+      empty this cycle.
+      🔍 **Phantom-space drill-down (no sudo):** `/Users/theduy`=116G on volume but ~ contents
+      ≈65G visible+hidden — matches audit 7's "~54G protected/unstattable" note. `diskutil
+      info` shows **no purgeable line** — the 99% was REAL, not soft space. `tmutil
+      listlocalsnapshots` empty. Volume: Users 116G, Applications 18G, private 14G, opt 5.2G.
+      New never-baselined candidates: `.npm-global` 7.1G, `.hermes` 6.0G, `.local` 8.0G.
+      🔴 **PLAYBOOK IS EXHAUSTED at 99%.** Reclaimable set was only ~2.5G; remaining big items
+      are all policy-protected: npm/bun caches ~20G, salonxverify ~4G (3rd audit unanswered),
+      devin/cli sessions.db 4.9G, codex-runtimes 3.5G. Next 95%+ reading needs a policy
+      decision from user, not more triage: protect-list changes or pipeline TTL.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

@@ -157,6 +157,20 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       are all policy-protected: npm/bun caches ~20G, salonxverify ~4G (3rd audit unanswered),
       devin/cli sessions.db 4.9G, codex-runtimes 3.5G. Next 95%+ reading needs a policy
       decision from user, not more triage: protect-list changes or pipeline TTL.
+      **AUDIT 14 CLOSED 2026-10-05. ~9.5 GiB reclaimed, 89%.** 185 GiB used / 18 GiB free /
+      91% → **178 GiB / 22 GiB / 89%**. Trend: 95→92→80→81→83→93→98→86→79→81→86→82→88→91→92→**89%**.
+      Scope: `do not delete cache of chrome` — Caches/Google (1.1G) left untouched.
+      Per-category: uv `clean --force` 3.2G→0B (36,792 files; **0 lock-holders — clean
+      window open**, no kill needed); OptGuideOnDeviceModel 4.0G; com.docker.install/
+      in_progress 2.1G; worktree node_modules only 20M; 2 stale claude versions (~415M).
+      Docker.raw 19G **report-only — daemon DOWN**; policy holds (never start to audit).
+      ⚠️ **Worktrees 10→21→27→40 in 5 days** — sharpest churn signal yet; spawning pipeline
+      never cleans up. Also **3rd supabase stack `salonxverify2` appeared** (frozen in
+      daemon-down state): verify-stack teardown stays the user's open decision, but measured
+      volumes total only ~719M — savings would be mostly shared supabase images, ~2-3G
+      per stack at most, not the earlier ~8G estimate.
+      Weekly prune Oct 4 delta 0GiB — fifth consecutive no-op; structurally expected (churn
+      is running containers, not stale images). LaunchAgent itself confirmed working.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)

@@ -171,6 +171,20 @@ Persistent queue surviving session boundaries. Any session may pick up, update, 
       per stack at most, not the earlier ~8G estimate.
       Weekly prune Oct 4 delta 0GiB — fifth consecutive no-op; structurally expected (churn
       is running containers, not stale images). LaunchAgent itself confirmed working.
+      **AUDIT 15 CLOSED 2026-10-06. ~8 GiB reclaimed, 89%.** 183 GiB used / 12 GiB free /
+      94% → **175 GiB / 22 GiB / 89%**. Trend: …→88→91→92→89→**89%**.
+      Per-category: targeted `docker rm` on 5 unlabeled repro DBs (nfkv-fresh, pgtap-2ntl2,
+      pgtap-nlg3, tucr-db, + **mn3f-schema spawned mid-audit** — churn live in real time) →
+      `image prune -a` 1.84G + `volume prune` 2.13G in-VM, `Docker.raw` 19G→15G host;
+      OptGuideOnDeviceModel 4.0G. uv 0B, node_modules 0B, in_progress absent.
+      ⚠️ **POLICY CHANGE: `~/Library/Caches/Google` now permanently protected** (user
+      directive — moved to do-not-touch list in storage-audit.md; report size only).
+      ⚠️ **PLAYBOOK CAVEAT FOUND: `container prune`/`system prune` delete STOPPED labeled
+      containers too.** All 3 verify stacks have exited edge_runtime containers — used
+      targeted `docker rm` + separate `image prune -a`/`volume prune` instead. Update
+      playbook wording if this recurs.
+      🔴 **4th supabase stack `salonxverifynfkv` appeared** (33 labeled containers now);
+      verify-stack teardown STILL unanswered (5 audits). Each adds ~2-3G protected.
 
 - [ ] Hermes-wylios pipeline: unstick stalled wyl-15 task (see [[hermes-wylios-coding-pipeline]])
 - [ ] Hermes-wylios pipeline: install `gh` in container (missing, breaks PR ops)
